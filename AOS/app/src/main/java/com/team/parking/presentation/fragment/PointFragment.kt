@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.team.parking.BuildConfig
 import com.team.parking.R
 import com.team.parking.databinding.FragmentPointBinding
 

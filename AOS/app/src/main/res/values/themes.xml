@@ -11,7 +11,7 @@
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:statusBarColor">@color/main_color</item>
+        <item name="android:statusBarColor">@color/main_color2</item>
         <!-- Customize your theme here. -->
     </style>
     <style name="Theme.NavigationDrawer" parent="Theme.MaterialComponents.DayNight.NoActionBar"/>
