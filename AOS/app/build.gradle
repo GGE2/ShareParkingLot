@@ -6,6 +6,9 @@ plugins {
     id 'androidx.navigation.safeargs.kotlin'
 }
 
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
 android {
     namespace 'com.team.parking'
     compileSdk 32
@@ -16,6 +19,8 @@ android {
         targetSdk 32
         versionCode 1
         versionName "1.0"
+        manifestPlaceholders["NAVER_CLIENT_KEY"] = "NAVER_CLIENT_KEY"
+        buildConfigField "String","NAVER_CLIENT_KEY", properties["NAVER_CLIENT_KEY"]
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -46,6 +51,9 @@ dependencies {
     def room_version = "2.4.0"
     def lifecycle_version = "2.5.1"
     def nav_version = "2.5.3"
+
+    // 네이버 지도 SDK
+    implementation 'com.naver.maps:map-sdk:3.15.0'
 
     //sidebar
     implementation "androidx.drawerlayout:drawerlayout:1.1.1"
