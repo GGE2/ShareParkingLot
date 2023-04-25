@@ -1,0 +1,11 @@
+rootProject.name = 'jumo'
+
+include 'core-web'
+
+include 'domain-parking'
+include 'domain-user'
+
+include 'jumo-parking'
+include 'jumo-user'
+
+include 'error'
