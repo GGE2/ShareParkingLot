@@ -1,9 +1,6 @@
 package com.example.domainparking.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -29,8 +26,10 @@ public class ParkingLot {
 
     private String old_addr;
 
+    @Column(name = "latitude")
     private float latitude;
 
+    @Column(name = "longitude")
     private float longitude;
 
     private String open_day;

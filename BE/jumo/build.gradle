@@ -111,6 +111,7 @@ project(':jumo-user') {
 project(':jumo-parking') {
 	dependencies {
 		implementation project(':core-web')
+		implementation project(':domain-parking')
 		implementation project(':error')
 	}
 }
