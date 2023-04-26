@@ -103,9 +103,11 @@ project(':domain-parking') {
 project(':jumo-user') {
 	dependencies {
 		implementation project(':core-web')
+		implementation project(':domain-user')
 		implementation group: 'org.springframework.cloud', name: 'spring-cloud-gcp-starter', version: '1.2.5.RELEASE'
 		implementation group: 'org.springframework.cloud', name: 'spring-cloud-gcp-storage', version: '1.2.5.RELEASE'
-
+		implementation 'org.springframework.boot:spring-boot-starter-webflux'
+		implementation group: 'com.google.firebase', name: 'firebase-admin', version: '8.1.0'
 	}
 }
 project(':jumo-parking') {
