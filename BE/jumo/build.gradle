@@ -60,7 +60,7 @@ project(':core-web') {
 	}
 
 	dependencies {
-		implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
+		api 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
 		api 'org.springframework.boot:spring-boot-starter-web'
 		implementation 'org.springframework.boot:spring-boot-starter-web-services'
 		api 'org.springframework.boot:spring-boot-starter-jdbc'
