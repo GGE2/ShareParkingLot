@@ -1,7 +1,7 @@
 package com.example.jumouser.provider.impl;
 
 
-import com.example.domainuser.dto.UserInfoDto;
+import com.example.domain.dto.UserInfoDto;
 import com.example.jumouser.provider.LoginProvider;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

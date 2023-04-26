@@ -1,10 +1,11 @@
 package com.example.jumoparking.service.impl;
 
-import com.example.domainparking.entity.ParkingLot;
-import com.example.domainparking.repo.ParkingLotRepo;
-import com.example.jumoparking.dto.ParkingInDto;
-import com.example.jumoparking.dto.ParkingListDto;
+import com.example.domain.dto.ParkingInDto;
+import com.example.domain.dto.ParkingListDto;
+import com.example.domain.entity.ParkingLot;
+import com.example.domain.repo.ParkingLotRepo;
 import com.example.jumoparking.service.ParkingLotService;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 public class ParkingLotServiceImpl implements ParkingLotService {
 
     private final ParkingLotRepo parkingLotRepo;
+
     @Override
     public List<ParkingListDto> getListOfPoint(ParkingInDto parkingInDto) {
         List<ParkingLot> parkingLots = parkingLotRepo.findAllByLatitudeGreaterThanAndLatitudeLessThanAndLongitudeGreaterThanAndLongitudeLessThan(

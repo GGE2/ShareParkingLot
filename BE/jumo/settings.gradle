@@ -2,8 +2,7 @@ rootProject.name = 'jumo'
 
 include 'core-web'
 
-include 'domain-parking'
-include 'domain-user'
+include 'domain'
 
 include 'jumo-parking'
 include 'jumo-user'

@@ -69,7 +69,7 @@ project(':core-web') {
 	}
 }
 
-project(':domain-user') {
+project(':domain') {
 	bootJar {
 		enabled = false
 	}
@@ -78,21 +78,7 @@ project(':domain-user') {
 	}
 
 	dependencies {
-		implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-		runtimeOnly 'com.mysql:mysql-connector-j'
-	}
-}
-project(':domain-parking') {
-	bootJar {
-		enabled = false
-	}
-	jar {
-		enabled = true
-	}
-
-
-	dependencies {
-		implementation project(':domain-user')
+		implementation project(':core-web')
 		implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 		runtimeOnly 'com.mysql:mysql-connector-j'
 		implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
@@ -103,7 +89,7 @@ project(':domain-parking') {
 project(':jumo-user') {
 	dependencies {
 		implementation project(':core-web')
-		implementation project(':domain-user')
+		implementation project(':domain')
 		implementation group: 'org.springframework.cloud', name: 'spring-cloud-gcp-starter', version: '1.2.5.RELEASE'
 		implementation group: 'org.springframework.cloud', name: 'spring-cloud-gcp-storage', version: '1.2.5.RELEASE'
 		implementation 'org.springframework.boot:spring-boot-starter-webflux'
@@ -113,7 +99,7 @@ project(':jumo-user') {
 project(':jumo-parking') {
 	dependencies {
 		implementation project(':core-web')
-		implementation project(':domain-parking')
+		implementation project(':domain')
 		implementation project(':error')
 	}
 }
