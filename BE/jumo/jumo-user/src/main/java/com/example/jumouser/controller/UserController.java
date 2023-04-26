@@ -2,8 +2,8 @@ package com.example.jumouser.controller;
 
 
 
-import com.example.domainuser.dto.LoginRequestDto;
-import com.example.domainuser.dto.UserInfoDto;
+import com.example.domain.dto.LoginRequestDto;
+import com.example.domain.dto.UserInfoDto;
 import com.example.jumouser.factory.UserFactory;
 import com.example.jumouser.service.UserService;
 import lombok.RequiredArgsConstructor;
