@@ -1,12 +1,15 @@
 package com.example.jumouser.service.impl;
 
+import com.example.jumouser.service.UserService;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.UserRecord;
+import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
-public class UserServiceImpl {
+@Service
+public class UserServiceImpl implements UserService {
 
     public String createFirebaseCustomToken(Map<String,Object> userInfo) throws Exception {
 

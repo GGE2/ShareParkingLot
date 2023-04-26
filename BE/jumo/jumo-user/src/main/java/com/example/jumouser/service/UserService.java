@@ -1,4 +1,4 @@
 package com.example.jumouser.service;
 
-public class UserService {
+public interface UserService {
 }
