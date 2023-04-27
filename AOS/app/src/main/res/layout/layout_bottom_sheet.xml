@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:behavior_hideable="false"
+        app:behavior_peekHeight="60dp"
+        android:background="@color/main_color2"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+    
+
+        
+        
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
