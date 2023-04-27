@@ -109,7 +109,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
+    /**
      * Profile Fragment Navigation
      */
     private fun setProfileFragmentNavigation(){
