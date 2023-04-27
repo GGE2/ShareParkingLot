@@ -1,7 +1,7 @@
 buildscript {
 
 	ext {
-		springBootVersion = '3.0.5'
+		springBootVersion = '2.7.9'
 	}
 
 	repositories {
@@ -20,7 +20,7 @@ subprojects {
 
 	group = 'com.example'
 	version = '0.0.1-SNAPSHOT'
-	sourceCompatibility = '17'
+	sourceCompatibility = '11'
 
 	configurations {
 		compileOnly {
@@ -60,7 +60,8 @@ project(':core-web') {
 	}
 
 	dependencies {
-		api 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
+		api group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
+		api group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
 		api 'org.springframework.boot:spring-boot-starter-web'
 		implementation 'org.springframework.boot:spring-boot-starter-web-services'
 		api 'org.springframework.boot:spring-boot-starter-jdbc'
@@ -90,8 +91,6 @@ project(':jumo-user') {
 	dependencies {
 		implementation project(':core-web')
 		implementation project(':domain')
-		implementation group: 'org.springframework.cloud', name: 'spring-cloud-gcp-starter', version: '1.2.5.RELEASE'
-		implementation group: 'org.springframework.cloud', name: 'spring-cloud-gcp-storage', version: '1.2.5.RELEASE'
 		implementation 'org.springframework.boot:spring-boot-starter-webflux'
 //		implementation project(':firebase')
 	}
@@ -101,6 +100,8 @@ project(':jumo-parking') {
 		implementation project(':core-web')
 		implementation project(':domain')
 		implementation project(':error')
+		implementation group: 'org.springframework.cloud', name: 'spring-cloud-gcp-starter', version: '1.2.5.RELEASE'
+		implementation group: 'org.springframework.cloud', name: 'spring-cloud-gcp-storage', version: '1.2.5.RELEASE'
 	}
 }
 

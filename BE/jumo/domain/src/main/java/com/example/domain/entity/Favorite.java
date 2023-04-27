@@ -1,6 +1,6 @@
 package com.example.domain.entity;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,7 +25,7 @@ public class Favorite {
     @JoinColumn(name="lot_id")
     private ParkingLot parkingLot;
 
-//    @ManyToOne
-//    @JoinColumn(name="user_id")
-//    private User user;
+    @ManyToOne
+    @JoinColumn(name="user_id")
+    private User user;
 }

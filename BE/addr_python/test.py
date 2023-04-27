@@ -25,6 +25,7 @@ with open('./전국주차장정보표준데이터.json', 'r', encoding='utf-8') 
         new_dic['주차장명'] = address['주차장명']
         new_dic['주차장구분'] = address['주차장구분']
         new_dic['주차장유형'] = address['주차장유형']
+        new_dic['주차구획수'] = address['주차구획수']
         new_dic['소재지도로명주소'] = address['소재지도로명주소']
         new_dic['소재지지번주소'] = address['소재지지번주소']
         new_dic['운영요일'] = address['운영요일']

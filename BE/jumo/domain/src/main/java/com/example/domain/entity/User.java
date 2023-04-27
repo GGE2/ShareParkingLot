@@ -1,8 +1,8 @@
 package com.example.domain.entity;
 
 
+import javax.persistence.*;
 import com.example.domain.dto.user.SignUpRequestDto;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;

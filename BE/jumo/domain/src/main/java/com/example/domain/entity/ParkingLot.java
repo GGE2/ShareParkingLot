@@ -1,10 +1,13 @@
 package com.example.domain.entity;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -33,6 +36,8 @@ public class ParkingLot {
     private float longitude;
 
     private String open_day;
+
+    private int lot_field;
 
     private int week_start;
 
@@ -63,5 +68,8 @@ public class ParkingLot {
     private String pay_type;
 
     private String special_prop;
+
+    @OneToMany(mappedBy = "favorite_id", cascade = CascadeType.ALL)
+    private List<Favorite> favoriteList = new ArrayList<>();
 
 }
