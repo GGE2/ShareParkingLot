@@ -29,6 +29,7 @@ public class ParkingListDto {
         this.clusteringCnt = 0;
     }
 
+
     @Builder
     public ParkingListDto(ShareLot shareLot){
         this.lat = shareLot.getLatitude();
