@@ -6,7 +6,8 @@ import com.example.jumouser.provider.LoginProvider;
 import org.springframework.stereotype.Component;
 
 @Component
-public class NaverLogin implements LoginProvider {
+
+public class JumoLogin implements LoginProvider  {
 
     @Override
     public UserInfoDto getUserInfo(String accessToken) {
