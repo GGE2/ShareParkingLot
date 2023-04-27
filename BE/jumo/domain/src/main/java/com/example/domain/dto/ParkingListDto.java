@@ -25,7 +25,7 @@ public class ParkingListDto {
         this.lat = parkingLot.getLatitude();
         this.lng = parkingLot.getLongitude();
         this.parkType = 0;
-        this.feeBasic = parkingLot.getPer_basic() * 6;
+        this.feeBasic = parkingLot.getPer_basic() * 2;
         this.clusteringCnt = 0;
     }
 

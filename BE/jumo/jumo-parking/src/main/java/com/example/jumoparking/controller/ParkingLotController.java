@@ -28,7 +28,7 @@ public class ParkingLotController {
 
     @PostMapping("/list/bottom")
     public List<ParkingBottomListDto> getParkingBottomList(@Validated @RequestBody ParkingInDto parkingInDto){
-        return parkingLotService.
+        return parkingLotService.getBottomListOfPoint(parkingInDto);
     }
 
 

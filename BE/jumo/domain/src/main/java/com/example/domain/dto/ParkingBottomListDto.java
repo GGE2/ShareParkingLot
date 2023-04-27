@@ -25,19 +25,20 @@ public class ParkingBottomListDto {
     public ParkingBottomListDto(ParkingLot parkingLot){
         this.lat = parkingLot.getLatitude();
         this.lng = parkingLot.getLongitude();
-        this.parkingField = parkingLot.getLot_part();
+        this.parkingField = 10;
         this.parkingName = parkingLot.getLot_name();
-        this.payType = parkingLot.getPay_type();
-        this.feeBasic = parkingLot.getPer_basic() * 6;
+        this.payType = parkingLot.getLot_part() + parkingLot.getPay_type();
+        this.feeBasic = parkingLot.getPer_basic() * 2;
     }
 
     @Builder
     public ParkingBottomListDto(ShareLot shareLot){
         this.lat = shareLot.getLatitude();
         this.lng = shareLot.getLongitude();
-        this.parkType = 1;
+        this.parkingField = 10;
+        this.parkingName = shareLot.getSha_name();
+        this.payType = "포인트결제";
         this.feeBasic = shareLot.getSha_fee();
-        this.clusteringCnt = 0;
     }
 
 }
