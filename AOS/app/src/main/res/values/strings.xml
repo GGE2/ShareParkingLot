@@ -2,4 +2,5 @@
     <string name="app_name">주차장의 모든것</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="fragment_map_search_hint">목적지 혹은 주소 검색</string>
 </resources>
