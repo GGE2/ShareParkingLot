@@ -18,7 +18,7 @@ import java.util.Optional;
 @Component
 public class KakaoLogin implements LoginProvider {
 
-    private final UserRepo userRepo;
+    private UserRepo userRepo;
     private KakaoLogin(UserRepo userRepo){
         this.userRepo=userRepo;
     }

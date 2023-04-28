@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class NaverLogin implements LoginProvider {
 
-    private final UserRepo userRepo;
+    private UserRepo userRepo;
 
     private NaverLogin(UserRepo userRepo){
         this.userRepo =userRepo;
