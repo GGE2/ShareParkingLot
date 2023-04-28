@@ -12,4 +12,7 @@ import lombok.NoArgsConstructor;
 public class LoginRequestDto {
     private String type;
     private String accessToken;
+    private String email;
+    private String password;
+    private String social_id;
 }

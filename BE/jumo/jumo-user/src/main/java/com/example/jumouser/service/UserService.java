@@ -6,8 +6,7 @@ import com.example.domain.entity.User;
 
 public interface UserService {
 
-    public boolean emailCheck(String email);
-    public User signUp(SignUpRequestDto requestDto);
+    boolean emailCheck(String email);
+    User signUp(SignUpRequestDto requestDto);
 
-    User checkUser(UserInfoDto userInfoDto);
 }

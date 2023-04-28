@@ -17,4 +17,6 @@ public class SignUpRequestDto {
     private String password;
     private String phone;
     private String profile_image;
+
+    private String social_id;
 }

@@ -17,22 +17,10 @@ public class UserServiceImpl implements UserService {
     public boolean emailCheck(String email){
         Optional<User> user = Optional.ofNullable(userRepo.findByEmail(email));
 
-        if(user.isEmpty()){
-            return true;
-        }else{
-            return false;
-        }
+        return user.isEmpty();
     }
 
-    public User checkUser(UserInfoDto userInfoDto){
-        Optional<User> user = Optional.ofNullable(userRepo.findByEmail(userInfoDto.getEmail()));
 
-        if(user.isEmpty()){
-            return null;
-        }else{
-            return user.get();
-        }
-    }
     public User signUp(SignUpRequestDto requestDto){
         User user = new User(requestDto);
         userRepo.save(user);

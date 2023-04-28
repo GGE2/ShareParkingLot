@@ -16,26 +16,32 @@ import java.util.List;
 @NoArgsConstructor
 public class User {
 
-    @Id
+    @Id()
+    @Column(name="user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long user_id;
     private String name;
     private String type;
+    @Column(name="social_id")
+    private String socialId;
     private String phone;
     private String email;
     private String password;
-    private String fcm_token;
-    private String profile_img;
-    private int pt_has;
+    @Column(name="fcm_token")
+    private String fcmToken;
+    @Column(name="profile_img")
+    private String profileImg;
+    @Column(name="pt_has")
+    private int ptHas;
 
     public User(SignUpRequestDto requestDto){
         this.email = requestDto.getEmail();
         this.name = requestDto.getName();
         this.type = requestDto.getType();
         this.phone = requestDto.getPhone();
-        this.profile_img = requestDto.getProfile_image();
+        this.profileImg = requestDto.getProfile_image();
         this.password=requestDto.getPassword();
-
+        this.socialId=requestDto.getSocial_id();
     }
 
     @OneToMany(mappedBy = "car_id", cascade = CascadeType.ALL)

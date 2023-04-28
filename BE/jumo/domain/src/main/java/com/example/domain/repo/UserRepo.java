@@ -8,4 +8,5 @@ import com.example.domain.entity.User;
 public interface UserRepo extends JpaRepository<User, Long> {
 
     User findByEmail(String email);
+    User findBySocialId(String social_id);
 }

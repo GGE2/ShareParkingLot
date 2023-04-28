@@ -10,4 +10,5 @@ public class UserInfoDto {
     private String email;
     private String profile_image;
 
+    private String social_id;
 }
