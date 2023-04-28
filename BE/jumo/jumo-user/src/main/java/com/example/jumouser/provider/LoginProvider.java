@@ -1,13 +1,12 @@
 package com.example.jumouser.provider;
 
-import com.example.domain.entity.User;
-import com.example.domain.dto.user.SignUpRequestDto;
 import com.example.domain.dto.user.UserInfoDto;
+import com.example.domain.entity.User;
 
 public interface LoginProvider {
-    public UserInfoDto getUserInfo(String accessToken);
+    UserInfoDto getUserInfo(String accessToken);
 //    public void signUp(SignUpRequestDto signUpRequestDto);
-    public User login();
+User login();
 
-    public User checkUser(UserInfoDto userInfoDto);
+    User checkUser(UserInfoDto userInfoDto);
 }

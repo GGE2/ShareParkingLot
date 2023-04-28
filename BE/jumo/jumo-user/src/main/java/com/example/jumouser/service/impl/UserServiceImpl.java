@@ -1,7 +1,6 @@
 package com.example.jumouser.service.impl;
 
 import com.example.domain.dto.user.SignUpRequestDto;
-import com.example.domain.dto.user.UserInfoDto;
 import com.example.domain.entity.User;
 import com.example.domain.repo.UserRepo;
 import com.example.jumouser.service.UserService;

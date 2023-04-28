@@ -12,7 +12,7 @@ import java.util.Optional;
 
 public class JumoLogin implements LoginProvider  {
 
-    private UserRepo userRepo;
+    private final UserRepo userRepo;
 
     private JumoLogin(UserRepo userRepo){
         this.userRepo=userRepo;

@@ -1,7 +1,6 @@
 package com.example.domain.dto;
 
 
-import com.example.domain.entity.ParkingLot;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

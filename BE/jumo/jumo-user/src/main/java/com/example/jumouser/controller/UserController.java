@@ -1,17 +1,14 @@
 package com.example.jumouser.controller;
 
 
-
 import com.example.domain.dto.user.LoginRequestDto;
 import com.example.domain.dto.user.SignUpRequestDto;
 import com.example.domain.dto.user.UserInfoDto;
+import com.example.domain.entity.User;
 import com.example.jumouser.factory.UserFactory;
-import com.example.jumouser.provider.LoginProvider;
 import com.example.jumouser.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import com.example.domain.entity.User;
 
 
 @RestController

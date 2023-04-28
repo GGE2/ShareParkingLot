@@ -8,7 +8,6 @@ import com.example.domain.entity.ShareLot;
 import com.example.domain.repo.ParkingLotRepo;
 import com.example.domain.repo.ShareLotRepo;
 import com.example.jumoparking.service.ParkingLotService;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

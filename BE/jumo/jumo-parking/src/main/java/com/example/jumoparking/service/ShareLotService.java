@@ -1,7 +1,6 @@
 package com.example.jumoparking.service;
 
 
-
 import com.example.domain.dto.ParkingInDto;
 import com.example.domain.dto.ParkingListDto;
 import com.example.domain.dto.ShareSaveDto;

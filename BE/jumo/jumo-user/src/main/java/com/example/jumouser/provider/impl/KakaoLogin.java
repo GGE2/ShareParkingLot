@@ -7,9 +7,7 @@ import com.example.domain.repo.UserRepo;
 import com.example.jumouser.provider.LoginProvider;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -20,7 +18,7 @@ import java.util.Optional;
 @Component
 public class KakaoLogin implements LoginProvider {
 
-    private UserRepo userRepo;
+    private final UserRepo userRepo;
     private KakaoLogin(UserRepo userRepo){
         this.userRepo=userRepo;
     }
