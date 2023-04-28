@@ -6,6 +6,8 @@ import com.example.domain.repo.UserRepo;
 import com.example.jumouser.provider.LoginProvider;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 public class NaverLogin implements LoginProvider {
 
@@ -22,13 +24,9 @@ public class NaverLogin implements LoginProvider {
         return null;
     }
 
-    @Override
-    public User login() {
-        return null;
-    }
 
     @Override
-    public User checkUser(UserInfoDto userInfoDto) {
+    public Optional<User> checkUser(UserInfoDto userInfoDto) {
         return null;
     }
 

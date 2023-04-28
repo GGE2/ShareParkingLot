@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -64,19 +65,14 @@ public class KakaoLogin implements LoginProvider {
 
     }
 
-    @Override
-    public User login() {
-        return null;
-    }
+    public Optional<User> checkUser(UserInfoDto userInfoDto){
 
-    public User checkUser(UserInfoDto userInfoDto){
-
-        Optional<User> user = Optional.ofNullable(userRepo.findBySocialId(userInfoDto.getSocial_id()));
+        List<User> user = userRepo.findBySocialId(userInfoDto.getSocial_id());
 
         if(user.isEmpty()){
             return null;
         }else{
-            return user.get();
+            return user.stream().findAny();
         }
     }
 

@@ -6,6 +6,7 @@ import com.example.domain.repo.UserRepo;
 import com.example.jumouser.provider.LoginProvider;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -28,20 +29,12 @@ public class JumoLogin implements LoginProvider  {
                 .build();
     }
 
-    @Override
-    public User login() {
-        return null;
-    }
 
     @Override
-    public User checkUser(UserInfoDto userInfoDto) {
-        Optional<User> user = Optional.ofNullable(userRepo.findByEmail(userInfoDto.getEmail()));
+    public Optional<User> checkUser(UserInfoDto userInfoDto) {
+        Optional<User> user = userRepo.findByEmailAndPassword(userInfoDto.getEmail(),userInfoDto.getPassword());
 
-        if(user.isEmpty()){
-            return null;
-        }else{
-            return user.get();
-        }
+        return user;
     }
 
 

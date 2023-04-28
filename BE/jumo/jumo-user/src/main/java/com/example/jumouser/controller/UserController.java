@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Optional;
 
 
 @RestController
@@ -25,25 +26,18 @@ public class UserController {
 
     @ApiOperation(value = "로그인", notes = "카카오, 네이버의 소셜")
     @GetMapping("/login")
-    public User login(HttpServletRequest request, HttpServletResponse response, @ModelAttribute("loginRequestDto") LoginRequestDto requestDto){
-        System.out.println(requestDto.getType());
-        System.out.println(requestDto.getAccessToken());
-        System.out.println(requestDto.getSocial_id());
-        
-        System.out.println(request.getQueryString());
-        System.out.println(request.getRequestURI());
-        System.out.println(request.getRequestURL());
+    public User login(@ModelAttribute("loginRequestDto") LoginRequestDto requestDto){
 
         UserInfoDto userInfoDto = userFactory.loginSelector(requestDto.getType()).getUserInfo(requestDto.getAccessToken());
-        User user = userFactory.loginSelector(requestDto.getType()).checkUser(userInfoDto);
-        return user;
+        Optional<User> user = userFactory.loginSelector(requestDto.getType()).checkUser(userInfoDto);
+        return user.get();
     }
     @ApiOperation(value = "로그인", notes = "회원가입")
     @PostMapping("/sign")
     public User signUp(@RequestBody SignUpRequestDto signUpRequestDto){
 
-        User user = userService.signUp(signUpRequestDto);
-        return user;
+        Optional<User> user = userService.signUp(signUpRequestDto);
+        return user.get();
     }
 
     @ApiOperation(value = "로그인", notes = "email check")
