@@ -35,7 +35,7 @@ public class NaverLogin implements LoginProvider {
         List<User> user = userRepo.findBySocialId(userInfoDto.getSocial_id());
 
         if(user.isEmpty()){
-            return null;
+            return Optional.of(new User());
         }else{
             return user.stream().findAny();
         }
