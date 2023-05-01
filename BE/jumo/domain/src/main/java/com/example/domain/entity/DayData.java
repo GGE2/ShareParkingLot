@@ -1,6 +1,8 @@
 package com.example.domain.entity;
 
 import javax.persistence.*;
+
+import com.example.domain.dto.DaySaveDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@Builder(builderMethodName = "DayDataBuilder")
 public class DayData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,5 +28,14 @@ public class DayData {
     private int day_start;
 
     private int day_end;
+
+    @Builder
+    public static DayDataBuilder builder(DaySaveDto daySaveDto, ShareLot shareLot){
+        return DayDataBuilder()
+                .shareLot(shareLot)
+                .day_str(daySaveDto.getDay_str())
+                .day_start(daySaveDto.getDay_start())
+                .day_end(daySaveDto.getDay_end());
+    }
 
 }

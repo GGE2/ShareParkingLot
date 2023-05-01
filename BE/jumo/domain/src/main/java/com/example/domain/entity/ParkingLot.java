@@ -17,7 +17,8 @@ import java.util.List;
 public class ParkingLot {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long lot_id;
+    @Column(name = "lot_id")
+    private Long lotId;
 
     private String lot_part;
 

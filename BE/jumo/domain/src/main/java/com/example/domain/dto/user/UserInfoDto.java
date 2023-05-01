@@ -9,6 +9,5 @@ public class UserInfoDto {
     private String type;
     private String email;
     private String profile_image;
-    private String password;
-    private String social_id;
+
 }

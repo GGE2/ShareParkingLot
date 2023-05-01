@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Getter
@@ -17,15 +19,18 @@ public class Favorite {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long favorite_id;
 
-    @ManyToOne
-    @JoinColumn(name="sha_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="sha_id", nullable = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private ShareLot shareLot;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="lot_id")
+    @JoinColumn(name="lot_id",nullable = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private ParkingLot parkingLot;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 }

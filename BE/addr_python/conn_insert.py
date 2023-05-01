@@ -14,7 +14,7 @@ def insertsql_from_json():
 
     curs = conn.cursor()
                
-    with open('./nnew_parking.json', encoding='utf-8') as json_file:
+    with open('./final_new_parking.json', encoding='utf-8') as json_file:
         json_data = json.load(json_file)
         json_line = json_data['records']
         
@@ -22,6 +22,7 @@ def insertsql_from_json():
             lot_name = address['주차장명']
             lot_part = address['주차장구분']
             lot_type = address['주차장유형']
+            lot_field = address['주차구획수']
             road_addr = address['소재지도로명주소']
             old_addr = address['소재지지번주소']
             open_day = address['운영요일']
@@ -76,8 +77,8 @@ def insertsql_from_json():
             
             
 
-            sql = "INSERT INTO parking_lot(fee_basic, fee_data, holi_end, holi_start, latitude, longitude, lot_name, lot_part, lot_type, old_addr, open_day, pay_type, per_basic, per_day, per_month, per_plus, plus_time, road_addr, sat_end, sat_start, special_prop, week_end, week_start) VALUES (%s, %s,%s, %s,%s, %s,%s, %s,%s, %s,%s, %s,%s, %s,%s, %s,%s, %s,%s, %s,%s, %s,%s)"
-            val = (fee_basic, fee_data, holi_end, holi_start, latitude, longitude, lot_name, lot_part, lot_type, old_addr, open_day, pay_type, per_basic, per_day, per_month, per_plus, plus_time, road_addr, sat_end, sat_start, special_prop, week_end, week_start)
+            sql = "INSERT INTO parking_lot(fee_basic, fee_data, holi_end, holi_start, latitude, longitude,lot_field, lot_name, lot_part, lot_type, old_addr, open_day, pay_type, per_basic, per_day, per_month, per_plus, plus_time, road_addr, sat_end, sat_start, special_prop, week_end, week_start) VALUES (%s, %s,%s, %s,%s, %s,%s,%s, %s,%s, %s,%s, %s,%s, %s,%s, %s,%s, %s,%s, %s,%s, %s,%s)"
+            val = (fee_basic, fee_data, holi_end, holi_start, latitude, longitude,lot_field, lot_name, lot_part, lot_type, old_addr, open_day, pay_type, per_basic, per_day, per_month, per_plus, plus_time, road_addr, sat_end, sat_start, special_prop, week_end, week_start)
 
             curs.execute(sql, val)
             conn.commit()

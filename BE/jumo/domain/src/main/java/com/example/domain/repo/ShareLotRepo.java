@@ -10,4 +10,5 @@ import java.util.List;
 public interface ShareLotRepo extends JpaRepository<ShareLot, Long> {
     List<ShareLot> findAllByLatitudeGreaterThanAndLatitudeLessThanAndLongitudeGreaterThanAndLongitudeLessThan(float startLat, float endLat, float startLng, float endLng);
 
+    List<ShareLot> findShareLotsByUser_UserId(Long userId);
 }

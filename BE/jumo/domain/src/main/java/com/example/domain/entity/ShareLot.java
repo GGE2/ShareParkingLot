@@ -20,7 +20,8 @@ public class ShareLot {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long sha_id;
+    @Column(name = "sha_id")
+    private Long shaId;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -49,6 +50,9 @@ public class ShareLot {
 
     @OneToMany(mappedBy = "favorite_id", cascade = CascadeType.ALL)
     private List<Favorite> favoriteList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "day_id", cascade = CascadeType.ALL)
+    private List<DayData> dayDataList = new ArrayList<>();
 
     public static ShareLotBuilder builder(ShareSaveDto shareSaveDto) {
         return ShareLotBuilder()

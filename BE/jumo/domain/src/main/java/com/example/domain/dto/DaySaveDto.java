@@ -14,7 +14,7 @@ import javax.persistence.Enumerated;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DaySaveDto {
-    private int shareLotId;
+    private Long shareLotId;
     @Enumerated(EnumType.STRING)
     private DayName day_str;
 

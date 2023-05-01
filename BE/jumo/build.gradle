@@ -114,6 +114,7 @@ project(':firebase'){
 
 project(':error'){
 	dependencies{
+		implementation project(':core-web')
 		api 'org.springframework.boot:spring-boot-starter-web'
 	}
 }

@@ -143,4 +143,4 @@ with open('./전국주차장정보표준데이터.json', 'r', encoding='utf-8') 
 
 with open('./new_parking.json', 'w', encoding='utf-8') as new_file:
     write_str = {'records': new_json_str}
-    json.dump(write_str, new_file,indent="")
+    json.dump(write_str, new_file,indent='\t', ensure_ascii=False)
