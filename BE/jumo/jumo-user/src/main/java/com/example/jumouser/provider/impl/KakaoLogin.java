@@ -69,9 +69,9 @@ public class KakaoLogin implements LoginProvider {
 
     public Optional<User> checkUser(UserInfoDto userInfoDto){
 
-        List<User> user = userRepo.findBySocialId(userInfoDto.getSocial_id());
 
-        if(user.isEmpty()){
+        Optional<User> user = userRepo.findBySocialId(userInfoDto.getSocial_id());
+        if(!user.isPresent()){
             return Optional.of(User.builder()
                             .type("kakao")
                             .profileImg(userInfoDto.getProfile_image())
@@ -79,7 +79,7 @@ public class KakaoLogin implements LoginProvider {
                     .build()
             );
         }else{
-            return user.stream().findAny();
+            return user;
         }
     }
 

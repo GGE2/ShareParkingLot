@@ -35,9 +35,9 @@ public class NaverLogin implements LoginProvider {
     @Override
     public Optional<User> checkUser(UserInfoDto userInfoDto){
 
-        List<User> user = userRepo.findBySocialId(userInfoDto.getSocial_id());
+        Optional<User> user = userRepo.findBySocialId(userInfoDto.getSocial_id());
 
-        if(user.isEmpty()){
+        if(!user.isPresent()){
             return Optional.of(User.builder()
                             .socialId(userInfoDto.getSocial_id())
                             .name(userInfoDto.getName())
@@ -45,7 +45,7 @@ public class NaverLogin implements LoginProvider {
                             .type("naver")
                     .build());
         }else{
-            return user.stream().findAny();
+            return user;
         }
     }
 

@@ -16,8 +16,8 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
     private final UserRepo userRepo;
     public boolean emailCheck(String email){
-        List<User> user = userRepo.findByEmail(email);
-        if(user.isEmpty()){
+        Optional<User> user = userRepo.findByEmail(email);
+        if(user.isPresent()){
             return true;
         }
         return false;
@@ -27,7 +27,12 @@ public class UserServiceImpl implements UserService {
     public Optional<User> signUp(SignUpRequestDto requestDto){
         User user = new User(requestDto);
         userRepo.save(user);
-        List<User> sign_user = userRepo.findByEmail(requestDto.getEmail()); // 수정할 것
-        return sign_user.stream().findAny();
+        Optional<User> sign_user = userRepo.findByEmail(requestDto.getEmail()); // 수정할 것
+        if(sign_user.isPresent()){
+            return sign_user;
+        }else{
+            return Optional.of(new User());
+        }
+
     }
 }
