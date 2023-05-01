@@ -27,6 +27,7 @@ public class JumoLogin implements LoginProvider  {
     public UserInfoDto getUserInfo(LoginRequestDto requestDto) {
         return UserInfoDto.builder()
                 .email(requestDto.getEmail())
+                .password(requestDto.getPassword())
                 .build();
     }
 
