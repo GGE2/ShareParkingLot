@@ -1,6 +1,7 @@
 package com.example.jumouser.provider.impl;
 
 
+import com.example.domain.dto.user.LoginRequestDto;
 import com.example.domain.dto.user.UserInfoDto;
 import com.example.domain.entity.User;
 import com.example.domain.repo.UserRepo;
@@ -35,13 +36,13 @@ public class KakaoLogin implements LoginProvider {
     String redirect;
 
     @Override
-    public UserInfoDto getUserInfo(String accessToken) {
+    public UserInfoDto getUserInfo(LoginRequestDto requestDto) {
         String reqURL = "https://kapi.kakao.com";
         try {
             WebClient webClient = WebClient.create(reqURL);
             ResponseEntity<String> response = webClient.get()
                     .uri(uriBuilder -> uriBuilder.path("/v2/user/me").build())
-                    .header("Authorization", "Bearer "+accessToken)
+                    .header("Authorization", "Bearer "+requestDto.getAccessToken())
                     .retrieve().toEntity(String.class).block();
             ObjectMapper objMapper = new ObjectMapper();
             Map<String,Object> obj = objMapper.readValue(response.getBody(), new TypeReference<Map<String, Object>>(){});

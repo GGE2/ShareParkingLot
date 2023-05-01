@@ -24,9 +24,14 @@ public class UserController {
 
     @GetMapping("/login")
     public User login(@ModelAttribute("loginRequestDto") LoginRequestDto requestDto){
-        UserInfoDto userInfoDto = userFactory.loginSelector(requestDto.getType()).getUserInfo(requestDto.getAccessToken());
-        User user = userService.checkUser(userInfoDto);
-        return user;
+
+        UserInfoDto userInfoDto = userFactory.loginSelector(requestDto.getType()).getUserInfo(requestDto);
+        Optional<User> user = userFactory.loginSelector(requestDto.getType()).checkUser(userInfoDto);
+        if(user.isPresent()){
+            return user.get();
+        }else{
+            return null;
+        }
     }
 
     @PostMapping("/sign")

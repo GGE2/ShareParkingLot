@@ -1,5 +1,6 @@
 package com.example.jumouser.provider.impl;
 
+import com.example.domain.dto.user.LoginRequestDto;
 import com.example.domain.dto.user.UserInfoDto;
 import com.example.domain.entity.User;
 import com.example.domain.repo.UserRepo;
@@ -23,9 +24,9 @@ public class JumoLogin implements LoginProvider  {
     }
 
     @Override
-    public UserInfoDto getUserInfo(String email) {
+    public UserInfoDto getUserInfo(LoginRequestDto requestDto) {
         return UserInfoDto.builder()
-                .email(email)
+                .email(requestDto.getEmail())
                 .build();
     }
 
