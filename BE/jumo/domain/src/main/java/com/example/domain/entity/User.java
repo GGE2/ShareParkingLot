@@ -3,9 +3,7 @@ package com.example.domain.entity;
 
 import javax.persistence.*;
 import com.example.domain.dto.user.SignUpRequestDto;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +12,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
 public class User {
 
     @Id()
@@ -33,6 +32,7 @@ public class User {
     private String profileImg;
     @Column(name="pt_has")
     private int ptHas;
+
 
     public User(SignUpRequestDto requestDto){
         this.email = requestDto.getEmail();

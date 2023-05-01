@@ -3,6 +3,7 @@ package com.example.jumouser.controller;
 
 
 import com.example.domain.dto.user.LoginRequestDto;
+import com.example.domain.dto.user.LoginResponseDto;
 import com.example.domain.dto.user.SignUpRequestDto;
 import com.example.domain.dto.user.UserInfoDto;
 import com.example.jumouser.factory.UserFactory;
@@ -26,12 +27,22 @@ public class UserController {
     private final UserFactory userFactory;
 
     @GetMapping("/login")
-    public User login(@ModelAttribute("loginRequestDto") LoginRequestDto requestDto){
+    public LoginResponseDto login(@ModelAttribute("loginRequestDto") LoginRequestDto requestDto){
         System.out.println(requestDto.toString());
         UserInfoDto userInfoDto = userFactory.loginSelector(requestDto.getType()).getUserInfo(requestDto);
         Optional<User> user = userFactory.loginSelector(requestDto.getType()).checkUser(userInfoDto);
-        System.out.println(user.get());
-        return user.get();
+        LoginResponseDto responseDto = LoginResponseDto.builder()
+                .user_id(user.get().getUserId())
+                .name(user.get().getName())
+                .email(user.get().getEmail())
+                .phone(user.get().getPhone())
+                .profile_img(user.get().getProfileImg())
+                .ptHas(user.get().getPtHas())
+                .type(user.get().getType())
+                .social_id(user.get().getSocialId())
+                .build();
+
+        return responseDto;
     }
 
     @PostMapping("/sign")
