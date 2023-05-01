@@ -34,6 +34,12 @@
         <action
             android:id="@+id/action_map_fragment_to_myShareParkingLotFragment"
             app:destination="@id/myShareParkingLotFragment" />
+        <action
+            android:id="@+id/action_map_fragment_to_myTicketFragment"
+            app:destination="@id/myTicketFragment" />
+        <action
+            android:id="@+id/action_map_fragment_to_parkinLotDetailFragment"
+            app:destination="@id/parkinLotDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/pointFragment"
@@ -54,7 +60,11 @@
         android:id="@+id/profileFragment"
         android:name="com.team.parking.presentation.fragment.ProfileFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_myCarFragment"
+            app:destination="@id/myCarFragment" />
+    </fragment>
     <fragment
         android:id="@+id/myShareParkingLotFragment"
         android:name="com.team.parking.presentation.fragment.MyShareParkingLotFragment"
@@ -66,6 +76,9 @@
         <action
             android:id="@+id/action_myShareParkingLotFragment_to_myShareParkingLotTicketFragment"
             app:destination="@id/myTicketFragment" />
+        <action
+            android:id="@+id/action_myShareParkingLotFragment_to_addShareParkingLotFragment"
+            app:destination="@id/addShareParkingLotFragment" />
     </fragment>
     <fragment
         android:id="@+id/daySelectFragment"
@@ -76,5 +89,42 @@
         android:id="@+id/myTicketFragment"
         android:name="com.team.parking.presentation.fragment.MyTicketFragment"
         android:label="fragment_my_share_parking_lot_ticket"
-        tools:layout="@layout/fragment_my_ticket" />
+        tools:layout="@layout/fragment_my_ticket" >
+        <action
+            android:id="@+id/action_myTicketFragment_to_ticketDetailFragment"
+            app:destination="@id/ticketDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/myCarFragment"
+        android:name="com.team.parking.presentation.fragment.MyCarFragment"
+        android:label="fragment_my_car"
+        tools:layout="@layout/fragment_my_car" />
+    <fragment
+        android:id="@+id/parkinLotDetailFragment"
+        android:name="com.team.parking.presentation.fragment.ParkingLotDetailFragment"
+        android:label="fragment_parkin_lot_detail"
+        tools:layout="@layout/fragment_parking_lot_detail" >
+        <action
+            android:id="@+id/action_parkinLotDetailFragment_to_purchaseTicketFragment"
+            app:destination="@id/purchaseTicketFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/purchaseTicketFragment"
+        android:name="com.team.parking.presentation.fragment.PurchaseTicketFragment"
+        android:label="fragment_purchase_ticket"
+        tools:layout="@layout/fragment_purchase_ticket" />
+    <fragment
+        android:id="@+id/addShareParkingLotFragment"
+        android:name="com.team.parking.presentation.fragment.AddShareParkingLotFragment"
+        android:label="fragment_add_share_parking_lot"
+        tools:layout="@layout/fragment_add_share_parking_lot" >
+        <action
+            android:id="@+id/action_addShareParkingLotFragment_to_daySelectFragment"
+            app:destination="@id/daySelectFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/ticketDetailFragment"
+        android:name="com.team.parking.TicketDetailFragment"
+        android:label="fragment_ticket_detail"
+        tools:layout="@layout/fragment_ticket_detail" />
 </navigation>

@@ -23,6 +23,9 @@ class FavoriteFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         fragmentFavoriteBinding = FragmentFavoriteBinding.bind(view)
+        fragmentFavoriteBinding.imageBackFavorite.setOnClickListener {
+            requireActivity().onBackPressed()
+        }
     }
 
 
