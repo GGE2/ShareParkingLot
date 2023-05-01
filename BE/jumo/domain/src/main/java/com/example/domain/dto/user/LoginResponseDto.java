@@ -18,4 +18,8 @@ public class LoginResponseDto {
 
     private String profile_img;
     private int ptHas;
+
+    public String toString(LoginResponseDto requestDto){
+        return "type : " +type + " phone : "+phone + " email : " + email  + " social_id : " + social_id+ " profile_img : " + profile_img + "name : " + name;
+    }
 }

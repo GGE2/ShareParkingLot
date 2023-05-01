@@ -41,7 +41,7 @@ public class UserController {
                 .type(user.get().getType())
                 .social_id(user.get().getSocialId())
                 .build();
-
+        System.out.println(responseDto.toString());
         return responseDto;
     }
 
