@@ -27,9 +27,10 @@ public class UserController {
 
     @GetMapping("/login")
     public User login(@ModelAttribute("loginRequestDto") LoginRequestDto requestDto){
-
+        System.out.println(requestDto.toString());
         UserInfoDto userInfoDto = userFactory.loginSelector(requestDto.getType()).getUserInfo(requestDto);
         Optional<User> user = userFactory.loginSelector(requestDto.getType()).checkUser(userInfoDto);
+
         return user.get();
     }
 
