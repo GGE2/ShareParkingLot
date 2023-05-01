@@ -12,4 +12,7 @@ public class UserInfoDto {
 
     private String social_id;
     private String password;
+
+    private String name;
+    private String profile_img;
 }

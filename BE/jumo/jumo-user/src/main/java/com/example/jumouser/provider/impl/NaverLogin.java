@@ -24,7 +24,10 @@ public class NaverLogin implements LoginProvider {
     @Override
     public UserInfoDto getUserInfo(LoginRequestDto requestDto) {
         return UserInfoDto.builder()
+                .type("naver")
                 .social_id(requestDto.getSocial_id())
+                .name(requestDto.getName())
+                .profile_img(requestDto.getProfile_img())
                 .build();
     }
 
@@ -35,7 +38,12 @@ public class NaverLogin implements LoginProvider {
         List<User> user = userRepo.findBySocialId(userInfoDto.getSocial_id());
 
         if(user.isEmpty()){
-            return Optional.of(new User());
+            return Optional.of(User.builder()
+                            .socialId(userInfoDto.getSocial_id())
+                            .name(userInfoDto.getName())
+                            .profileImg(userInfoDto.getProfile_img())
+                            .type("naver")
+                    .build());
         }else{
             return user.stream().findAny();
         }

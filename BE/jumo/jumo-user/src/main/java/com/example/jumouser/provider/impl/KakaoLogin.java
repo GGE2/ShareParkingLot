@@ -54,6 +54,7 @@ public class KakaoLogin implements LoginProvider {
 
             UserInfoDto userInfo = UserInfoDto.builder()
                     .type("kakao")
+                    .social_id(requestDto.getSocial_id())
                     .profile_image(image)
                     .build();
 
@@ -71,7 +72,12 @@ public class KakaoLogin implements LoginProvider {
         List<User> user = userRepo.findBySocialId(userInfoDto.getSocial_id());
 
         if(user.isEmpty()){
-            return null;
+            return Optional.of(User.builder()
+                            .type("kakao")
+                            .profileImg(userInfoDto.getProfile_image())
+                            .socialId(userInfoDto.getSocial_id())
+                    .build()
+            );
         }else{
             return user.stream().findAny();
         }
