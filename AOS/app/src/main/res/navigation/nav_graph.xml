@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_loginFragment_to_mapFragment"
             app:destination="@id/map_fragment" />
+        <action
+            android:id="@+id/action_login_fragment_to_signUpFragment"
+            app:destination="@id/signUpFragment" />
     </fragment>
     <fragment
         android:id="@+id/map_fragment"
@@ -56,6 +59,15 @@
         android:name="com.team.parking.presentation.fragment.FavoriteFragment"
         android:label="fragment_favorite"
         tools:layout="@layout/fragment_favorite" />
+    <fragment
+        android:id="@+id/signUpFragment"
+        android:name="com.team.parking.presentation.fragment.SignUpFragment"
+        android:label="fragment_sign_up"
+        tools:layout="@layout/fragment_sign_up" >
+        <action
+            android:id="@+id/action_signUpFragment_to_login_fragment"
+            app:destination="@id/login_fragment" />
+    </fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.team.parking.presentation.fragment.ProfileFragment"

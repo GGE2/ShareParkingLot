@@ -29,5 +29,10 @@
     <font
         app:fontStyle="normal"
         app:font="@font/nexon_gothic_bold"/>
-
+    <font app:fontStyle = "normal"
+        app:font="@font/line_br" />
+    <font app:fontStyle = "normal"
+        app:font="@font/line_rg"/>
+    <font app:fontStyle = "normal"
+        app:font="@font/line_th"/>
 </font-family>

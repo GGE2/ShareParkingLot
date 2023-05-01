@@ -21,8 +21,16 @@ android {
         versionName "1.0"
         manifestPlaceholders["NAVER_CLIENT_KEY"] = "NAVER_CLIENT_KEY"
         buildConfigField "String","NAVER_CLIENT_KEY", properties["NAVER_CLIENT_KEY"]
-
+        manifestPlaceholders["KAKAO_CLIENT_KEY"] = "KAKAO_CLIENT_KEY"
+        buildConfigField "String","KAKAO_CLIENT_KEY", properties["KAKAO_CLIENT_KEY"]
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        manifestPlaceholders["NAVER_CLIENT_ID"] = "NAVER_CLIENT_ID"
+        buildConfigField "String","NAVER_CLIENT_ID", properties["NAVER_CLIENT_ID"]
+
+
+        manifestPlaceholders["NAVER_CLIENT_SECRET"] = "NAVER_CLIENT_SECRET"
+        buildConfigField "String","NAVER_CLIENT_SECRET", properties["NAVER_CLIENT_SECRET"]
     }
 
     buildTypes {
@@ -53,6 +61,9 @@ dependencies {
     def nav_version = "2.5.3"
 
     // 네이버 지도 SDK
+    implementation 'com.navercorp.nid:oauth-jdk8:5.1.0'
+    // 카카오 로그인
+    implementation "com.kakao.sdk:v2-user:2.13.0"
     implementation 'com.naver.maps:map-sdk:3.16.1'
     //위치정보 사용 권한
     implementation 'com.google.android.gms:play-services-location:16.0.0'

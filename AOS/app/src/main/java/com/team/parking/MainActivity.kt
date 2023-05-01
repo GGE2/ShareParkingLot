@@ -15,7 +15,13 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import com.google.android.material.navigation.NavigationView
+import com.kakao.sdk.common.util.Utility
+import com.team.parking.data.api.UserService
+import com.team.parking.data.model.user.User
 import com.team.parking.databinding.ActivityMainBinding
+import com.team.parking.presentation.utils.App
+
+import com.team.parking.presentation.viewmodel.UserViewModel
 import com.team.parking.presentation.viewmodel.MapViewModel
 import com.team.parking.presentation.viewmodel.MapViewModelFactory
 import com.team.parking.databinding.SideHeaderBinding
@@ -31,10 +37,13 @@ class MainActivity : AppCompatActivity() {
     lateinit var mapViewModel: MapViewModel
 
     private lateinit var binding : ActivityMainBinding
-    private lateinit var headerBinding: SideHeaderBinding
+    lateinit var userViewModel: UserViewModel
     lateinit var navigationDrawer : DrawerLayout
     lateinit var navigationView : NavigationView
+    
+    private lateinit var headerBinding: SideHeaderBinding
     lateinit var navController: NavController
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -43,6 +52,9 @@ class MainActivity : AppCompatActivity() {
         setNavigationController()
         setNavigationDrawerInit()
         setOnClickNavigationDrawerItem()
+
+        userViewModel = ViewModelProvider(this)[UserViewModel::class.java]
+
         setFullScreen()
         initMapViewModel()
     }
