@@ -17,7 +17,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepo userRepo;
     public boolean emailCheck(String email){
         Optional<User> user = userRepo.findByEmail(email);
-        if(user.isPresent()){
+        if(!user.isPresent()){
             return true;
         }
         return false;
