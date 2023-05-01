@@ -30,7 +30,7 @@ public class UserController {
 
         UserInfoDto userInfoDto = userFactory.loginSelector(requestDto.getType()).getUserInfo(requestDto);
         Optional<User> user = userFactory.loginSelector(requestDto.getType()).checkUser(userInfoDto);
-        if(user.isEmpty()){
+        if(user.isPresent()){
             System.out.println(user.get());
             return user.get();
         }else{
