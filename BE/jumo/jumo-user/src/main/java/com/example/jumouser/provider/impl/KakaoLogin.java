@@ -71,7 +71,7 @@ public class KakaoLogin implements LoginProvider {
 
 
         Optional<User> user = userRepo.findBySocialId(userInfoDto.getSocial_id());
-        if(!user.isPresent()){
+        if(user.isEmpty()){
             return Optional.of(User.builder()
                             .type("kakao")
                             .profileImg(userInfoDto.getProfile_image())

@@ -52,4 +52,9 @@ public class User {
 
     @OneToMany(mappedBy = "credit_id")
     private List<Transaction> transactions = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return "name : "+ name + " social_id : " +socialId;
+    }
 }

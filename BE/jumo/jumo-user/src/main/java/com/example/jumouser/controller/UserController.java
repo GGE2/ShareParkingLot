@@ -30,7 +30,7 @@ public class UserController {
         System.out.println(requestDto.toString());
         UserInfoDto userInfoDto = userFactory.loginSelector(requestDto.getType()).getUserInfo(requestDto);
         Optional<User> user = userFactory.loginSelector(requestDto.getType()).checkUser(userInfoDto);
-
+        System.out.println(user.get());
         return user.get();
     }
 
