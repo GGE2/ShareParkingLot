@@ -35,7 +35,7 @@ public class JumoLogin implements LoginProvider  {
     @Override
     public Optional<User> checkUser(UserInfoDto userInfoDto) {
         Optional<User> user = userRepo.findByEmailAndPassword(userInfoDto.getEmail(),userInfoDto.getPassword());
-        if(user.isPresent()){
+        if(!user.isEmpty()){
             return user;
         }else{
             return Optional.of(new User());
