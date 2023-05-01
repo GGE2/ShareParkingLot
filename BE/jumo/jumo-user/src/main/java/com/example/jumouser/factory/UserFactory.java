@@ -9,15 +9,18 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class UserFactory {
+
+    private final UserRepo userRepo;
     public LoginProvider loginSelector(String type){
         switch (type) {
             case "kakao" :
-                return new KakaoLogin();
+                return KakaoLogin.getInstance(userRepo);
             case "naver" :
-                return new NaverLogin();
+                return NaverLogin.getInstance(userRepo);
             default:
-                return new JumoLogin();
+                return JumoLogin.getInstance(userRepo);
         }
     }
 

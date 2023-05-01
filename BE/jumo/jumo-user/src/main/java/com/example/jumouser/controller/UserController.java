@@ -13,6 +13,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import com.example.domain.entity.User;
 
+import javax.swing.text.html.Option;
+import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/user")
@@ -37,8 +40,8 @@ public class UserController {
     @PostMapping("/sign")
     public User signUp(@RequestBody SignUpRequestDto signUpRequestDto){
 
-        User user = userService.signUp(signUpRequestDto);
-        return user;
+        Optional<User> user = userService.signUp(signUpRequestDto);
+        return user.get();
     }
 
     @GetMapping("/email")
