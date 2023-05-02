@@ -57,4 +57,8 @@ public class User {
     public String toString() {
         return "name : "+ name + " social_id : " +socialId;
     }
+
+    public void updateProfileImg(String url){
+        this.profileImg = url;
+    }
 }
