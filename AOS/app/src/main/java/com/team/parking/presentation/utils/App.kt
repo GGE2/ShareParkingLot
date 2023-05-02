@@ -23,9 +23,9 @@ class App : Application(){
         super.onCreate()
         NaverMapSdk.getInstance(this).client =
             NaverMapSdk.NaverCloudPlatformClient(BuildConfig.NAVER_CLIENT_KEY)
+        KakaoSdk.init(this,BuildConfig.KAKAO_CLIENT_KEY)
         NaverIdLoginSDK.initialize(this, "${BuildConfig.NAVER_CLIENT_ID}", "${BuildConfig.NAVER_CLIENT_SECRET}" , "네이버 로그인")
         KakaoSdk.init(this, "${BuildConfig.KAKAO_CLIENT_KEY}")
-
         userRetrofit= Retrofit.Builder()
             .baseUrl("http://k8d108.p.ssafy.io:8081/")
             .addConverterFactory(GsonConverterFactory.create())
@@ -50,6 +50,7 @@ class App : Application(){
                 when {
                     capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> {
                         return true
+
                     }
                     capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> {
                         return true

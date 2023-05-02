@@ -20,10 +20,11 @@ import com.team.parking.data.api.UserService
 import com.team.parking.data.model.user.User
 import com.team.parking.databinding.ActivityMainBinding
 import com.team.parking.presentation.utils.App
-
 import com.team.parking.presentation.viewmodel.UserViewModel
 import com.team.parking.presentation.viewmodel.MapViewModel
 import com.team.parking.presentation.viewmodel.MapViewModelFactory
+import com.team.parking.presentation.viewmodel.SearchViewModel
+import com.team.parking.presentation.viewmodel.SearchViewModelFactory
 import com.team.parking.databinding.SideHeaderBinding
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -35,6 +36,10 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var mapViewModelFactory : MapViewModelFactory
     lateinit var mapViewModel: MapViewModel
+
+    @Inject
+    lateinit var searchViewModelFactory: SearchViewModelFactory
+    lateinit var searchViewModel: SearchViewModel
 
     private lateinit var binding : ActivityMainBinding
     lateinit var userViewModel: UserViewModel
@@ -52,18 +57,19 @@ class MainActivity : AppCompatActivity() {
         setNavigationController()
         setNavigationDrawerInit()
         setOnClickNavigationDrawerItem()
-
+        //setFullScreen()
         userViewModel = ViewModelProvider(this)[UserViewModel::class.java]
-
-        setFullScreen()
         initMapViewModel()
     }
 
     fun initMapViewModel(){
         mapViewModel = ViewModelProvider(this,mapViewModelFactory)[MapViewModel::class.java]
+        userViewModel = ViewModelProvider(this)[UserViewModel::class.java]
+        searchViewModel = ViewModelProvider(this,searchViewModelFactory)[SearchViewModel::class.java]
         setProfileFragmentNavigation()
     }
-    
+
+
     fun setOnClickNavigationDrawerItem(){
         binding.navigationFragmentMap.setNavigationItemSelectedListener { item ->
             when (item.itemId) {

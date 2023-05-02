@@ -6,6 +6,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.naver.maps.map.overlay.Marker
 import com.team.parking.data.model.map.MapRequest
 import com.team.parking.data.model.map.MapResponse
 import com.team.parking.data.util.Resource
@@ -25,6 +26,8 @@ class MapViewModel(
     //지도 주차장 데이터
     private var _parkingLots : MutableLiveData<Resource<List<MapResponse>>> = MutableLiveData()
     val parkingLots : LiveData<Resource<List<MapResponse>>> get() = _parkingLots
+
+    private var _marker : MutableLiveData<Marker> = MutableLiveData()
 
     /**
      * 서버로부터 주차장 데이터 받기
