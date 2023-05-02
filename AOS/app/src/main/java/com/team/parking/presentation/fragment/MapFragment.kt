@@ -2,38 +2,35 @@ package com.team.parking.presentation.fragment
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.location.Location
 import android.os.Bundle
+import android.os.Looper
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.google.android.gms.location.*
 import com.team.parking.R
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.OnSuccessListener
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.util.FusedLocationSource
 import com.team.parking.MainActivity
-import com.team.parking.data.api.MapAPIService
 import com.team.parking.data.model.map.MapRequest
 import com.team.parking.data.util.Resource
 import com.team.parking.databinding.FragmentMapBinding
-import com.team.parking.presentation.utils.App
 import com.team.parking.presentation.viewmodel.MapViewModel
-import com.team.parking.presentation.viewmodel.MapViewModelFactory
-import dagger.hilt.android.scopes.FragmentScoped
-import kotlinx.coroutines.*
-import javax.inject.Inject
+import com.team.parking.presentation.viewmodel.SearchViewModel
 
 
 private const val TAG = "MapFragment_지훈"
@@ -42,17 +39,24 @@ class MapFragment : Fragment() , OnMapReadyCallback {
     private lateinit var fragmentMapBinding: FragmentMapBinding
     private lateinit var locationSource: FusedLocationSource
     private lateinit var naverMap: NaverMap
-    private lateinit var currentLocation : Location
-    private lateinit var fusedLocationClient : FusedLocationProviderClient
-    private lateinit var mapRequest : MapRequest
-    private lateinit var viewModel: MapViewModel
-    private  var job : Job? = null
-
+    private lateinit var locationClient : FusedLocationProviderClient
+    private lateinit var mapViewModel: MapViewModel
+    private lateinit var searchViewModel: SearchViewModel
+    private val permissionList = Manifest.permission.ACCESS_FINE_LOCATION
+    //GPS 권한 생성
+    private val requestPermission = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()){
+        when(it){
+            true ->{
+            }else->{
+                naverMap.locationTrackingMode = LocationTrackingMode.None
+            }
+        }
+    }
+    private var cacheData = ArrayList<Marker>()
+    private var currentZoom:Double = 0.0
     companion object {
-        private const val LOCATION_PERMISSION_REQUEST_CODE = 1000
-        private val PERMISSIONS = arrayOf(
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION)
+        private const val PERMISSION_REQUEST_CODE = 1000
     }
 
     override fun onCreateView(
@@ -64,44 +68,60 @@ class MapFragment : Fragment() , OnMapReadyCallback {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+        locationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+        locationSource = FusedLocationSource(this, PERMISSION_REQUEST_CODE)
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         fragmentMapBinding = DataBindingUtil.bind<FragmentMapBinding>(view)!!
+        mapViewModel = (activity as MainActivity).mapViewModel
+        searchViewModel = (activity as MainActivity).searchViewModel
         init()
-        locationSource = FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
-        viewModel = (activity as MainActivity).mapViewModel
     }
-
 
     /**
      * 서버로부터 주차장 데이터 가져오기
      */
-    private fun getMapData(){
-        viewModel.getMapDatas(mapRequest)
-        viewModel.parkingLots.observe(viewLifecycleOwner) { response ->
+    private fun getMapData(mapRequest: MapRequest){
+        mapViewModel.getMapDatas(mapRequest)
+        mapViewModel.parkingLots.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is Resource.Success -> {
-                    Log.i(TAG, "서버로부터 주차장 데이터를 가져오는데 성공했습니다.")
+                    //Log.i(TAG, "서버로부터 주차장 데이터를 가져오는데 성공했습니다.")
                     response.data.let{ data->
-                        Log.i(TAG, "getMapData: ${data!!.size}")
-                        for(i in 0 until data!!.size){
-                            val marker = Marker()
-                            marker.position = LatLng(data[i].lat,data[i].lng)
-                            marker.map = naverMap
+                        if(currentZoom<15.0){
+                            for(i in 0 until data!!.size){
+                                val marker = Marker()
+                                cacheData.add(marker)
+                                marker.position = LatLng(data[i].lat,data[i].lng)
+                                marker.iconTintColor = Color.RED
+                                marker.map = naverMap
+                            }
+                        }else{
+                            for(i in 0 until data!!.size){
+                                val marker = Marker()
+                                cacheData.add(marker)
+                                marker.position = LatLng(data[i].lat,data[i].lng)
+                                marker.iconTintColor = Color.BLUE
+                                marker.map = naverMap
+                            }
                         }
                     }
                 }
                 is Resource.Error -> {
-                    Log.i(TAG, "서버로부터 주차장 데이터 가져오는데 실패하였습니다.")
+                    //Log.i(TAG, "서버로부터 주차장 데이터 가져오는데 실패하였습니다.")
                 }
                 else -> {
-                    Log.i(TAG, "서버로부터 주차장 데이터를 가져오고 있습니다.")
+                    //Log.i(TAG, "서버로부터 주차장 데이터를 가져오고 있습니다.")
                 }
             }
+        }
+    }
+    private fun removeMapData(){
+        for(i in 0 until cacheData.size){
+            cacheData[i].map = null
         }
     }
 
@@ -113,42 +133,33 @@ class MapFragment : Fragment() , OnMapReadyCallback {
     private fun init() {
         setDatabinding()
         setOnClickNavigationDrawerItem()
-        fetchLastLocation()
+        initMap()
     }
 
     /**
-     * 사용자 현재위치 받기
+     * SearchFragment 검색후 해당 장소로 좌표이동
      */
-    private fun fetchLastLocation(){
-        if (ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED &&
-            ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                requireActivity(),
-                PERMISSIONS,
-                LOCATION_PERMISSION_REQUEST_CODE
-            )
-            return
+    private fun changeLocation(){
+        searchViewModel.searchedPlace.observe(viewLifecycleOwner){
+            val cameraUpdate = CameraUpdate.scrollTo(LatLng(it.y.toDouble(),it.x.toDouble()))
+            val zoomUpdate = CameraUpdate.zoomTo(15.0)
+            naverMap.moveCamera(cameraUpdate)
+            naverMap.moveCamera(zoomUpdate)
         }
-        var task = fusedLocationClient.lastLocation
-        task.addOnSuccessListener(object : OnSuccessListener<Location?> {
-            override fun onSuccess(location: Location?) {
-                if(location!=null) {
-                    currentLocation = location
-                }
-                initMap()
-            }
-
-        })
-
-
     }
+
+    override fun onMapReady(naverMap: NaverMap) {
+        this.naverMap = naverMap
+        requestPermission.launch(permissionList)
+        naverMap.locationSource = locationSource
+        naverMap.uiSettings.isLocationButtonEnabled = true
+        mapSetting()
+        getMapDataFromRemote()
+        changeLocation()
+    }
+
+
+
 
     /**
      * NaverMap Option
@@ -209,8 +220,16 @@ class MapFragment : Fragment() , OnMapReadyCallback {
      */
     private fun mapSetting(){
         naverMap.uiSettings.isLocationButtonEnabled = true
+        naverMap.uiSettings.logoGravity = (Gravity.END)
         naverMap.minZoom = 8.0
         naverMap.maxZoom = 18.0
+    }
+
+    /**
+     * 장소 검색 클릭시 SearchFragment로 이동
+     */
+    fun setOnClickSearchListener(){
+        findNavController().navigate(R.id.action_map_fragment_to_searchFragment)
     }
 
     /**
@@ -225,112 +244,34 @@ class MapFragment : Fragment() , OnMapReadyCallback {
             //Log.i(TAG, "getMapDataFromRemote: ${getAddress(naverMap.cameraPosition.target.latitude,naverMap.cameraPosition.target.longitude)}")
         }
         naverMap.addOnCameraIdleListener {
-            /*val marker = Marker()
-            marker.position = LatLng(naverMap.cameraPosition.target.latitude,naverMap.cameraPosition.target.longitude)
-            marker.map = naverMap*/
-            //Log.i(TAG, "getMapDataFromRemote 1: ${naverMap.contentBounds.center.latitude},${naverMap.contentBounds.center.longitude}")
+
+            currentZoom =  naverMap.cameraPosition.zoom
+            //Log.i(TAG, "줌 레벨 : ${naverMap.cameraPosition.zoom}")
             /*Log.i(TAG, "줌 레벨 : ${naverMap.cameraPosition.zoom}")
             Log.i(TAG, "중심 좌표 : ${naverMap.cameraPosition.target.latitude},${naverMap.cameraPosition.target.longitude}")
             Log.i(TAG, "${naverMap.contentBounds.southWest.latitude} ,${naverMap.contentBounds.northWest.latitude} ")
             Log.i(TAG, "${naverMap.contentBounds.southWest.longitude} ,${naverMap.contentBounds.northEast.longitude}")*/
 
             //getAddress(naverMap.cameraPosition.target.latitude,naverMap.cameraPosition.target.longitude)
-            /*mapRequest = MapRequest(
-                naverMap.cameraPosition.target.latitude,naverMap.cameraPosition.target.longitude,
-                130.0,130.0,0.0,0.0,0.0
-            )*/
-
-        }
-    }
-
-
-
-   /* // 좌표 -> 주소 변환
-    private fun getAddress(lat: Double, lng: Double): String {
-        val geoCoder = Geocoder(requireContext(), Locale.KOREA)
-        val address: ArrayList<Address>
-        var addressResult = "주소를 가져 올 수 없습니다."
-        try {
-            //세번째 파라미터는 좌표에 대해 주소를 리턴 받는 갯수로
-            //한좌표에 대해 두개이상의 이름이 존재할수있기에 주소배열을 리턴받기 위해 최대갯수 설정
-            address = geoCoder.getFromLocation(lat, lng, 1) as ArrayList<Address>
-            if (address.size > 0) {
-                // 주소 받아오기
-                val currentLocationAddress = address[0].getAddressLine(0)
-                    .toString()
-                Log.i(TAG, "getAddress: ${address[0].thoroughfare.toString()}")
-                addressResult = currentLocationAddress
+            if(currentZoom>=13.8&& currentZoom<17.2){
+                val mapRequest = MapRequest(
+                    naverMap.cameraPosition.target.latitude,naverMap.cameraPosition.target.longitude,
+                    naverMap.contentBounds.northWest.latitude,naverMap.contentBounds.northEast.longitude,
+                    naverMap.contentBounds.southWest.latitude,naverMap.contentBounds.southWest.longitude,
+                    naverMap.cameraPosition.zoom
+                )
+                removeMapData()
+                getMapData(mapRequest)
             }
-
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-        return addressResult
-    }*/
-
-
-    override fun onMapReady(naverMap: NaverMap) {
-        this.naverMap = naverMap
-
-        val cameraUpdate = CameraUpdate.scrollTo(LatLng(currentLocation.latitude,currentLocation.longitude))
-        val zoomUpdate = CameraUpdate.zoomTo(14.0)
-        naverMap.moveCamera(cameraUpdate)
-        naverMap.moveCamera(zoomUpdate)
-        //Log.i(TAG, "onMapReady: ${currentLocation.latitude},${currentLocation.longitude}")
-        mapSetting()
-        getMapDataFromRemote()
-        mapRequest = MapRequest(
-            naverMap.cameraPosition.target.latitude,naverMap.cameraPosition.target.longitude,
-            130.0,130.0,0.0,0.0,0.0
-        )
-        getMapData()
-
-
-        if (ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED &&
-            ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                requireActivity(),
-                PERMISSIONS,
-                LOCATION_PERMISSION_REQUEST_CODE
-            )
-            return
-        }
-    }
-
-
-    /**
-     * GPS 권한 요청 CallBack
-     */
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
-    ) {
-        if (locationSource.onRequestPermissionsResult(
-                requestCode,
-                permissions,
-                grantResults
-            )
-        ) {
-            if (!locationSource.isActivated) { // 권한 거부됨
-                Toast.makeText(context, "권한이 거부되어 현위치를 표시할 수 없습니다.", Toast.LENGTH_SHORT)
-                    .show()
-            } else {
-                fetchLastLocation()
-                naverMap.locationTrackingMode = LocationTrackingMode.Follow
-                Log.i(TAG, "onRequestPermissionsResult: ")
+            else{
+                removeMapData()
             }
-            return
         }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
+
+
+
+
 
 }
 
