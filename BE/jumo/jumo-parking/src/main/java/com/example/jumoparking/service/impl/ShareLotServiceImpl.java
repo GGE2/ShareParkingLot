@@ -41,7 +41,7 @@ public class ShareLotServiceImpl implements ShareLotService {
         Optional<User> user = userRepo.findById(userId);
         ShareLot shareLot = ShareLot.builder(shareSaveDto, user.get()).build();
 
-        if(files.size() == 0){
+        if(files == null || files.size() == 0){
             shareLot = shareLotRepo.save(shareLot);
 
             if (shareLot == null){
