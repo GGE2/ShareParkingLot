@@ -72,7 +72,7 @@ class LoginFragment : Fragment() {
 
     fun setOnJumoLogin(){
         CoroutineScope(Dispatchers.IO).launch{
-            Log.d(TAG, "setOnJumoLogin: ${userViewModel._login_email}")
+            Log.d(TAG, "setOnJumoLogin: ${userViewModel._login_password}")
             val response = App.userRetrofit.create(UserService::class.java).login(
                 type="jumo",email=userViewModel._login_email, password=userViewModel._login_password
             )
@@ -90,7 +90,7 @@ class LoginFragment : Fragment() {
                         requireActivity().runOnUiThread {
                             Log.d(TAG, "setOnJumoLogin: Good")
                             userViewModel.login(response.body()!!)
-                            findNavController().navigate(R.id.action_login_fragment_to_signUpFragment)
+                            findNavController().navigate(R.id.action_loginFragment_to_mapFragment)
                         }
                     }
                 }
@@ -150,6 +150,11 @@ class LoginFragment : Fragment() {
                                     }
                                 }else{
                                     userViewModel.login(response.body()!!)
+                                    withContext(Dispatchers.Main) {
+                                        requireActivity().runOnUiThread {
+                                            findNavController().navigate(R.id.action_loginFragment_to_mapFragment)
+                                        }
+                                    }
                                 }
                             } else {
                                 Log.d(TAG, "login: ${response.code()}")
@@ -196,6 +201,11 @@ class LoginFragment : Fragment() {
                             }
                         }else{
                             userViewModel.login(response.body()!!)
+                            withContext(Dispatchers.Main) {
+                                requireActivity().runOnUiThread {
+                                    findNavController().navigate(R.id.action_loginFragment_to_mapFragment)
+                                }
+                            }
                         }
                     } else {
                         Log.d(TAG, "login: ${response.code()}")
@@ -241,6 +251,7 @@ class LoginFragment : Fragment() {
         NaverIdLoginSDK.authenticate(requireContext(), oauthLoginCallback)
     }
     fun setOnSignUp(){
+        userViewModel._type="jumo"
         findNavController().navigate(R.id.action_login_fragment_to_signUpFragment)
     }
 }
