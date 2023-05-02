@@ -254,4 +254,6 @@ class LoginFragment : Fragment() {
         userViewModel._type="jumo"
         findNavController().navigate(R.id.action_login_fragment_to_signUpFragment)
     }
+
+    
 }

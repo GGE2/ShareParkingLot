@@ -1,5 +1,6 @@
 package com.team.parking.presentation.viewmodel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.team.parking.data.model.user.LoginResponse
@@ -21,6 +22,8 @@ class UserViewModel : ViewModel() {
     var _login_password :String = ""
     var _social_id : String= ""
     // 여기까지 login 전
+    private var _userLiveData: MutableLiveData<User> = MutableLiveData()
+    val userLiveData: LiveData<User> get() = _userLiveData
     var user: User? = null
 
     fun login(
@@ -34,6 +37,7 @@ class UserViewModel : ViewModel() {
             loginResponse.profile_img,
             loginResponse.ptHas, loginResponse.type!!, loginResponse.social_id ?: ""
         )
+        _userLiveData.postValue(user)
     }
 
 

@@ -27,6 +27,10 @@ class NetModule {
     @Retention(AnnotationRetention.BINARY)
     annotation class SearchRetrofit
 
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class UserRetrofit
+
     @Singleton
     @Provides
     @MapRetrofit
@@ -59,7 +63,21 @@ class NetModule {
         return searchRetrofit.create(SearchAPIService::class.java)
     }
 
+    @Singleton
+    @Provides
+    @UserRetrofit
+    fun provideUserRetrofit():Retrofit{
+        return Retrofit.Builder()
+            .baseUrl("${BuildConfig.BASE_URL}8081/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
 
+//    @Singleton
+//    @Provides
+//    fun provideUserService(@UserRetrofit userRetrofit:Retrofit):UserAPIService{
+//        return userRetrofit.create(SearchAPIService::class.java)
+//    }
 
 
 }
