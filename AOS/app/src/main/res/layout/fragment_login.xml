@@ -161,26 +161,25 @@
                 android:id="@+id/sign_up_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="220dp"
                 android:layout_marginTop="20dp"
                 android:background="#00ff0000"
                 android:fontFamily="@font/line_rg"
                 android:onClick="@{()->handlers.setOnSignUp()}"
                 android:text="@string/sign_up_text"
                 android:textSize="10sp"
-                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/password_reset_btn"
                 app:layout_constraintTop_toBottomOf="@+id/password_input" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/password_reset_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
+                android:layout_marginEnd="32dp"
                 android:background="#00ff0000"
                 android:fontFamily="@font/line_rg"
                 android:text="@string/password_reset_text"
                 android:textSize="10sp"
-                app:layout_constraintLeft_toRightOf="@id/sign_up_btn"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/sign_up_btn" />
 
             <androidx.appcompat.widget.AppCompatButton

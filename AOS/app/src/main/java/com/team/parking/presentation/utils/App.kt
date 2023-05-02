@@ -17,9 +17,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 class App : Application(){
     companion object{
         lateinit var retrofit: Retrofit
-    }
-
-    companion object {
         lateinit var userRetrofit: Retrofit
     }
     override fun onCreate() {
