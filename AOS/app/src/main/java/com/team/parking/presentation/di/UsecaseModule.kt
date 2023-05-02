@@ -1,7 +1,9 @@
 package com.team.parking.presentation.di
 
 import com.team.parking.domain.repository.MapRepository
+import com.team.parking.domain.repository.SearchRepository
 import com.team.parking.domain.usecase.GetMapDataUseCase
+import com.team.parking.domain.usecase.GetSearchDataUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,10 +17,18 @@ class UsecaseModule {
 
     @Singleton
     @Provides
-    fun provideGetMapUsecaseDataUseCase(
+    fun provideGetMapDataUseCase(
         mapRepository: MapRepository
     ) : GetMapDataUseCase{
         return GetMapDataUseCase(mapRepository)
+    }
+
+    @Singleton
+    @Provides
+    fun provideGetSearchDataUsecase(
+        searchRepository: SearchRepository
+    ) : GetSearchDataUseCase{
+        return GetSearchDataUseCase(searchRepository)
     }
 
 }

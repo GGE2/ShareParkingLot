@@ -32,6 +32,13 @@
             android:id="@+id/action_map_fragment_to_favoriteFragment"
             app:destination="@id/favoriteFragment" />
         <action
+            android:id="@+id/action_map_fragment_to_searchFragment"
+            app:destination="@id/searchFragment"
+            app:enterAnim="@anim/push_up_in"
+            app:exitAnim="@anim/push_up_out"
+            app:popEnterAnim="@anim/push_down_in"
+            app:popExitAnim="@anim/push_down_out" />
+         <action
             android:id="@+id/action_map_fragment_to_profileFragment"
             app:destination="@id/profileFragment" />
         <action
@@ -60,6 +67,10 @@
         android:label="fragment_favorite"
         tools:layout="@layout/fragment_favorite" />
     <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.team.parking.presentation.fragment.SearchFragment"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" />
         android:id="@+id/signUpFragment"
         android:name="com.team.parking.presentation.fragment.SignUpFragment"
         android:label="fragment_sign_up"
