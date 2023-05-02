@@ -23,7 +23,7 @@ class AddShareParkingLotFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.buttonAddShareParkngLot.setOnClickListener {
+        binding.buttonAddShareParkingLot.setOnClickListener {
             findNavController().navigate(R.id.action_addShareParkingLotFragment_to_daySelectFragment)
         }
     }
