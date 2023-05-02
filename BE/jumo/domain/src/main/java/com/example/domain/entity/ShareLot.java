@@ -45,17 +45,18 @@ public class ShareLot {
 
     private float longitude;
 
-    @OneToMany(mappedBy = "img_id", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "shareLot", cascade = CascadeType.ALL)
     private List<Image> images = new ArrayList<>();
 
-    @OneToMany(mappedBy = "favorite_id", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "shareLot", cascade = CascadeType.ALL)
     private List<Favorite> favoriteList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "day_id", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "shareLot", cascade = CascadeType.ALL)
     private List<DayData> dayDataList = new ArrayList<>();
 
-    public static ShareLotBuilder builder(ShareSaveDto shareSaveDto) {
+    public static ShareLotBuilder builder(ShareSaveDto shareSaveDto, User user) {
         return ShareLotBuilder()
+                .user(user)
                 .latitude(shareSaveDto.getLatitude())
                 .longitude(shareSaveDto.getLongitude())
                 .sha_fee(shareSaveDto.getShaFee())

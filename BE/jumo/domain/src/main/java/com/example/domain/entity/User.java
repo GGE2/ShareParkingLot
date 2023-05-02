@@ -15,7 +15,7 @@ import java.util.List;
 @Getter
 public class User {
 
-    @Id()
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long userId;
@@ -44,13 +44,13 @@ public class User {
         this.socialId=requestDto.getSocial_id();
     }
 
-    @OneToMany(mappedBy = "car_id", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<CarInfo> carInfoList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "ticket_id", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Ticket> tickets = new ArrayList<>();
 
-    @OneToMany(mappedBy = "credit_id")
+    @OneToMany(mappedBy = "user")
     private List<Transaction> transactions = new ArrayList<>();
 
     @Override

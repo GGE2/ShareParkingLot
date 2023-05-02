@@ -12,13 +12,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CarInfoDto {
-    private Long car_id;
+    private Long carId;
     private String carStr;
     private boolean carRep;
 
     @Builder
     public CarInfoDto(CarInfo carInfo){
-        this.car_id = carInfo.getCar_id();
+        this.carId = carInfo.getCar_id();
         this.carStr = carInfo.getCar_str();
         this.carRep = carInfo.getCar_rep();
     }

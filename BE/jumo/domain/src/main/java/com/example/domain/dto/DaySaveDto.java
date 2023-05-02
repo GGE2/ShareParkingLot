@@ -16,9 +16,9 @@ import javax.persistence.Enumerated;
 public class DaySaveDto {
     private Long shareLotId;
     @Enumerated(EnumType.STRING)
-    private DayName day_str;
+    private DayName dayStr;
 
-    private int day_start;
+    private int dayStart;
 
-    private int day_end;
+    private int dayEnd;
 }

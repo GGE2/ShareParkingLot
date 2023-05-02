@@ -1,10 +1,7 @@
 package com.example.jumoparking.service.impl;
 
 import com.example.domain.dto.*;
-import com.example.domain.entity.Favorite;
-import com.example.domain.entity.Image;
-import com.example.domain.entity.ParkingLot;
-import com.example.domain.entity.ShareLot;
+import com.example.domain.entity.*;
 import com.example.domain.repo.*;
 import com.example.jumoparking.service.ShareLotService;
 import com.google.cloud.storage.Acl;
@@ -39,9 +36,10 @@ public class ShareLotServiceImpl implements ShareLotService {
 
 
     @Override
-    public Long saveShareLot(ShareSaveDto shareSaveDto, @RequestPart List<MultipartFile> files) throws IOException {
+    public Long saveShareLot(ShareSaveDto shareSaveDto,Long userId, @RequestPart List<MultipartFile> files) throws IOException {
 
-        ShareLot shareLot = ShareLot.builder(shareSaveDto).build();
+        Optional<User> user = userRepo.findById(userId);
+        ShareLot shareLot = ShareLot.builder(shareSaveDto, user.get()).build();
 
         if(files.size() == 0){
             shareLot = shareLotRepo.save(shareLot);

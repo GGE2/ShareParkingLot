@@ -1,13 +1,15 @@
 package com.example.domain.entity;
 
 import javax.persistence.*;
+
+import com.example.domain.dto.DaySaveDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Builder
+@Builder(builderMethodName = "TicketBuilder")
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -49,4 +51,13 @@ public class Ticket {
 
     @Column(columnDefinition = "boolean default false")
     private boolean sell_confirm;
+
+    public static TicketBuilder builder(ShareLot shareLot, User buyer, DaySaveDto daySaveDto){
+        return TicketBuilder()
+                .sell_confirm(true)
+                .buy_confirm(false);
+    }
+
+
+
 }

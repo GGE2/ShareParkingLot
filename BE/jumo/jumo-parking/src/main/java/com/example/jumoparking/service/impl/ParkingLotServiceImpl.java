@@ -187,10 +187,11 @@ public class ParkingLotServiceImpl implements ParkingLotService {
     @Override
     public boolean checkFavorite(Long userId, Long lotId) {
         Favorite favorite = favoriteRepo.findFavoritesByParkingLot_LotIdAndUser_UserId(lotId, userId);
+
         if (favorite == null){
             Favorite newFavorite = Favorite.builder()
-                    .parkingLot(null)
-                    .shareLot(shareLotRepo.findById(lotId).get())
+                    .shareLot(null)
+                    .parkingLot(parkingLotRepo.findById(lotId).get())
                     .user(userRepo.findById(userId).get())
                     .build();
 

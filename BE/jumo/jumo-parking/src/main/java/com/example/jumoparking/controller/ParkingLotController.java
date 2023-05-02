@@ -39,16 +39,16 @@ public class ParkingLotController {
     }
     @ApiOperation(value = "주차장 상세", notes = "임의로 공유랑 일반 주차장 상세 통일함, 혹시 분리하고 싶거나 더 필요한 데이터 있으면 말해줘 이미지 url 또한 포함 됨")
     @GetMapping("/detail")
-    public ParkingDetailDto shareLotDetail(@RequestParam Long lotId){ return parkingLotService.getDetail(lotId);}
+    public ParkingDetailDto shareLotDetail(@RequestParam Long parkId){ return parkingLotService.getDetail(parkId);}
 
     @ApiOperation(value = "즐겨찾기", notes = "필요한 param 이 좀 많음, parkType 은 공유주차장인지 일반주차장인지 구분")
     @GetMapping("/favorite")
-    public boolean checkFavorite(@RequestParam Long lotId, @RequestParam Long userId, @RequestParam int parkType){
+    public boolean checkFavorite(@RequestParam Long parkId, @RequestParam Long userId, @RequestParam int parkType){
         if(parkType == 1){
-            return shareLotService.checkFavorite(userId, lotId);
+            return shareLotService.checkFavorite(userId, parkId);
         }
         else{
-            return parkingLotService.checkFavorite(userId, lotId);
+            return parkingLotService.checkFavorite(userId, parkId);
         }
     }
 

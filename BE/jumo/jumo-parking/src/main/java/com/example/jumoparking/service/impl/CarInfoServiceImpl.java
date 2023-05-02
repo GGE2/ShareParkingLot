@@ -25,11 +25,21 @@ public class CarInfoServiceImpl implements CarInfoService {
 
     @Override
     public void saveCarInfo(CarSaveDto carSaveDto, Long userId) {
-        CarInfo carInfo = CarInfo.builder()
-                .car_str(carSaveDto.getCarStr())
-                .user(userRepo.findById(userId).get())
-                .build();
-        carInfoRepo.save(carInfo);
+        if (carInfoRepo.findCarInfosByUser_UserId(userId).size() == 0){
+            CarInfo carInfo = CarInfo.builder()
+                    .car_str(carSaveDto.getCarStr())
+                    .car_rep(true)
+                    .user(userRepo.findById(userId).get())
+                    .build();
+            carInfoRepo.save(carInfo);
+        }
+        else {
+            CarInfo carInfo = CarInfo.builder()
+                    .car_str(carSaveDto.getCarStr())
+                    .user(userRepo.findById(userId).get())
+                    .build();
+            carInfoRepo.save(carInfo);
+        }
     }
 
     @Override
@@ -38,9 +48,11 @@ public class CarInfoServiceImpl implements CarInfoService {
         for(CarInfo carInfo : carInfos){
             if(carInfo.getCar_rep()){
                 carInfo.setCar_rep(false);
+                carInfoRepo.save(carInfo);
             }
             if(carInfo.getCar_id() == carId){
                 carInfo.setCar_rep(true);
+                carInfoRepo.save(carInfo);
             }
         }
         return true;

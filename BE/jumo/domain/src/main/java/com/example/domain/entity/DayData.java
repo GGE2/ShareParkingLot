@@ -33,9 +33,9 @@ public class DayData {
     public static DayDataBuilder builder(DaySaveDto daySaveDto, ShareLot shareLot){
         return DayDataBuilder()
                 .shareLot(shareLot)
-                .day_str(daySaveDto.getDay_str())
-                .day_start(daySaveDto.getDay_start())
-                .day_end(daySaveDto.getDay_end());
+                .day_str(daySaveDto.getDayStr())
+                .day_start(daySaveDto.getDayStart())
+                .day_end(daySaveDto.getDayEnd());
     }
 
 }

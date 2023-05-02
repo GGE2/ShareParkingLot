@@ -28,7 +28,7 @@ public class ParkingBottomListDto {
         this.lng = parkingLot.getLongitude();
         this.parkingField = parkingLot.getLot_field();
         this.parkingName = parkingLot.getLot_name();
-        this.payType = parkingLot.getLot_part() + parkingLot.getPay_type();
+        this.payType = parkingLot.getLot_part() + " "+ parkingLot.getPay_type();
         this.feeBasic = parkingLot.getPer_basic() * 2;
     }
 
