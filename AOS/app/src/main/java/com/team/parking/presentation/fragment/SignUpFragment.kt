@@ -82,7 +82,6 @@ class SignUpFragment : Fragment() {
                 resources.getString(R.string.dialog_email_blank)
 
         } else {
-            Regex("[a-zA-Z0-9]{1,20}").matches(email!!)
             CoroutineScope(Dispatchers.IO).launch {
                 Log.d(TAG, "checkEmail123: $email")
                 val response = App.userRetrofit.create(UserService::class.java).checkEmail(email)
