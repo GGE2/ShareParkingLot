@@ -2,9 +2,7 @@ package com.team.parking.presentation.di
 
 import com.team.parking.data.api.MapAPIService
 import com.team.parking.data.api.SearchAPIService
-import com.team.parking.data.repository.MapRepositoryImpl
-import com.team.parking.data.repository.SearchRepositoryImpl
-import com.team.parking.data.repository.dataSource.MapRemoteDatasource
+import com.team.parking.data.repository.dataSource.MapRemoteDataSource
 import com.team.parking.data.repository.dataSource.SearchRemoteDataSource
 import com.team.parking.data.repository.dataSourceImpl.MapRemoteDataSourceImpl
 import com.team.parking.data.repository.dataSourceImpl.SearchRemoteDataSourceImpl
@@ -22,7 +20,7 @@ class RemoteDataModule {
     @Provides
     fun provideMapRemoteDataSource(
         mapAPIService: MapAPIService
-    ):MapRemoteDatasource{
+    ):MapRemoteDataSource{
         return MapRemoteDataSourceImpl(mapAPIService)
     }
 

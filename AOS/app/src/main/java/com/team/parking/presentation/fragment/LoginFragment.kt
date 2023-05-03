@@ -12,7 +12,6 @@ import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.KakaoSdk
-import com.kakao.sdk.common.KakaoSdk.type
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
@@ -61,7 +60,7 @@ class LoginFragment : Fragment() {
             lifecycleOwner = this@LoginFragment
             viewModel = userViewModel
         }
-
+        findNavController().navigate(R.id.action_loginFragment_to_mapFragment)
     }
 
     override fun onAttach(context: Context) {

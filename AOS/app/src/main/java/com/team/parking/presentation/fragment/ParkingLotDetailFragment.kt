@@ -5,9 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.team.parking.databinding.FragmentParkingLotDetailBinding
 
-class ParkingLotDetailFragment : Fragment() {
+class ParkingLotDetailFragment : BottomSheetDialogFragment(){
 
     private lateinit var binding: FragmentParkingLotDetailBinding
 

@@ -70,7 +70,7 @@ dependencies {
     implementation 'com.navercorp.nid:oauth-jdk8:5.1.0'
     // 카카오 로그인
     implementation "com.kakao.sdk:v2-user:2.13.0"
-    implementation 'com.naver.maps:map-sdk:3.16.1'
+    implementation 'com.naver.maps:map-sdk:3.16.2'
     //위치정보 사용 권한
     implementation 'com.google.android.gms:play-services-location:19.0.1'
 
