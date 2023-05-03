@@ -35,14 +35,13 @@ public class ParkingLotServiceImpl implements ParkingLotService {
     @Override
     public List<ParkingListDto> getListOfPoint(ParkingInDto parkingInDto) {
         float zoom = parkingInDto.getZoomLevel();
+
         List<ParkingLot> parkingLots = parkingLotRepo.findAllByLatitudeGreaterThanAndLatitudeLessThanAndLongitudeGreaterThanAndLongitudeLessThan(
                 parkingInDto.getStartLat(), parkingInDto.getEndLat(), parkingInDto.getStartLng(), parkingInDto.getEndLng());
         List<ShareLot> shareLots = shareLotRepo.findAllByLatitudeGreaterThanAndLatitudeLessThanAndLongitudeGreaterThanAndLongitudeLessThan(
                 parkingInDto.getStartLat(), parkingInDto.getEndLat(), parkingInDto.getStartLng(), parkingInDto.getEndLng());
 
-        System.out.println(parkingLots.size() + shareLots.size());
-
-        if (zoom > 13.8 && 15>= zoom && parkingLots.size() + shareLots.size() > 7)
+        if (zoom >= 13.8 && 15> zoom && parkingLots.size() + shareLots.size() > 7)
         {
             HashMap<String,Float> latMap = new HashMap<String,Float>();
             HashMap<String,Float> lngMap = new HashMap<String,Float>();
@@ -55,7 +54,7 @@ public class ParkingLotServiceImpl implements ParkingLotService {
                 String[] oldAddrs = oldAddr.split(" ");
                 String checkStr = new String();
 
-                if (zoom > 13.8 && 14.2 >= zoom){
+                if (zoom >= 13.8 && 14.2 > zoom){
                     for (int i = oldAddrs.length -1 ; i >=1 ; i--){
                         checkStr = oldAddrs[i];
                         if (checkStr.endsWith("읍") || checkStr.endsWith("면") || checkStr.endsWith("시") || checkStr.endsWith("구")){
@@ -151,7 +150,7 @@ public class ParkingLotServiceImpl implements ParkingLotService {
             }
             return parkingLotList;
         }
-        else if ((zoom > 15 && zoom <= 17.2) || (zoom > 13.8 && 15 >= zoom && parkingLots.size() + shareLots.size() <= 7))
+        else if ((zoom >= 15 && zoom < 17.2) || (zoom >= 13.8 && 15 > zoom && parkingLots.size() + shareLots.size() <= 7))
         {
             List<ParkingListDto> parkList = parkingLots.stream().map(parkingLot -> new ParkingListDto(parkingLot)).collect(Collectors.toList());
             List<ParkingListDto> shaList = shareLots.stream().map(shareLot -> new ParkingListDto(shareLot)).collect(Collectors.toList());
