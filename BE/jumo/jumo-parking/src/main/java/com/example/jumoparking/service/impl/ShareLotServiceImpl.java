@@ -35,8 +35,7 @@ public class ShareLotServiceImpl implements ShareLotService {
     @Value("${spring.cloud.gcp.storage.bucket}")
     private String drawingStorage;
 
-    @Autowired
-    private Storage storage;
+    private final Storage storage;
 
 
     @Override

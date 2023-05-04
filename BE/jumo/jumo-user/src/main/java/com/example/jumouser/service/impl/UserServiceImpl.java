@@ -28,8 +28,8 @@ public class UserServiceImpl implements UserService {
     private final NotiRepo notiRepo;
     @Value("${spring.cloud.gcp.storage.bucket}")
     private String drawingStorage;
-    @Autowired
-    private Storage storage;
+
+    private final Storage storage;
 
     public boolean emailCheck(String email){
         Optional<User> user = userRepo.findByEmail(email);
