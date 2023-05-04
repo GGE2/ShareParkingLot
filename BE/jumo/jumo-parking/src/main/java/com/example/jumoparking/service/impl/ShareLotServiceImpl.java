@@ -51,6 +51,18 @@ public class ShareLotServiceImpl implements ShareLotService {
 
                 return -1L;
             }
+            for (DayName dayName : DayName.values()){
+                DayData dayData = DayData.DayDataBuilder()
+                        .shareLot(shareLot)
+                        .dayStr(dayName)
+                        .day_start(-1)
+                        .day_end(-1)
+                        .enable(false)
+                        .build();
+
+                dayDataRepo.save(dayData);
+            }
+
             return shareLot.getShaId();
         }
         else{
