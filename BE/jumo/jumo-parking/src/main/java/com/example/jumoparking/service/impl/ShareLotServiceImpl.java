@@ -36,10 +36,16 @@ public class ShareLotServiceImpl implements ShareLotService {
 
 
     @Override
-    public Long saveShareLot(ShareSaveDto shareSaveDto,Long userId, @RequestPart List<MultipartFile> files) throws IOException {
+    public Long saveShareLot(ShareSaveDto shareSaveDto,Long userId, List<MultipartFile> files) throws IOException {
 
         Optional<User> user = userRepo.findById(userId);
         ShareLot shareLot = ShareLot.builder(shareSaveDto, user.get()).build();
+
+        System.out.println(shareLot.getSha_jibun());
+
+        if(files == null){
+            System.out.println("파일 아예 null");
+        }
 
         if(files == null || files.size() == 0){
             shareLot = shareLotRepo.save(shareLot);
@@ -51,6 +57,7 @@ public class ShareLotServiceImpl implements ShareLotService {
             return shareLot.getShaId();
         }
         else{
+            System.out.println(files.size() + "파일이 들어오긴 하네?");
 
             shareLot = shareLotRepo.save(shareLot);
 

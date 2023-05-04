@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.List;
 
 public interface ShareLotService {
-    Long saveShareLot(ShareSaveDto shareSaveDto,Long userId, @RequestPart List<MultipartFile> files) throws IOException;
+    Long saveShareLot(ShareSaveDto shareSaveDto,Long userId, List<MultipartFile> files) throws IOException;
 
     void deleteShareLot(Long sha_id);
 

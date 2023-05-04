@@ -27,8 +27,9 @@ public class ShareLotController {
     private final ShareLotService shareLotService;
     private final DayDataService dayDataService;
     @ApiOperation(value = "공유 주차장 등록", notes = "멀티파트파일 리스트를 보내주어야 함 이게 좀 어려울거같으면 같이 방법 찾아보기")
-    @PostMapping(value =  "/save",consumes= MediaType.MULTIPART_FORM_DATA_VALUE)
-    public Long createShareLot(@Validated @ModelAttribute ShareSaveDto saveDto, @RequestParam Long userId, @RequestParam(required = false) List<MultipartFile> files) throws  Exception{
+    @PostMapping(value =  "/save",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,
+            MediaType.APPLICATION_JSON_VALUE})
+    public Long createShareLot(@Validated @RequestParam(name = "saveDto", value = "saveDto") ShareSaveDto saveDto, @RequestParam Long userId, @RequestParam(required = false, value = "files", name = "files") List<MultipartFile> files) throws  Exception{
         return shareLotService.saveShareLot(saveDto, userId,files);
     }
 
