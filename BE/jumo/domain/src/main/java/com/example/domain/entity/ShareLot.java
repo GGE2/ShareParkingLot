@@ -46,15 +46,19 @@ public class ShareLot {
 
     private float longitude;
 
+    @Builder.Default
     @OneToMany(mappedBy = "shareLot", cascade = CascadeType.ALL)
     private List<Image> images = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "shareLot", cascade = CascadeType.ALL)
     private List<Favorite> favoriteList = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "shareLot", cascade = CascadeType.ALL)
     private List<DayData> dayDataList = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "shareLot", cascade = CascadeType.ALL)
     private List<Ticket> ticketList = new ArrayList<>();
 

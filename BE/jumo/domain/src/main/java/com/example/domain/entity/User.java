@@ -52,12 +52,15 @@ public class User {
         this.ptHas -= point;
     }
 
+    @Builder.Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<CarInfo> carInfoList = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "buyer", cascade = CascadeType.ALL)
     private List<Ticket> tickets = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "user")
     private List<Transaction> transactions = new ArrayList<>();
 

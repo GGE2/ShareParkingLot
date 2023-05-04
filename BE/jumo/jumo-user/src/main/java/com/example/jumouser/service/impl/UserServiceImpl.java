@@ -12,6 +12,7 @@ import com.google.cloud.storage.Acl;
 import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,8 +28,9 @@ public class UserServiceImpl implements UserService {
     private final NotiRepo notiRepo;
     @Value("${spring.cloud.gcp.storage.bucket}")
     private String drawingStorage;
+    @Autowired
+    private Storage storage;
 
-    private final Storage storage;
     public boolean emailCheck(String email){
         Optional<User> user = userRepo.findByEmail(email);
         if(!user.isPresent()){

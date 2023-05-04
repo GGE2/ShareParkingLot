@@ -9,9 +9,9 @@ import com.google.cloud.storage.Acl;
 import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -35,14 +35,14 @@ public class ShareLotServiceImpl implements ShareLotService {
     @Value("${spring.cloud.gcp.storage.bucket}")
     private String drawingStorage;
 
-    private final Storage storage;
+    @Autowired
+    private Storage storage;
 
 
     @Override
     public Long saveShareLot(ShareSaveDto shareSaveDto, List<MultipartFile> files) throws IOException {
         Optional<User> user = userRepo.findById(shareSaveDto.getUserId());
         ShareLot shareLot = ShareLot.builder(shareSaveDto, user.get()).build();
-
 
         if(files == null || files.size() == 0){
             shareLot = shareLotRepo.save(shareLot);

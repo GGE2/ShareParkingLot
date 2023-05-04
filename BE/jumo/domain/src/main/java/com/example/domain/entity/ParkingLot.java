@@ -70,6 +70,7 @@ public class ParkingLot {
 
     private String special_prop;
 
+    @Builder.Default
     @OneToMany(mappedBy = "parkingLot", cascade = CascadeType.ALL)
     private List<Favorite> favoriteList = new ArrayList<>();
 
