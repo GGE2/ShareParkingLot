@@ -15,4 +15,6 @@ public interface UserService {
     public UserProfileResponseDto getUserProfile(Long user_id);
 
     public String updateProfileImg(Long user_id, MultipartFile file) throws IOException;
+
+    Boolean updateFcmToken(Long user_id, String fcm_token);
 }

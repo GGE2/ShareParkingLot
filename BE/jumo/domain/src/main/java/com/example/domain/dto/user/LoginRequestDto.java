@@ -17,7 +17,7 @@ public class LoginRequestDto {
     private String social_id;
     private String profile_img;
     private String name;
-
+    private String fcm_token;
     public String toString(LoginRequestDto requestDto){
         return "type : " +type + " accessToken : " + accessToken +" email : " + email + " password : "  + password + " social_id : " + social_id+ " profile_img : " + profile_img + "name : " + name;
     }

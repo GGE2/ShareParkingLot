@@ -3,6 +3,7 @@ package com.example.jumouser.controller;
 
 
 import com.example.domain.dto.user.*;
+import com.example.domain.entity.FcmToken;
 import com.example.jumouser.factory.UserFactory;
 import com.example.jumouser.provider.LoginProvider;
 import com.example.jumouser.service.UserService;
@@ -33,6 +34,9 @@ public class UserController {
         System.out.println(requestDto.toString());
         UserInfoDto userInfoDto = userFactory.loginSelector(requestDto.getType()).getUserInfo(requestDto);
         Optional<User> user = userFactory.loginSelector(requestDto.getType()).checkUser(userInfoDto);
+        if(!user.isEmpty()){
+            userService.updateFcmToken(user.get().getUserId(), user.get().getFcmToken());
+        }
         LoginResponseDto responseDto = LoginResponseDto.builder()
                 .user_id(user.get().getUserId())
                 .name(user.get().getName())
@@ -42,6 +46,7 @@ public class UserController {
                 .ptHas(user.get().getPtHas())
                 .type(user.get().getType())
                 .social_id(user.get().getSocialId())
+                .fcm_token(user.get().getFcmToken())
                 .build();
         System.out.println(responseDto.toString());
         return responseDto;
@@ -71,4 +76,6 @@ public class UserController {
     public String updateProfileImg(@RequestPart("image") MultipartFile file, @RequestPart Long user_id) throws IOException {
         return userService.updateProfileImg(user_id,file);
     }
+
+
 }

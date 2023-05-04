@@ -19,7 +19,7 @@ public class JumoLogin implements LoginProvider  {
         this.userRepo=userRepo;
     }
     public static JumoLogin getInstance(UserRepo userRepo){
-
+        System.out.println("LoginInstance");
         return new JumoLogin(userRepo);
     }
 
