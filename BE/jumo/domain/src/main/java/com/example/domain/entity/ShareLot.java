@@ -60,6 +60,7 @@ public class ShareLot {
 
     public static ShareLotBuilder builder(ShareSaveDto shareSaveDto, User user) {
         return ShareLotBuilder()
+                .user(user)
                 .latitude(shareSaveDto.getLatitude())
                 .longitude(shareSaveDto.getLongitude())
                 .sha_fee(shareSaveDto.getShaFee())
