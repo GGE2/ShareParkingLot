@@ -2,6 +2,7 @@ package com.example.jumoparking.service.impl;
 
 import com.example.domain.dto.*;
 import com.example.domain.entity.*;
+import com.example.domain.etc.DayName;
 import com.example.domain.repo.*;
 import com.example.jumoparking.service.ShareLotService;
 import com.google.cloud.storage.Acl;
@@ -29,6 +30,8 @@ public class ShareLotServiceImpl implements ShareLotService {
 
     private final UserRepo userRepo;
 
+    private final DayDataRepo dayDataRepo;
+
     @Value("${spring.cloud.gcp.storage.bucket}")
     private String drawingStorage;
 
@@ -37,9 +40,9 @@ public class ShareLotServiceImpl implements ShareLotService {
 
     @Override
     public Long saveShareLot(ShareSaveDto shareSaveDto, List<MultipartFile> files) throws IOException {
-        System.out.println(shareSaveDto.getUserId());
         Optional<User> user = userRepo.findById(shareSaveDto.getUserId());
         ShareLot shareLot = ShareLot.builder(shareSaveDto, user.get()).build();
+
 
         if(files == null || files.size() == 0){
             shareLot = shareLotRepo.save(shareLot);
@@ -74,6 +77,18 @@ public class ShareLotServiceImpl implements ShareLotService {
 
                 image = imageRepo.save(image);
 
+            }
+
+            for (DayName dayName : DayName.values()){
+                DayData dayData = DayData.DayDataBuilder()
+                        .shareLot(shareLot)
+                        .dayStr(dayName)
+                        .day_start(-1)
+                        .day_end(-1)
+                        .enable(false)
+                        .build();
+
+                dayDataRepo.save(dayData);
             }
 
 

@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -31,9 +32,24 @@ public class DayDataServiceImpl implements DayDataService {
 
     @Override
     @Transactional
+    public void updateDayData(DaySaveDto daySaveDto, Long lotId){
+        Optional<DayData> dayData = dayDataRepo.findDayDataByShareLot_ShaIdAndDayStrEquals(lotId, daySaveDto.getDayStr());
+        dayData.get().updateDayData(daySaveDto);
+        dayDataRepo.save(dayData.get());
+    }
+
+    @Override
+    @Transactional
     public void deleteDayData(Long lotId) {
         Optional<ShareLot> shareLot = shareLotRepo.findById(lotId);
         List<DayData> dayDataList = shareLot.get().getDayDataList();
         dayDataRepo.deleteAllInBatch(dayDataList);
+    }
+
+    @Override
+    public List<DaySaveDto> listDayData(Long parkId) {
+        Optional<ShareLot> shareLot = shareLotRepo.findById(parkId);
+        List<DayData> dayDataList = shareLot.get().getDayDataList();
+        return  dayDataList.stream().map(dayData -> new DaySaveDto(dayData)).collect(Collectors.toList());
     }
 }

@@ -58,7 +58,7 @@ public class ParkingDetailDto {
         List<DayData> dayList = shareLot.getDayDataList();
         String openDayString = "";
         for (DayData dayData : dayList){
-            openDayString += dayData.getDay_str().toString() + " ";
+            openDayString += dayData.getDayStr().toString() + " ";
         }
         this.openDay = openDayString;
         this.feeData = "유료";

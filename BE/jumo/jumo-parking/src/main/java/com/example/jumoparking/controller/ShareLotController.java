@@ -33,22 +33,20 @@ public class ShareLotController {
         return shareLotService.saveShareLot(saveDto, files);
     }
 
-    @ApiOperation(value = "요일 정보 등록", notes = "프론트 로직을 다른 정보 등록 -> 요일정보 등록 페이지로 넘어가는 느낌으로 생각해서 분리함")
-    @PostMapping("/saveDay")
+    @ApiOperation(value = "요일 수정 및 생성 모두", notes = "프론트 로직을 다른 정보 등록 -> 요일정보 등록 페이지로 넘어가는 느낌으로 생각해서 분리함")
+    @PutMapping("/saveDay")
     public boolean saveDay(@RequestParam Long parkId, @RequestBody List<DaySaveDto> daySaveDtos){
-        for (DaySaveDto daySaveDto : daySaveDtos){
-            dayDataService.saveDayData(daySaveDto, parkId);
+
+        for(DaySaveDto daySaveDto : daySaveDtos){
+            dayDataService.updateDayData(daySaveDto, parkId);
         }
         return true;
     }
 
-    @ApiOperation(value = "요일 수정", notes = "이건 내공유 주차장 페이지 가서 버튼 누를 때, 새롭게 월~일 리스트 새로 보내주기// 공유에 달려있는 기존 데이터 싹 사젝 후 다시 등록하는 ㄴ식")
-    @PostMapping("/updateDay")
-    public void updateDay(@RequestParam Long parkId, @RequestBody List<DaySaveDto> daySaveDtos){
-        dayDataService.deleteDayData(parkId);
-        for(DaySaveDto daySaveDto : daySaveDtos){
-            dayDataService.saveDayData(daySaveDto, parkId);
-        }
+    @ApiOperation(value = "요일 정보 리스트", notes = "이건 내공유 주차장 페이지 가서 버튼 누를 때, 새롭게 월~일 리스트 새로 보내주기// 공유에 달려있는 기존 데이터 싹 사젝 후 다시 등록하는 ㄴ식")
+    @GetMapping("/listDay")
+    public List<DaySaveDto> updateDay(@RequestParam Long parkId){
+        return dayDataService.listDayData(parkId);
     }
 
     @ApiOperation(value = "공유주차장 삭제", notes = "return 값 없음")
