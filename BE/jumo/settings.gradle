@@ -7,6 +7,5 @@ include 'domain'
 include 'jumo-parking'
 include 'jumo-user'
 
-include 'firebase'
-
 include 'error'
+include 'notification'

@@ -84,11 +84,13 @@ project(':domain') {
 		runtimeOnly 'com.mysql:mysql-connector-j'
 		implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
 		implementation group: 'com.google.code.geocoder-java', name: 'geocoder-java', 'version': '0.16'
+		api 'org.springframework.boot:spring-boot-starter-data-redis'
 	}
 }
 
 project(':jumo-user') {
 	dependencies {
+
 		implementation project(':core-web')
 		implementation project(':domain')
 		implementation project(':error')
@@ -109,15 +111,17 @@ project(':jumo-parking') {
 	}
 }
 
-project(':firebase'){
-	dependencies{
-		api group: 'com.google.firebase', name: 'firebase-admin', version: '8.1.0'
-	}
-}
 
 project(':error'){
 	dependencies{
 		implementation project(':core-web')
 		api 'org.springframework.boot:spring-boot-starter-web'
+	}
+}
+
+project(':notification'){
+	dependencies {
+		implementation project(':core-web')
+		implementation group: 'com.google.firebase', name: 'firebase-admin', version: '8.1.0'
 	}
 }
