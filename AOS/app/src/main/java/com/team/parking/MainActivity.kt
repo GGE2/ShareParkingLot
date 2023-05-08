@@ -14,8 +14,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
+
+import com.google.android.gms.tasks.OnCompleteListener
 import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.messaging.FirebaseMessaging
 import com.kakao.sdk.common.util.Utility
 import com.team.parking.data.api.UserService
 import com.team.parking.data.model.user.User
@@ -56,6 +59,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var headerBinding: SideHeaderBinding
     lateinit var navController: NavController
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -68,6 +73,7 @@ class MainActivity : AppCompatActivity() {
         userViewModel = ViewModelProvider(this)[UserViewModel::class.java]
         initMapViewModel()
         onLoginSuccess()
+
     }
 
     fun initMapViewModel(){
@@ -152,6 +158,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
     private fun onLoginSuccess(){
         userViewModel.userLiveData.observe(this){
             runOnUiThread {
@@ -173,5 +180,5 @@ class MainActivity : AppCompatActivity() {
             super.onBackPressed()
         }
     }
-    //onbackpressed dayselectviewmodel boolean check if true call backpress twice else call backpress normally
+
 }

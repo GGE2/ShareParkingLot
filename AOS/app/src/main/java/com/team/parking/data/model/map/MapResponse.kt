@@ -13,5 +13,7 @@ data class MapResponse(
     @SerializedName("parkType")
     val parkType: Int,
     @SerializedName("clusteringCnt")
-    val clusteringCnt : Int
+    val clusteringCnt : Int,
+    @SerializedName("parkId")
+    val parkId : Int
 )

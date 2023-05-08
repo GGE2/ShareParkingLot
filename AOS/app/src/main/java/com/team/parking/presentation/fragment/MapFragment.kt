@@ -21,10 +21,14 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.*
 import com.team.parking.R
 import com.google.android.gms.tasks.OnSuccessListener
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
 import com.naver.maps.map.overlay.Marker
+import com.naver.maps.map.overlay.Overlay
 import com.naver.maps.map.util.FusedLocationSource
+import com.naver.maps.map.widget.ZoomControlView
 import com.team.parking.MainActivity
 import com.team.parking.data.model.map.MapRequest
 import com.team.parking.data.util.Resource
@@ -35,7 +39,7 @@ import com.team.parking.presentation.viewmodel.SearchViewModel
 
 private const val TAG = "MapFragment_지훈"
 
-class MapFragment : Fragment() , OnMapReadyCallback {
+class MapFragment : Fragment() , OnMapReadyCallback{
     private lateinit var fragmentMapBinding: FragmentMapBinding
     private lateinit var locationSource: FusedLocationSource
     private lateinit var naverMap: NaverMap
@@ -43,6 +47,7 @@ class MapFragment : Fragment() , OnMapReadyCallback {
     private lateinit var mapViewModel: MapViewModel
     private lateinit var searchViewModel: SearchViewModel
     private val permissionList = Manifest.permission.ACCESS_FINE_LOCATION
+    private lateinit var bottomSheetBehavior  : BottomSheetBehavior<View>
     //GPS 권한 생성
     private val requestPermission = registerForActivityResult(
         ActivityResultContracts.RequestPermission()){
@@ -75,14 +80,51 @@ class MapFragment : Fragment() , OnMapReadyCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         fragmentMapBinding = DataBindingUtil.bind<FragmentMapBinding>(view)!!
         mapViewModel = (activity as MainActivity).mapViewModel
         searchViewModel = (activity as MainActivity).searchViewModel
         init()
+        bottomSheetBehavior = BottomSheetBehavior.from(fragmentMapBinding.bottomSheetOpen.root)
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
     }
 
     /**
-     * 서버로부터 주차장 데이터 가져오기
+     * BottomSheet 생성
+     */
+    private fun setBottomSheet(){
+        val bottomSheetBehavior = BottomSheetBehavior.from(fragmentMapBinding.bottomSheetOpen.root)
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+
+        /*fragmentMapBinding.btnFragmentMapOpen.setOnClickListener {
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        }*/
+    }
+
+    /**
+     * 주차장 상세 데이터 가져오기
+     */
+    private fun getMapDetailData(lotId:Int){
+        mapViewModel.getDetailMapData(lotId)
+        mapViewModel.parkingLot.observe(viewLifecycleOwner){ response->
+            when (response){
+                is Resource.Success ->{
+                    Log.i(TAG, "getMapDetailData: ${response.data}")
+                    bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+                }
+                is Resource.Error ->{
+                    Log.i(TAG, "서버와 통신이 원활하지 않습니다.")
+                }
+                else ->{
+                    //Log.i(TAG, "getMapDetailDataL: ")
+                }
+            }
+
+        }
+    }
+
+    /**
+     * 주차장 데이터 가져오기
      */
     private fun getMapData(mapRequest: MapRequest){
         mapViewModel.getMapDatas(mapRequest)
@@ -94,6 +136,7 @@ class MapFragment : Fragment() , OnMapReadyCallback {
                         if(currentZoom<15.0){
                             for(i in 0 until data!!.size){
                                 val marker = Marker()
+                                marker.tag = data[i]
                                 cacheData.add(marker)
                                 marker.position = LatLng(data[i].lat,data[i].lng)
                                 marker.iconTintColor = Color.RED
@@ -106,6 +149,11 @@ class MapFragment : Fragment() , OnMapReadyCallback {
                                 marker.position = LatLng(data[i].lat,data[i].lng)
                                 marker.iconTintColor = Color.BLUE
                                 marker.map = naverMap
+                                marker.setOnClickListener {
+                                    Log.i(TAG, "getMapData: ${data[i].parkId}")
+                                    getMapDetailData(data[i].parkId)
+                                    false
+                                }
                             }
                         }
                     }
@@ -119,9 +167,14 @@ class MapFragment : Fragment() , OnMapReadyCallback {
             }
         }
     }
+
+    /**
+     * 지도 이동시 기존 좌표 삭제
+     */
     private fun removeMapData(){
         for(i in 0 until cacheData.size){
             cacheData[i].map = null
+            cacheData[i].onClickListener = null
         }
     }
 
@@ -137,22 +190,37 @@ class MapFragment : Fragment() , OnMapReadyCallback {
     }
 
     /**
-     * SearchFragment 검색후 해당 장소로 좌표이동
+     * SearchFragment 검색후 해당 장소로 좌표이동 후 마커생성
      */
     private fun changeLocation(){
         searchViewModel.searchedPlace.observe(viewLifecycleOwner){
-            val cameraUpdate = CameraUpdate.scrollTo(LatLng(it.y.toDouble(),it.x.toDouble()))
             val zoomUpdate = CameraUpdate.zoomTo(15.0)
+            val cameraUpdate = CameraUpdate.scrollTo(LatLng(it.y.toDouble(),it.x.toDouble()))
+            val marker = Marker(LatLng(it.y.toDouble(),it.x.toDouble()))
+            marker.iconTintColor = Color.MAGENTA
+            marker.map = naverMap
             naverMap.moveCamera(cameraUpdate)
             naverMap.moveCamera(zoomUpdate)
         }
+    }
+    /**
+     * 내위치 버튼 추가 및 최소 줌 최대 줌 추가
+     */
+    private fun mapSetting(){
+        naverMap.uiSettings.apply {
+            isLocationButtonEnabled = true
+            logoGravity = Gravity.END
+            setLogoMargin(0,10,10,0)
+        }
+        naverMap.minZoom = 12.0
+        naverMap.maxZoom = 18.0
     }
 
     override fun onMapReady(naverMap: NaverMap) {
         this.naverMap = naverMap
         requestPermission.launch(permissionList)
+        naverMap.defaultCameraAnimationDuration = 1000
         naverMap.locationSource = locationSource
-        naverMap.uiSettings.isLocationButtonEnabled = true
         mapSetting()
         getMapDataFromRemote()
         changeLocation()
@@ -162,7 +230,7 @@ class MapFragment : Fragment() , OnMapReadyCallback {
 
 
     /**
-     * NaverMap Option
+     * NaverMap 초기화
      */
     private fun initMap() {
         val fm = childFragmentManager
@@ -171,6 +239,7 @@ class MapFragment : Fragment() , OnMapReadyCallback {
                 fm.beginTransaction().add(R.id.fragment_fragment_map_maps,it).commit()
             }
         mapFragment.getMapAsync(this)
+
     }
 
 
@@ -215,15 +284,7 @@ class MapFragment : Fragment() , OnMapReadyCallback {
         (activity as MainActivity).navigationDrawer.openDrawer(GravityCompat.START)
     }
 
-    /**
-     * 내위치 버튼 추가 및 최소 줌 최대 줌 추가
-     */
-    private fun mapSetting(){
-        naverMap.uiSettings.isLocationButtonEnabled = true
-        naverMap.uiSettings.logoGravity = (Gravity.END)
-        naverMap.minZoom = 8.0
-        naverMap.maxZoom = 18.0
-    }
+
 
     /**
      * 장소 검색 클릭시 SearchFragment로 이동
@@ -268,7 +329,6 @@ class MapFragment : Fragment() , OnMapReadyCallback {
             }
         }
     }
-
 
 
 

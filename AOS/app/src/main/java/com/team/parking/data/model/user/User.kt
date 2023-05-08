@@ -14,6 +14,6 @@ data class User(
     var social_id : String,
     var type: String) {
 
-    constructor(user_id: Long,phone: String,email: String,name: String,profile_img: String?,pt_has: Int,type: String,social_id:String,)
-            : this(user_id, phone, email, "", name, "", profile_img, pt_has, social_id, type)
+    constructor(user_id: Long,phone: String,email: String,name: String,profile_img: String?,pt_has: Int,type: String,social_id:String,fcm_token: String?,)
+            : this(user_id, phone, email, "", name, fcm_token, profile_img, pt_has, social_id, type)
 }

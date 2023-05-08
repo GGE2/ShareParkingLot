@@ -1,12 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/frameLayout8"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="vm"
+            type="com.team.parking.presentation.viewmodel.MapViewModel" />
+
+    </data>
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/bottom_sheet"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F6FCFF"
-    tools:context=".ParkinLotDetailFragment">
+    app:behavior_hideable="true"
+    app:behavior_peekHeight="340dp"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_default_parking_lot_detail"
@@ -144,3 +154,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/layout_info_parking_lot_detail" />
 </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -25,6 +25,14 @@ class UsecaseModule {
 
     @Singleton
     @Provides
+    fun provideGetMapDetailDataUseCase(
+        mapRepository: MapRepository
+    ) : GetMapDetailDataUseCase{
+        return GetMapDetailDataUseCase(mapRepository)
+    }
+
+    @Singleton
+    @Provides
     fun provideGetSearchDataUsecase(
         searchRepository: SearchRepository
     ) : GetSearchDataUseCase{
@@ -78,4 +86,5 @@ class UsecaseModule {
     ) : DeleteShareLotUseCase{
         return DeleteShareLotUseCase(shareLotRepository)
     }
+    
 }

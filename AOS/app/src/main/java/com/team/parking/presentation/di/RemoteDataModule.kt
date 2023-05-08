@@ -25,7 +25,7 @@ class RemoteDataModule {
     @Provides
     fun provideMapRemoteDataSource(
         mapAPIService: MapAPIService
-    ):MapRemoteDatasource{
+    ):MapRemoteDataSource{
         return MapRemoteDataSourceImpl(mapAPIService)
     }
 

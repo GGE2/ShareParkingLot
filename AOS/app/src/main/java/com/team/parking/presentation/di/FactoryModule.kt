@@ -16,9 +16,9 @@ class FactoryModule {
     @Singleton
     @Provides
     fun provideMapViewModelFactory(
-        app:Application,getMapDataUseCase: GetMapDataUseCase
+        app:Application,getMapDataUseCase: GetMapDataUseCase,getMapDetailDataUseCase: GetMapDetailDataUseCase
     ):MapViewModelFactory{
-        return MapViewModelFactory(app,getMapDataUseCase)
+        return MapViewModelFactory(app,getMapDataUseCase,getMapDetailDataUseCase)
     }
 
 

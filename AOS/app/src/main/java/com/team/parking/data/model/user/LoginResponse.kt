@@ -10,6 +10,7 @@ data class LoginResponse (val user_id: Long? = null,
                           val profile_img: String? = "",
                           val ptHas: Int = 0,
                           val social_id : String?="",
+                          val fcm_token : String?="",
                           ) {
 
     override fun toString(): String {

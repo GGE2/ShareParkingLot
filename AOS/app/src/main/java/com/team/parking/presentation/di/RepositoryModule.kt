@@ -23,7 +23,7 @@ class RepositoryModule {
     @Singleton
     @Provides
     fun provideMapRepository(
-        mapRemoteDataSource: MapRemoteDatasource
+        mapRemoteDataSource: MapRemoteDataSource
     ):MapRepository{
         return MapRepositoryImpl(mapRemoteDataSource)
     }
