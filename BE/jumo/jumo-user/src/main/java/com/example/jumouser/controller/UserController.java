@@ -3,7 +3,6 @@ package com.example.jumouser.controller;
 
 
 import com.example.domain.dto.user.*;
-import com.example.domain.entity.FcmToken;
 import com.example.jumouser.factory.UserFactory;
 import com.example.jumouser.provider.LoginProvider;
 import com.example.jumouser.service.UserService;
@@ -31,25 +30,27 @@ public class UserController {
     @ApiOperation(value = "로그인", notes = "Type : Kakao,Naver,Jumo 로그인, Dto 참조")
     @GetMapping("/login")
     public LoginResponseDto login(@ModelAttribute("loginRequestDto") LoginRequestDto requestDto){
-        System.out.println(requestDto.toString());
-        UserInfoDto userInfoDto = userFactory.loginSelector(requestDto.getType()).getUserInfo(requestDto);
-        Optional<User> user = userFactory.loginSelector(requestDto.getType()).checkUser(userInfoDto);
-        if(!user.isEmpty()){
-            userService.updateFcmToken(user.get().getUserId(), requestDto.getFcm_token());
+        try {
+            System.out.println(requestDto.toString());
+            UserInfoDto userInfoDto = userFactory.loginSelector(requestDto.getType()).getUserInfo(requestDto);
+            Optional<User> user = userFactory.loginSelector(requestDto.getType()).checkUser(userInfoDto);
+            LoginResponseDto responseDto = LoginResponseDto.builder()
+                    .user_id(user.get().getUserId())
+                    .name(user.get().getName())
+                    .email(user.get().getEmail())
+                    .phone(user.get().getPhone())
+                    .profile_img(user.get().getProfileImg())
+                    .ptHas(user.get().getPtHas())
+                    .type(user.get().getType())
+                    .social_id(user.get().getSocialId())
+                    .build();
+            System.out.println(responseDto.toString());
+
+            return responseDto;
+        }catch (Exception e){
+            System.out.println("error");
+            return null;
         }
-        LoginResponseDto responseDto = LoginResponseDto.builder()
-                .user_id(user.get().getUserId())
-                .name(user.get().getName())
-                .email(user.get().getEmail())
-                .phone(user.get().getPhone())
-                .profile_img(user.get().getProfileImg())
-                .ptHas(user.get().getPtHas())
-                .type(user.get().getType())
-                .social_id(user.get().getSocialId())
-                .fcm_token(requestDto.getFcm_token())
-                .build();
-        System.out.println(responseDto.toString());
-        return responseDto;
     }
 
     @ApiOperation(value = "회원가입", notes = "카카오,네이버 회원가입 -> 주모")
@@ -77,5 +78,8 @@ public class UserController {
         return userService.updateProfileImg(user_id,file);
     }
 
-
+    @PostMapping("/fcm-token")
+    public Boolean updateFcmToken(@RequestBody UpdateFcmRequestDto requestDto){
+        return userService.updateFcmToken(requestDto.getUser_id(),requestDto.getFcm_token());
+    }
 }
