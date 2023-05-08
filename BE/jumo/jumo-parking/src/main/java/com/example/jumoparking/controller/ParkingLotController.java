@@ -58,6 +58,10 @@ public class ParkingLotController {
         return parkingLotService.getFavoriteList(userId);
     }
 
-
+    @ApiOperation(value = "일반주차장만 보기", notes = "공유 주차장만 보기는 sharLot/* 쪽에 있음")
+    @PostMapping("/list/parking")
+    public List<ParkingListDto> getListOfParking(@Validated @RequestBody ParkingInDto parkingInDto){
+        return parkingLotService.getListOfParking(parkingInDto);
+    }
 
 }

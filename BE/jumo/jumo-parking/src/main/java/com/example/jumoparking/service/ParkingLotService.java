@@ -18,4 +18,9 @@ public interface ParkingLotService {
     boolean checkFavorite(Long userId, Long lotId);
 
     List<ParkingBottomListDto> getFavoriteList(Long userId);
+
+    List<ParkingListDto> getListOfParking(ParkingInDto parkingInDto);
+
+
+    List<ParkingListDto> getListOfShare(ParkingInDto parkingInDto);
 }

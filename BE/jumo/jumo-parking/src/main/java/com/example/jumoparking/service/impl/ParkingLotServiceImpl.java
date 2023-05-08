@@ -4,20 +4,20 @@ import com.example.domain.dto.ParkingBottomListDto;
 import com.example.domain.dto.ParkingDetailDto;
 import com.example.domain.dto.ParkingInDto;
 import com.example.domain.dto.ParkingListDto;
-import com.example.domain.entity.Favorite;
-import com.example.domain.entity.ParkingLot;
-import com.example.domain.entity.ShareLot;
-import com.example.domain.repo.FavoriteRepo;
-import com.example.domain.repo.ParkingLotRepo;
-import com.example.domain.repo.ShareLotRepo;
-import com.example.domain.repo.UserRepo;
+import com.example.domain.entity.*;
+import com.example.domain.etc.DayName;
+import com.example.domain.etc.OutTiming;
+import com.example.domain.repo.*;
 import com.example.jumoparking.service.ParkingLotService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.yaml.snakeyaml.util.EnumUtils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.TextStyle;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,16 +32,71 @@ public class ParkingLotServiceImpl implements ParkingLotService {
 
     private final UserRepo userRepo;
 
+    private final DayDataRepo dayDataRepo;
+
+    private final OutTiming outTiming;
+
     @Override
     public List<ParkingListDto> getListOfPoint(ParkingInDto parkingInDto) {
         float zoom = parkingInDto.getZoomLevel();
-
+        // 위도 경도 기반 주차장 리스트들 얻어오기
         List<ParkingLot> parkingLots = parkingLotRepo.findAllByLatitudeGreaterThanAndLatitudeLessThanAndLongitudeGreaterThanAndLongitudeLessThan(
                 parkingInDto.getStartLat(), parkingInDto.getEndLat(), parkingInDto.getStartLng(), parkingInDto.getEndLng());
-        List<ShareLot> shareLots = shareLotRepo.findAllByLatitudeGreaterThanAndLatitudeLessThanAndLongitudeGreaterThanAndLongitudeLessThan(
+        List<ShareLot> originShareLots = shareLotRepo.findAllByLatitudeGreaterThanAndLatitudeLessThanAndLongitudeGreaterThanAndLongitudeLessThan(
                 parkingInDto.getStartLat(), parkingInDto.getEndLat(), parkingInDto.getStartLng(), parkingInDto.getEndLng());
 
-        if (zoom >= 13.8 && 15> zoom && parkingLots.size() + shareLots.size() > 7)
+        // 운영 요일 기반 공유주차장 거르기 로직
+        List<ShareLot> shareLots = filteringByDay(originShareLots);
+
+        //클러스터링 로직 메소드로 분리
+        return clusteringCoord(zoom, shareLots, parkingLots);
+    }
+
+    private  List<ShareLot> filteringByDay(List<ShareLot> originShareLots){
+        return originShareLots.stream().filter(shareLot -> {
+            DayName dayOfWeek = DayName.valueOf(LocalDate.now().getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.US));
+            Optional <DayData> dayData= dayDataRepo.findDayDataByShareLot_ShaIdAndDayStrEquals(shareLot.getShaId(), dayOfWeek);
+
+            System.out.println(dayData.get().getDayStr());
+
+            if(dayData.get().isEnable()){
+                int [] enableTimeList = new int[24];
+                Arrays.fill(enableTimeList, 0);
+                int nowHour = LocalDateTime.now().getHour();
+                System.out.println(nowHour);
+                System.out.println(dayData.get().getDay_end() );
+                if (dayData.get().getDay_end() <= nowHour ){
+                    return false;
+                }else{
+                    for(int i=Math.max(nowHour+1, dayData.get().getDay_start()); i < dayData.get().getDay_end() ; i++){
+                        enableTimeList[i] = 1;
+                    }
+                    List<Ticket> ticketList = shareLot.getTicketList();
+                    ticketList.stream().map(ticket -> {
+                        int endTime = outTiming.OutTimingMethod(ticket.getIn_timing(), ticket.getType());
+                        for (int j= ticket.getIn_timing() ; j<endTime; j++){
+                            enableTimeList[j] = 1;
+                        }
+                        return null;
+                    });
+                    System.out.println(enableTimeList);
+
+                    for(int i = 0 ; i< 24; i++){
+                        if (enableTimeList[i] == 1){
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+            }
+            else{
+                return false;
+            }
+        }).collect(Collectors.toList());
+    }
+
+    private List<ParkingListDto> clusteringCoord(float zoom, List<ShareLot> shareLots, List<ParkingLot> parkingLots){
+        if (zoom >= 13.8 && 15> zoom)
         {
             HashMap<String,Float> latMap = new HashMap<String,Float>();
             HashMap<String,Float> lngMap = new HashMap<String,Float>();
@@ -70,7 +125,6 @@ public class ParkingLotServiceImpl implements ParkingLotService {
                         }
                     }
                 }
-
 
                 if (latMap.containsKey(checkStr)){
                     latMap.put(checkStr, latMap.get(checkStr) + parkinglot.getLatitude());
@@ -125,32 +179,41 @@ public class ParkingLotServiceImpl implements ParkingLotService {
                 }
             }
 
-            for (String s: cntOneList)
-            {
-                String plusKey = new String();
-                double minDistance = 10000.000;
-                for (String s2 : latAvg.keySet()){
-                    double tempDistance = Math.pow(Math.abs(latAvg.get(s2) - latMap.get(s)), 2) + Math.pow(Math.abs(lngAvg.get(s2) - lngMap.get(s)), 2);
-                    if (tempDistance < minDistance){
-                        minDistance = tempDistance;
-                        plusKey = s2;
+            if (latAvg.size() != 0){
+                for (String s: cntOneList)
+                {
+                    String plusKey = new String();
+                    double minDistance = 10000.000;
+                    for (String s2 : latAvg.keySet()){
+                        double tempDistance = Math.pow(Math.abs(latAvg.get(s2) - latMap.get(s)), 2) + Math.pow(Math.abs(lngAvg.get(s2) - lngMap.get(s)), 2);
+                        if (tempDistance < minDistance){
+                            minDistance = tempDistance;
+                            plusKey = s2;
+                        }
+                    }
+
+                    latAvg.put(plusKey, (cntMap.get(plusKey) * latAvg.get(plusKey) + latMap.get(s))/(cntMap.get(plusKey) + 1));
+                    lngAvg.put(plusKey, (cntMap.get(plusKey) * lngAvg.get(plusKey) + lngMap.get(s))/(cntMap.get(plusKey) + 1));
+                    cntMap.put(plusKey, cntMap.get(plusKey)+1);
+                }
+                for(String s : latMap.keySet()){
+                    if ( cntMap.get(s) != 1)
+                    {
+                        parkingLotList.add(new ParkingListDto(-1L, latMap.get(s)/cntMap.get(s), lngMap.get(s)/cntMap.get(s), 0,0,cntMap.get(s)));
                     }
                 }
-
-                latAvg.put(plusKey, (cntMap.get(plusKey) * latAvg.get(plusKey) + latMap.get(s))/(cntMap.get(plusKey) + 1));
-                lngAvg.put(plusKey, (cntMap.get(plusKey) * lngAvg.get(plusKey) + lngMap.get(s))/(cntMap.get(plusKey) + 1));
-                cntMap.put(plusKey, cntMap.get(plusKey)+1);
             }
-
-            for(String s : latMap.keySet()){
-                if ( cntMap.get(s) != 1)
-                {
-                    parkingLotList.add(new ParkingListDto(-1L, latMap.get(s)/cntMap.get(s), lngMap.get(s)/cntMap.get(s), 0,0,cntMap.get(s)));
+            else{
+                for(String s : latMap.keySet()) {
+                    parkingLotList.add(new ParkingListDto(-1L, latMap.get(s), lngMap.get(s), 0, 0, cntMap.get(s)));
                 }
             }
+
+
+
             return parkingLotList;
         }
-        else if ((zoom >= 15 && zoom < 17.2) || (zoom >= 13.8 && 15 > zoom && parkingLots.size() + shareLots.size() <= 7))
+        else if (zoom >= 15 && zoom < 17.2)
         {
             List<ParkingListDto> parkList = parkingLots.stream().map(parkingLot -> new ParkingListDto(parkingLot)).collect(Collectors.toList());
             List<ParkingListDto> shaList = shareLots.stream().map(shareLot -> new ParkingListDto(shareLot)).collect(Collectors.toList());
@@ -160,7 +223,6 @@ public class ParkingLotServiceImpl implements ParkingLotService {
         }
 
         return new ArrayList<>();
-
     }
 
     @Override
@@ -217,4 +279,29 @@ public class ParkingLotServiceImpl implements ParkingLotService {
         }
         return favoriteList;
     }
+
+    @Override
+    public List<ParkingListDto> getListOfParking(ParkingInDto parkingInDto) {
+        float zoom = parkingInDto.getZoomLevel();
+        // 위도 경도 기반 주차장 리스트들 얻어오기
+        List<ParkingLot> parkingLots = parkingLotRepo.findAllByLatitudeGreaterThanAndLatitudeLessThanAndLongitudeGreaterThanAndLongitudeLessThan(
+                parkingInDto.getStartLat(), parkingInDto.getEndLat(), parkingInDto.getStartLng(), parkingInDto.getEndLng());
+        List<ShareLot> shareLots = new ArrayList<>();
+        return clusteringCoord(zoom, shareLots, parkingLots);
+    }
+
+    @Override
+    public List<ParkingListDto> getListOfShare(ParkingInDto parkingInDto) {
+        float zoom = parkingInDto.getZoomLevel();
+        // 위도 경도 기반 주차장 리스트들 얻어오기
+        List<ParkingLot> parkingLots = new ArrayList<>();
+        List<ShareLot> originShareLots = shareLotRepo.findAllByLatitudeGreaterThanAndLatitudeLessThanAndLongitudeGreaterThanAndLongitudeLessThan(
+                parkingInDto.getStartLat(), parkingInDto.getEndLat(), parkingInDto.getStartLng(), parkingInDto.getEndLng());
+        System.out.println(originShareLots.size());
+        List<ShareLot> shareLots = filteringByDay(originShareLots);
+        System.out.println(shareLots.size());
+        return clusteringCoord(zoom, shareLots, parkingLots);
+    }
+
+
 }

@@ -21,5 +21,4 @@ public interface ShareLotService {
     boolean checkFavorite(Long userId, Long lotId);
 
     List<MyShareListDto> getListMyShare(Long userId);
-
 }

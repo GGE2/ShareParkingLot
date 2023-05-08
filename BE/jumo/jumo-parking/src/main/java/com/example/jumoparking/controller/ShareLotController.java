@@ -1,11 +1,9 @@
 package com.example.jumoparking.controller;
 
-import com.example.domain.dto.DaySaveDto;
-import com.example.domain.dto.MyShareListDto;
-import com.example.domain.dto.ParkingDetailDto;
-import com.example.domain.dto.ShareSaveDto;
+import com.example.domain.dto.*;
 import com.example.domain.entity.ShareLot;
 import com.example.jumoparking.service.DayDataService;
+import com.example.jumoparking.service.ParkingLotService;
 import com.example.jumoparking.service.ShareLotService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -26,6 +24,8 @@ public class ShareLotController {
 
     private final ShareLotService shareLotService;
     private final DayDataService dayDataService;
+    private final ParkingLotService parkingLotService;
+
     @ApiOperation(value = "공유 주차장 등록", notes = "멀티파트파일 리스트를 보내주어야 함 이게 좀 어려울거같으면 같이 방법 찾아보기")
     @PostMapping(value =  "/save",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,
             MediaType.APPLICATION_JSON_VALUE})
@@ -64,6 +64,12 @@ public class ShareLotController {
     @GetMapping("/myList")
     public List<MyShareListDto> shareList(@RequestParam Long userId){
         return shareLotService.getListMyShare(userId);
+    }
+
+    @ApiOperation(value = "공유주차장만 보기", notes = "일반 주차장만 보기는 parkingLot/* 쪽에 있음")
+    @PostMapping("/list/share")
+    public List<ParkingListDto> getListOfShare(@Validated @RequestBody ParkingInDto parkingInDto){
+        return parkingLotService.getListOfShare(parkingInDto);
     }
 
 }

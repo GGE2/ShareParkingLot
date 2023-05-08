@@ -158,5 +158,4 @@ public class ShareLotServiceImpl implements ShareLotService {
         return shareLots.stream().map(shareLot -> new MyShareListDto(shareLot.getShaId(), shareLot.getSha_name())).collect(Collectors.toList());
     }
 
-
 }
