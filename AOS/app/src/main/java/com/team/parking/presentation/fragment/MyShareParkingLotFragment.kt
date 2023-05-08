@@ -84,10 +84,10 @@ class MyShareParkingLotFragment : Fragment() {
                 dialog.dismiss()
             }
             buttonOkCheckDialog.setOnClickListener {
-                shareParkingLotViewModel.deleteShareLot(parkId)
-                shareParkingLotViewModel.getShareLotList(userViewModel.user!!.user_id)
+                shareParkingLotViewModel.deleteShareLot(parkId, userViewModel.user!!.user_id)
                 dialog.dismiss()
             }
         }
+        dialog.show()
     }
 }

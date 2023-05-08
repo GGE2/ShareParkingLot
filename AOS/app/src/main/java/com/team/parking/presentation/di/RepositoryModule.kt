@@ -3,7 +3,7 @@ package com.team.parking.presentation.di
 import com.team.parking.data.repository.MapRepositoryImpl
 import com.team.parking.data.repository.SearchRepositoryImpl
 import com.team.parking.data.repository.ShareLotRepositoryImpl
-import com.team.parking.data.repository.dataSource.MapRemoteDatasource
+import com.team.parking.data.repository.dataSource.MapRemoteDataSource
 import com.team.parking.data.repository.dataSource.SearchRemoteDataSource
 import com.team.parking.data.repository.dataSource.ShareLotRemoteDatasource
 import com.team.parking.domain.repository.MapRepository

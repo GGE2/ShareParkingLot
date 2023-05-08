@@ -16,6 +16,7 @@ import com.team.parking.domain.usecase.GetShareLotListUseCase
 import com.team.parking.domain.usecase.PostShareLotUseCase
 import com.team.parking.presentation.utils.App
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 
@@ -95,10 +96,12 @@ class ShareParkingLotViewModel(
         }
     }
 
-    fun deleteShareLot(parkId: Long) = viewModelScope.launch(Dispatchers.IO){
+    fun deleteShareLot(parkId: Long, userId: Long) = viewModelScope.launch(Dispatchers.IO){
         try {
             if(application.isNetworkAvailable(app)){
                 var apiResult = deleteShareLotUseCase.execute(parkId)
+                delay(500)
+                getShareLotList(userId)
             }else{
                 Log.d(TAG, "get: 네트워크 문제")
             }

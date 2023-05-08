@@ -48,21 +48,12 @@ class DaySelectFragment : Fragment() {
             daySelectViewModel.getShareLotDay(shareParkingLotViewModel.sharelotId)
         }
         daySelectViewModel.currentIndex.observe(viewLifecycleOwner){
-            binding.apply {
-                val data = daySelectViewModel.dayList[daySelectViewModel.currentIndex.value!!]
-                checkEnableDaySelect.isChecked = data.enable
-                if(data.dayStart != -1){
-                    textValueStartTimeDaySelect.text = "${data.dayStart}:00"
-                } else {
-                    textValueStartTimeDaySelect.text = ""
-                }
-                if(data.dayEnd != -1){
-                    textValueEndTimeDaySelect.text = "${data.dayEnd}:00"
-                } else {
-                    textValueEndTimeDaySelect.text = ""
-                }
-            }
+            onObserveData()
         }
+        daySelectViewModel.dayList.observe(viewLifecycleOwner){
+            onObserveData()
+        }
+        daySelectViewModel.setCurrentIndex(0)
         binding.apply {
             daySelectViewModel.layoutList = listOf(
                 layoutMonDaySelect,
@@ -96,7 +87,7 @@ class DaySelectFragment : Fragment() {
                 layoutWeekDayOnClick(6, it)
             }
             checkEnableDaySelect.setOnCheckedChangeListener { compoundButton, b ->
-                daySelectViewModel.dayList[daySelectViewModel.currentIndex.value!!].enable = b
+                daySelectViewModel.dayList.value!![daySelectViewModel.currentIndex.value!!].enable = b
             }
             layoutStartTimeDaySelect.setOnClickListener {
                 showTimePickerDialog(object : OnTimeSetListener{
@@ -106,10 +97,10 @@ class DaySelectFragment : Fragment() {
                         minute: Int,
                         second: Int
                     ) {
-                        daySelectViewModel.dayList[daySelectViewModel.currentIndex.value!!].dayStart = hourOfDay
+                        daySelectViewModel.dayList.value!![daySelectViewModel.currentIndex.value!!].dayStart = hourOfDay
                         binding.textValueStartTimeDaySelect.text = "${hourOfDay}:00"
                     }
-                })
+                }, true)
             }
             layoutEndTimeDaySelect.setOnClickListener {
                 showTimePickerDialog(object : OnTimeSetListener{
@@ -119,10 +110,10 @@ class DaySelectFragment : Fragment() {
                         minute: Int,
                         second: Int
                     ) {
-                        daySelectViewModel.dayList[daySelectViewModel.currentIndex.value!!].dayEnd = hourOfDay
+                        daySelectViewModel.dayList.value!![daySelectViewModel.currentIndex.value!!].dayEnd = hourOfDay
                         binding.textValueEndTimeDaySelect.text = "${hourOfDay}:00"
                     }
-                })
+                }, false)
             }
             buttonFinishDaySelect.setOnClickListener {
                 daySelectViewModel.putShareLotDay(shareParkingLotViewModel.sharelotId)
@@ -137,18 +128,38 @@ class DaySelectFragment : Fragment() {
         it.background = ResourcesCompat.getDrawable(resources, R.drawable.day_selected_background, null)
     }
 
-    fun showTimePickerDialog(onTimeSetListener: OnTimeSetListener){
+    fun showTimePickerDialog(onTimeSetListener: OnTimeSetListener, min: Boolean){
         val timePickerDialog = TimePickerDialog.newInstance(onTimeSetListener, false)
         timePickerDialog.enableMinutes(false)
-        timePickerDialog.setMinTime(
-            if(daySelectViewModel.dayList[daySelectViewModel.currentIndex.value!!].dayStart == -1) 0
-            else daySelectViewModel.dayList[daySelectViewModel.currentIndex.value!!].dayStart,
-            0, 0)
-        timePickerDialog.setMaxTime(
-            if(daySelectViewModel.dayList[daySelectViewModel.currentIndex.value!!].dayEnd == -1) 23
-            else daySelectViewModel.dayList[daySelectViewModel.currentIndex.value!!].dayEnd,
-            59, 59
-        )
+        if(!min){
+            timePickerDialog.setMinTime(
+                if(daySelectViewModel.dayList.value!![daySelectViewModel.currentIndex.value!!].dayStart == -1) 0
+                else daySelectViewModel.dayList.value!![daySelectViewModel.currentIndex.value!!].dayStart,
+                0, 0)
+        } else {
+            timePickerDialog.setMaxTime(
+                if(daySelectViewModel.dayList.value!![daySelectViewModel.currentIndex.value!!].dayEnd == -1) 23
+                else daySelectViewModel.dayList.value!![daySelectViewModel.currentIndex.value!!].dayEnd,
+                59, 59
+            )
+        }
         timePickerDialog.show(parentFragmentManager, "")
+    }
+
+    fun onObserveData(){
+        binding.apply {
+            val data = daySelectViewModel.dayList.value!![daySelectViewModel.currentIndex.value!!]
+            checkEnableDaySelect.isChecked = data.enable
+            if(data.dayStart != -1){
+                textValueStartTimeDaySelect.text = "${data.dayStart}:00"
+            } else {
+                textValueStartTimeDaySelect.text = ""
+            }
+            if(data.dayEnd != -1){
+                textValueEndTimeDaySelect.text = "${data.dayEnd}:00"
+            } else {
+                textValueEndTimeDaySelect.text = ""
+            }
+        }
     }
 }

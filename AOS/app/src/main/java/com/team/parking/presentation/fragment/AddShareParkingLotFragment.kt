@@ -115,7 +115,6 @@ class AddShareParkingLotFragment : Fragment() {
         binding.imageAddPictureAddShareParkingLot.setOnClickListener {
             checkPermisson()
         }
-        //viewmodel 만들기, 주소 검색 searchfragment 재사용하기
     }
 
     val result = registerForActivityResult(
@@ -181,6 +180,9 @@ class AddShareParkingLotFragment : Fragment() {
                 return false
             } else if(editTextPriceAddShareParkingLot.text.isEmpty()){
                 Toast.makeText(requireContext(), "주차 요금을 입력해주세요.", Toast.LENGTH_SHORT).show()
+                return false
+            } else if(editTextPriceAddShareParkingLot.text.toString().toInt() % 100 != 0){
+                Toast.makeText(requireContext(), "주차 요금을 100원 단위로 입력해주세요.", Toast.LENGTH_SHORT).show()
                 return false
             } else if(!radioButtonEntrancePayAddShareParkingLot.isChecked && !radioButtonExitPayAddShareParkingLot.isChecked){
                 Toast.makeText(requireContext(), "결제 방식을 선택해주세요.", Toast.LENGTH_SHORT).show()

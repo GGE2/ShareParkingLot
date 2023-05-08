@@ -26,11 +26,10 @@ class DaySelectViewModel(
 ): AndroidViewModel(app) {
     val application = App()
     var add: Boolean = false
-    var shaId: Long = -2
     private var _currentIndex: MutableLiveData<Int> = MutableLiveData(0)
     val currentIndex: LiveData<Int> get() = _currentIndex
     var layoutList: List<View> = listOf()
-    var dayList: List<DayRequest> = listOf(
+    private var _dayList: MutableLiveData<List<DayRequest>> = MutableLiveData(listOf(
         DayRequest(-1,-1,"Mon",false),
         DayRequest(-1,-1,"Tue",false),
         DayRequest(-1,-1,"Wed",false),
@@ -38,7 +37,8 @@ class DaySelectViewModel(
         DayRequest(-1,-1,"Fri",false),
         DayRequest(-1,-1,"Sat",false),
         DayRequest(-1,-1,"Sun",false)
-    )
+    ))
+    val dayList: LiveData<List<DayRequest>> get() = _dayList
     var resource: Resources = Resources.getSystem()
 
     fun setCurrentIndex(index: Int){
@@ -46,7 +46,7 @@ class DaySelectViewModel(
     }
 
     fun initDayList(){
-        dayList = listOf(
+        _dayList.value = listOf(
             DayRequest(-1,-1,"Mon",false),
             DayRequest(-1,-1,"Tue",false),
             DayRequest(-1,-1,"Wed",false),
@@ -67,7 +67,9 @@ class DaySelectViewModel(
         try {
             if(application.isNetworkAvailable(app)){
                 var apiResult = getShareLotDayUseCase.execute(parkId)
-                dayList = apiResult.data!!
+                _dayList.postValue(apiResult.data!!)
+                setCurrentIndex(1)
+                setCurrentIndex(0)
             }else{
                 Log.d(TAG, "get: 네트워크 문제")
             }
@@ -79,7 +81,7 @@ class DaySelectViewModel(
     fun putShareLotDay(parkId: Long) = viewModelScope.launch(Dispatchers.IO) {
         try {
             if(application.isNetworkAvailable(app)){
-                var apiResult = putShareLotDayUseCase.execute(dayList, parkId)
+                var apiResult = putShareLotDayUseCase.execute(_dayList.value!!, parkId)
             }else{
                 Log.d(TAG, "get: 네트워크 문제")
             }
