@@ -66,8 +66,8 @@ class MainActivity : AppCompatActivity() {
         //setFullScreen()
         userViewModel = ViewModelProvider(this)[UserViewModel::class.java]
         initMapViewModel()
-        getFCMToken()
         onLoginSuccess()
+
     }
 
     fun initMapViewModel(){
@@ -150,22 +150,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun getFCMToken(): String?{
-        var token: String? = null
-        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
-            if (!task.isSuccessful) {
-                Log.w(TAG, "Fetching FCM registration token failed", task.exception)
-                return@OnCompleteListener
-            }
 
-            // Get new FCM registration token
-            token = task.result
-
-            // Log and toast
-            Log.d(TAG, "FCM Token is ${token}")
-        })
-
-        return token
     private fun onLoginSuccess(){
         userViewModel.userLiveData.observe(this){
             runOnUiThread {
@@ -177,4 +162,5 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
 }

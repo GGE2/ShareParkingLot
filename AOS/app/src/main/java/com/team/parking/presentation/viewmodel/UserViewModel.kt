@@ -1,5 +1,6 @@
 package com.team.parking.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -25,21 +26,29 @@ class UserViewModel : ViewModel() {
     private var _userLiveData: MutableLiveData<User> = MutableLiveData()
     val userLiveData: LiveData<User> get() = _userLiveData
     var user: User? = null
+    private var _fcm_token : MutableLiveData<String> = MutableLiveData()
+    val fcm_token : LiveData<String> get() = _fcm_token
 
     fun login(
         loginResponse: LoginResponse
     ) {
+
         user = User(
             loginResponse.user_id!!,
             loginResponse.phone!!,
             loginResponse.email!!,
             loginResponse.name!!,
             loginResponse.profile_img,
-            loginResponse.ptHas, loginResponse.type!!, loginResponse.social_id ?: ""
+            loginResponse.ptHas, loginResponse.type!!, loginResponse.social_id ?: "",
+            loginResponse.fcm_token
         )
+        Log.d(TAG, "login: ${user!!.fcm_token}")
         _userLiveData.postValue(user)
     }
 
+    fun updateFcmToken(token : String){
+        _fcm_token.postValue(token)
+    }
 
     fun signReset() {
         _userName = ""
