@@ -290,6 +290,97 @@ public class ParkingLotServiceImpl implements ParkingLotService {
         return clusteringCoord(zoom, shareLots, parkingLots);
     }
 
+    private static int distance(double lat1, double lon1, double lat2, double lon2){
+        double theta = lon1 - lon2;
+        double dist = Math.sin(deg2rad(lat1))* Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1))*Math.cos(deg2rad(lat2))*Math.cos(deg2rad(theta));
+        dist = Math.acos(dist);
+        dist = rad2deg(dist);
+        dist = dist * 60*1.1515*1609.344;
+
+        return (int) Math.floor(dist); //단위 meter
+    }
+
+    private static double deg2rad(double deg){
+        return (deg * Math.PI/180.0);
+    }
+    //radian(라디안)을 10진수로 변환
+    private static double rad2deg(double rad){
+        return (rad * 180 / Math.PI);
+    }
+
+    class ParkingBottomListDtoDistComparator implements Comparator<ParkingBottomListDto> {
+        @Override
+        public int compare(ParkingBottomListDto f1, ParkingBottomListDto f2) {
+            if (f1.getMeter() > f2.getMeter()) {
+                return 1;
+            } else if (f1.getMeter() < f2.getMeter()) {
+                return -1;
+            }
+            return 0;
+        }
+    }
+
+    class ParkingBottomListDtoPriceComparator implements Comparator<ParkingBottomListDto> {
+        @Override
+        public int compare(ParkingBottomListDto f1, ParkingBottomListDto f2) {
+            if (f1.getFeeBasic() > f2.getFeeBasic()) {
+                return 1;
+            } else if (f1.getFeeBasic() < f2.getFeeBasic()) {
+                return -1;
+            }
+            return 0;
+        }
+    }
+
+    @Override
+    public List<ParkingBottomListDto> getOrderByDist(ParkingInDto parkingInDto) {
+        List<ParkingLot> parkingLots = parkingLotRepo.findAllByLatitudeGreaterThanAndLatitudeLessThanAndLongitudeGreaterThanAndLongitudeLessThan(
+                parkingInDto.getStartLat(), parkingInDto.getEndLat(), parkingInDto.getStartLng(), parkingInDto.getEndLng());
+        List<ShareLot> shareLots = shareLotRepo.findAllByLatitudeGreaterThanAndLatitudeLessThanAndLongitudeGreaterThanAndLongitudeLessThan(
+                parkingInDto.getStartLat(), parkingInDto.getEndLat(), parkingInDto.getStartLng(), parkingInDto.getEndLng()
+        );
+
+        List<ParkingBottomListDto> parkList = parkingLots.stream().map(parkingLot -> {
+            int meter = distance(parkingInDto.getCenterLat(),parkingInDto.getCenterLng(), parkingLot.getLatitude(), parkingLot.getLongitude());
+            return new ParkingBottomListDto(parkingLot, meter);
+        }).collect(Collectors.toList());
+        List<ParkingBottomListDto> shaList = shareLots.stream().map(shareLot -> {
+            int meter = distance(parkingInDto.getCenterLat(),parkingInDto.getCenterLng(), shareLot.getLatitude(), shareLot.getLongitude());
+            return new ParkingBottomListDto(shareLot, meter);
+        }).collect(Collectors.toList());
+
+        parkList.addAll(shaList);
+        Collections.sort(parkList, new ParkingBottomListDtoDistComparator());
+
+        return parkList;
+    }
+
+
+
+
+    @Override
+    public List<ParkingBottomListDto> getOrderByPrice(ParkingInDto parkingInDto) {
+        List<ParkingLot> parkingLots = parkingLotRepo.findAllByLatitudeGreaterThanAndLatitudeLessThanAndLongitudeGreaterThanAndLongitudeLessThan(
+                parkingInDto.getStartLat(), parkingInDto.getEndLat(), parkingInDto.getStartLng(), parkingInDto.getEndLng());
+        List<ShareLot> shareLots = shareLotRepo.findAllByLatitudeGreaterThanAndLatitudeLessThanAndLongitudeGreaterThanAndLongitudeLessThan(
+                parkingInDto.getStartLat(), parkingInDto.getEndLat(), parkingInDto.getStartLng(), parkingInDto.getEndLng()
+        );
+
+        List<ParkingBottomListDto> parkList = parkingLots.stream().map(parkingLot -> {
+            int meter = distance(parkingInDto.getCenterLat(),parkingInDto.getCenterLng(), parkingLot.getLatitude(), parkingLot.getLongitude());
+            return new ParkingBottomListDto(parkingLot, meter);
+        }).collect(Collectors.toList());
+        List<ParkingBottomListDto> shaList = shareLots.stream().map(shareLot -> {
+            int meter = distance(parkingInDto.getCenterLat(),parkingInDto.getCenterLng(), shareLot.getLatitude(), shareLot.getLongitude());
+            return new ParkingBottomListDto(shareLot, meter);
+        }).collect(Collectors.toList());
+
+        parkList.addAll(shaList);
+        Collections.sort(parkList, new ParkingBottomListDtoPriceComparator());
+
+        return parkList;
+    }
+
     @Override
     public List<ParkingListDto> getListOfShare(ParkingInDto parkingInDto) {
         float zoom = parkingInDto.getZoomLevel();

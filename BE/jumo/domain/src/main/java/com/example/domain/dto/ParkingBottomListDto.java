@@ -21,16 +21,8 @@ public class ParkingBottomListDto {
     private String payType;
     private int feeBasic;
 
-    @Builder
-    public ParkingBottomListDto(ParkingLot parkingLot){
-        this.parkId = parkingLot.getLotId();
-        this.lat = parkingLot.getLatitude();
-        this.lng = parkingLot.getLongitude();
-        this.parkingField = parkingLot.getLot_field();
-        this.parkingName = parkingLot.getLot_name();
-        this.payType = parkingLot.getLot_part() + " "+ parkingLot.getPay_type();
-        this.feeBasic = parkingLot.getPer_basic() * 2;
-    }
+    private int meter;
+
 
     @Builder
     public ParkingBottomListDto(ShareLot shareLot){
@@ -40,7 +32,44 @@ public class ParkingBottomListDto {
         this.parkingField = shareLot.getSha_field();
         this.parkingName = shareLot.getSha_name();
         this.payType = "포인트결제";
-        this.feeBasic = shareLot.getSha_fee();
+        this.feeBasic = shareLot.getShaFee();
+        this.meter = 0;
+    }
+
+    @Builder
+    public ParkingBottomListDto(ParkingLot parkingLot){
+        this.parkId = parkingLot.getLotId();
+        this.lat = parkingLot.getLatitude();
+        this.lng = parkingLot.getLongitude();
+        this.parkingField = parkingLot.getLot_field();
+        this.parkingName = parkingLot.getLot_name();
+        this.payType = parkingLot.getLot_part() + " "+ parkingLot.getPay_type();
+        this.feeBasic = parkingLot.getPerBasic() * 2;
+        this.meter = 0;
+    }
+
+    @Builder
+    public ParkingBottomListDto(ParkingLot parkingLot, int meter){
+        this.parkId = parkingLot.getLotId();
+        this.lat = parkingLot.getLatitude();
+        this.lng = parkingLot.getLongitude();
+        this.parkingField = parkingLot.getLot_field();
+        this.parkingName = parkingLot.getLot_name();
+        this.payType = parkingLot.getLot_part() + " "+ parkingLot.getPay_type();
+        this.feeBasic = parkingLot.getPerBasic() * 2;
+        this.meter = meter;
+    }
+
+    @Builder
+    public ParkingBottomListDto(ShareLot shareLot, int meter){
+        this.parkId = shareLot.getShaId();
+        this.lat = shareLot.getLatitude();
+        this.lng = shareLot.getLongitude();
+        this.parkingField = shareLot.getSha_field();
+        this.parkingName = shareLot.getSha_name();
+        this.payType = "포인트결제";
+        this.feeBasic = shareLot.getShaFee();
+        this.meter = meter;
     }
 
 }

@@ -63,5 +63,17 @@ public class ParkingLotController {
     public List<ParkingListDto> getListOfParking(@Validated @RequestBody ParkingInDto parkingInDto){
         return parkingLotService.getListOfParking(parkingInDto);
     }
+    @ApiOperation(value = "목록보기 거리순", notes = "목록보기를 할 때 기본적으로 dto 에 meter 추가")
+    @PostMapping("/list/bottom/dist")
+    public List<ParkingBottomListDto> getBottomListOfDist(@Validated @RequestBody ParkingInDto parkingInDto){
+        return parkingLotService.getOrderByDist(parkingInDto);
+    }
+
+    @ApiOperation(value = "목록보기 가격순", notes = "meter 정보도 같이 표시 된다.")
+    @PostMapping("/list/bottom/price")
+    public List<ParkingBottomListDto> getBottomListOfPrice(@Validated @RequestBody ParkingInDto parkingInDto){
+        return parkingLotService.getOrderByPrice(parkingInDto);
+    }
+
 
 }

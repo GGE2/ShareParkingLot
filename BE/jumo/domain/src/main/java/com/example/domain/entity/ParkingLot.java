@@ -56,7 +56,8 @@ public class ParkingLot {
 
     private int fee_basic;
 
-    private int per_basic;
+    @Column(name = "per_basic")
+    private int perBasic;
 
     private int plus_time;
 

@@ -37,7 +37,8 @@ public class ShareLot {
 
     private int sha_field;
 
-    private int sha_fee;
+    @Column(name = "sha_fee")
+    private int shaFee;
 
     @Column(columnDefinition="TEXT")
     private String sha_prop;
@@ -67,7 +68,7 @@ public class ShareLot {
                 .user(user)
                 .latitude(shareSaveDto.getLatitude())
                 .longitude(shareSaveDto.getLongitude())
-                .sha_fee(shareSaveDto.getShaFee())
+                .shaFee(shareSaveDto.getShaFee())
                 .sha_field(shareSaveDto.getShaField())
                 .sha_jibun(shareSaveDto.getJibun())
                 .sha_road(shareSaveDto.getRoad())

@@ -116,7 +116,7 @@ public class TicketServiceImpl implements TicketService {
 
         if (user.isPresent() && shareLot.isPresent()) {
             int[] typeToHour = new int[]{2, 6, 10, 48};
-            int cost = typeToHour[ticketCreateRequestDto.getType()]*shareLot.get().getSha_fee();
+            int cost = typeToHour[ticketCreateRequestDto.getType()]*shareLot.get().getShaFee();
             
             // 보유 포인트가 결제 금액 이상일 때 구매
             if(user.get().getPtHas() >= cost) {

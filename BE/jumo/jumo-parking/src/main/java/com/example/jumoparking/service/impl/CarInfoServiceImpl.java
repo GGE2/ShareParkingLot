@@ -20,7 +20,20 @@ public class CarInfoServiceImpl implements CarInfoService {
     private final UserRepo userRepo;
     @Override
     public List<CarInfoDto> getListCarInfo(Long userId) {
-        return carInfoRepo.findCarInfosByUser_UserId(userId).stream().map(carInfo -> new CarInfoDto(carInfo)).collect(Collectors.toList());
+        List<CarInfoDto> carInfoList = carInfoRepo.findCarInfosByUser_UserId(userId).stream().map(carInfo -> new CarInfoDto(carInfo)).collect(Collectors.toList());
+        for(int i =0 ; i < carInfoList.size(); i++){
+            if(carInfoList.get(i).isCarRep()){
+                if(i != 0){
+                    CarInfoDto tmpCarInfoDto = carInfoList.get(0);
+                    carInfoList.set(0, carInfoList.get(i));
+                    carInfoList.set(i, tmpCarInfoDto);
+                    break;
+                }else{
+                    break;
+                }
+            }
+        }
+        return carInfoList;
     }
 
     @Override

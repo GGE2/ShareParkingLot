@@ -27,7 +27,7 @@ public class ParkingListDto {
         this.lat = parkingLot.getLatitude();
         this.lng = parkingLot.getLongitude();
         this.parkType = 0;
-        this.feeBasic = parkingLot.getFee_data() == "무료" ? -1 : parkingLot.getPer_basic() * 2;
+        this.feeBasic = parkingLot.getFee_data() == "무료" ? -1 : parkingLot.getPerBasic() * 2;
         this.clusteringCnt = 0;
     }
 
@@ -38,7 +38,7 @@ public class ParkingListDto {
         this.lat = shareLot.getLatitude();
         this.lng = shareLot.getLongitude();
         this.parkType = 1;
-        this.feeBasic = shareLot.getSha_fee();
+        this.feeBasic = shareLot.getShaFee();
         this.clusteringCnt = 0;
     }
 }

@@ -21,6 +21,10 @@ public interface ParkingLotService {
 
     List<ParkingListDto> getListOfParking(ParkingInDto parkingInDto);
 
+    List<ParkingBottomListDto> getOrderByDist(ParkingInDto parkingInDto);
+
+    List<ParkingBottomListDto> getOrderByPrice(ParkingInDto parkingInDto);
+
 
     List<ParkingListDto> getListOfShare(ParkingInDto parkingInDto);
 }

@@ -41,7 +41,7 @@ public class ParkingDetailDto {
         this.jibun = parkingLot.getOld_addr();
         this.openDay = parkingLot.getOpen_day();
         this.feeData = parkingLot.getFee_data();
-        this.feeBasic = parkingLot.getPer_basic();
+        this.feeBasic = parkingLot.getPerBasic();
         this.dayFee = parkingLot.getPer_day();
         this.payType = parkingLot.getPay_type();
         this.specialProp = parkingLot.getSpecial_prop();
@@ -62,8 +62,8 @@ public class ParkingDetailDto {
         }
         this.openDay = openDayString;
         this.feeData = "유료";
-        this.feeBasic = shareLot.getSha_fee();
-        this.dayFee = shareLot.getSha_fee() * 48;
+        this.feeBasic = shareLot.getShaFee();
+        this.dayFee = shareLot.getShaFee() * 48;
         this.payType = "포인트결제";
         this.specialProp = shareLot.getSha_prop();
         List<Image> images = shareLot.getImages();

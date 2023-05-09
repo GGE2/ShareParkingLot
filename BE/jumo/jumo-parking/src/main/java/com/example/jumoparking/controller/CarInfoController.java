@@ -18,13 +18,13 @@ public class CarInfoController {
 
     private final CarInfoService carInfoService;
 
-    @ApiOperation(value = "차량 등록", notes = "차량 번호만 담아서 보내주면 될 듯 , 대표차량 한 대 등록할 때 자동 설정하고 싶으면 로직 수정해야함 말 좀")
+    @ApiOperation(value = "차량 등록", notes = "차량 번호만 담아서 보내주면 될 듯 한 대만 있을 때 자동으로 대표차량 등록은 완료")
     @PostMapping("/save")
     public void saveCar(@RequestBody CarSaveDto carSaveDto, @RequestParam Long userId){
         carInfoService.saveCarInfo(carSaveDto, userId);
     }
 
-    @ApiOperation(value = "차량리스트", notes = "차량 아이디, 번호, 대표차인지 여부")
+    @ApiOperation(value = "차량리스트", notes = "차량 아이디, 번호, 대표차인지 여부 그리고 대표차가 가장 위에 위치하도록")
     @GetMapping("/list")
     public List<CarInfoDto> listCar(@RequestParam Long userId){
         return carInfoService.getListCarInfo(userId);
