@@ -6,9 +6,8 @@ import com.team.parking.data.model.parkinglot.ShareLotRequest
 import com.team.parking.data.model.parkinglot.ShareLotResponse
 import okhttp3.MultipartBody
 import retrofit2.Response
-import retrofit2.http.*
 
-interface ShareLotRemoteDatasource {
+interface ShareLotRemoteDataSource {
     suspend fun deleteShareLot(parkId: Long) : Response<Unit>
     suspend fun getShareLotDetail(parkId: Long) : Response<ParkingLotResponse>
     suspend fun getShareLotList(userId: Long) : Response<List<ShareLotResponse>>

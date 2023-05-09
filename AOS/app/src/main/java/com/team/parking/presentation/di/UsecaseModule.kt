@@ -1,6 +1,7 @@
 package com.team.parking.presentation.di
 
 import com.team.parking.domain.repository.MapRepository
+import com.team.parking.domain.repository.PointRepository
 import com.team.parking.domain.repository.SearchRepository
 import com.team.parking.domain.repository.ShareLotRepository
 import com.team.parking.domain.usecase.*
@@ -33,7 +34,7 @@ class UsecaseModule {
 
     @Singleton
     @Provides
-    fun provideGetSearchDataUsecase(
+    fun provideGetSearchDataUseCase(
         searchRepository: SearchRepository
     ) : GetSearchDataUseCase{
         return GetSearchDataUseCase(searchRepository)
@@ -41,7 +42,7 @@ class UsecaseModule {
 
     @Singleton
     @Provides
-    fun provideGetSearchAddressUsecase(
+    fun provideGetSearchAddressUseCase(
         searchRepository: SearchRepository
     ) : GetSearchAddressUseCase{
         return GetSearchAddressUseCase(searchRepository)
@@ -49,7 +50,7 @@ class UsecaseModule {
 
     @Singleton
     @Provides
-    fun providePostShareLotUsecase(
+    fun providePostShareLotUseCase(
         shareLotRepository: ShareLotRepository
     ) : PostShareLotUseCase{
         return PostShareLotUseCase(shareLotRepository)
@@ -57,7 +58,7 @@ class UsecaseModule {
 
     @Singleton
     @Provides
-    fun provideGetShareLotListUsecase(
+    fun provideGetShareLotListUseCase(
         shareLotRepository: ShareLotRepository
     ) : GetShareLotListUseCase{
         return GetShareLotListUseCase(shareLotRepository)
@@ -65,7 +66,7 @@ class UsecaseModule {
 
     @Singleton
     @Provides
-    fun provideGetShareLotDayUsecase(
+    fun provideGetShareLotDayUseCase(
         shareLotRepository: ShareLotRepository
     ) : GetShareLotDayUseCase{
         return GetShareLotDayUseCase(shareLotRepository)
@@ -73,7 +74,7 @@ class UsecaseModule {
 
     @Singleton
     @Provides
-    fun providePutShareLotDayUsecase(
+    fun providePutShareLotDayUseCase(
         shareLotRepository: ShareLotRepository
     ) : PutShareLotDayUseCase{
         return PutShareLotDayUseCase(shareLotRepository)
@@ -81,10 +82,41 @@ class UsecaseModule {
 
     @Singleton
     @Provides
-    fun provideDeleteShareLotUsecase(
+    fun provideDeleteShareLotUseCase(
         shareLotRepository: ShareLotRepository
     ) : DeleteShareLotUseCase{
         return DeleteShareLotUseCase(shareLotRepository)
     }
-    
+
+    @Singleton
+    @Provides
+    fun provideGetCurrentPointUseCase(
+        pointRepository: PointRepository
+    ) : GetCurrentPointUseCase{
+        return GetCurrentPointUseCase(pointRepository)
+    }
+
+    @Singleton
+    @Provides
+    fun providePutChargePointUseCase(
+        pointRepository: PointRepository
+    ) : PutChargePointUseCase{
+        return PutChargePointUseCase(pointRepository)
+    }
+
+    @Singleton
+    @Provides
+    fun provideGetEarnedPointUseCase(
+        pointRepository: PointRepository
+    ) : GetEarnedPointUseCase{
+        return GetEarnedPointUseCase(pointRepository)
+    }
+
+    @Singleton
+    @Provides
+    fun provideGetSpentPointUseCase(
+        pointRepository: PointRepository
+    ) : GetSpentPointUseCase{
+        return GetSpentPointUseCase(pointRepository)
+    }
 }

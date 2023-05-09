@@ -22,3 +22,4 @@
 -keep class com.naver.maps.map.widget.ZoomControlView {
     *;
 }
+-keep class kr.co.bootpay.android.**  { *; }

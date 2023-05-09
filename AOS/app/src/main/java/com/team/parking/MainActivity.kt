@@ -51,6 +51,10 @@ class MainActivity : AppCompatActivity() {
     lateinit var daySelectViewModelFactory: DaySelectViewModelFactory
     lateinit var daySelectViewModel: DaySelectViewModel
 
+    @Inject
+    lateinit var pointViewModelFactory: PointViewModelFactory
+    lateinit var pointViewModel: PointViewModel
+
     private lateinit var binding : ActivityMainBinding
     lateinit var userViewModel: UserViewModel
     lateinit var navigationDrawer : DrawerLayout
@@ -82,6 +86,7 @@ class MainActivity : AppCompatActivity() {
         daySelectViewModel = ViewModelProvider(this, daySelectViewModelFactory)[DaySelectViewModel::class.java]
         searchViewModel = ViewModelProvider(this,searchViewModelFactory)[SearchViewModel::class.java]
         shareParkingLotViewModel = ViewModelProvider(this, shareParkingLotViewModelFactory)[ShareParkingLotViewModel::class.java]
+        pointViewModel = ViewModelProvider(this,pointViewModelFactory)[PointViewModel::class.java]
         setProfileFragmentNavigation()
     }
 

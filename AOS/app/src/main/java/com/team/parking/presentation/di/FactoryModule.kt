@@ -56,4 +56,14 @@ class FactoryModule {
     ) : DaySelectViewModelFactory{
         return DaySelectViewModelFactory(app, getShareLotDayUseCase, putShareLotDayUseCase)
     }
+
+    @Singleton
+    @Provides
+    fun providePointViewModelFactory(
+        app:Application,
+        getCurrentPointUseCase: GetCurrentPointUseCase,
+        putChargePointUseCase: PutChargePointUseCase
+    ) : PointViewModelFactory{
+        return PointViewModelFactory(app, getCurrentPointUseCase, putChargePointUseCase)
+    }
 }

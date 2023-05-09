@@ -5,11 +5,11 @@ import com.team.parking.data.model.day.DayRequest
 import com.team.parking.data.model.parkinglot.ParkingLotResponse
 import com.team.parking.data.model.parkinglot.ShareLotRequest
 import com.team.parking.data.model.parkinglot.ShareLotResponse
-import com.team.parking.data.repository.dataSource.ShareLotRemoteDatasource
+import com.team.parking.data.repository.dataSource.ShareLotRemoteDataSource
 import okhttp3.MultipartBody
 import retrofit2.Response
 
-class ShareLotRemoteDataSourceImpl(private val shareLotAPIService: ShareLotAPIService) : ShareLotRemoteDatasource {
+class ShareLotRemoteDataSourceImpl(private val shareLotAPIService: ShareLotAPIService) : ShareLotRemoteDataSource {
     override suspend fun deleteShareLot(parkId: Long): Response<Unit> {
         return shareLotAPIService.deleteShareLot(parkId)
     }

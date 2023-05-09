@@ -1,42 +1,41 @@
 package com.team.parking.data.repository
 
 import com.team.parking.data.model.day.DayRequest
-import com.team.parking.data.model.map.SearchKeyWordResponse
 import com.team.parking.data.model.parkinglot.ParkingLotResponse
 import com.team.parking.data.model.parkinglot.ShareLotRequest
 import com.team.parking.data.model.parkinglot.ShareLotResponse
-import com.team.parking.data.repository.dataSource.ShareLotRemoteDatasource
+import com.team.parking.data.repository.dataSource.ShareLotRemoteDataSource
 import com.team.parking.data.util.Resource
 import com.team.parking.domain.repository.ShareLotRepository
 import okhttp3.MultipartBody
 import retrofit2.Response
 
-class ShareLotRepositoryImpl(private val shareLotRemoteDatasource: ShareLotRemoteDatasource) : ShareLotRepository {
+class ShareLotRepositoryImpl(private val shareLotRemoteDataSource: ShareLotRemoteDataSource) : ShareLotRepository {
     override suspend fun deleteShareLot(parkId: Long): Resource<Unit> {
-        return responseToUnit(shareLotRemoteDatasource.deleteShareLot(parkId))
+        return responseToUnit(shareLotRemoteDataSource.deleteShareLot(parkId))
     }
 
     override suspend fun getShareLotDetail(parkId: Long): Resource<ParkingLotResponse> {
-        return responseToParkingLotResponse(shareLotRemoteDatasource.getShareLotDetail(parkId))
+        return responseToParkingLotResponse(shareLotRemoteDataSource.getShareLotDetail(parkId))
     }
 
     override suspend fun getShareLotList(userId: Long): Resource<List<ShareLotResponse>> {
-        return responseToList(shareLotRemoteDatasource.getShareLotList(userId))
+        return responseToList(shareLotRemoteDataSource.getShareLotList(userId))
     }
 
     override suspend fun postShareLot(
         saveDto: ShareLotRequest,
         files: List<MultipartBody.Part>
     ): Resource<Long> {
-        return responseToLong(shareLotRemoteDatasource.postShareLot(saveDto, files))
+        return responseToLong(shareLotRemoteDataSource.postShareLot(saveDto, files))
     }
 
     override suspend fun putSaveDay(daySaveDtos: List<DayRequest>, parkId: Long): Resource<Unit> {
-        return responseToUnit(shareLotRemoteDatasource.putSaveDay(daySaveDtos, parkId))
+        return responseToUnit(shareLotRemoteDataSource.putSaveDay(daySaveDtos, parkId))
     }
 
     override suspend fun getShareLotDay(parkId: Long): Resource<List<DayRequest>> {
-        return responseToDayList(shareLotRemoteDatasource.getShareLotDay(parkId))
+        return responseToDayList(shareLotRemoteDataSource.getShareLotDay(parkId))
     }
 
     private fun responseToUnit(response: Response<Unit>): Resource<Unit> {
