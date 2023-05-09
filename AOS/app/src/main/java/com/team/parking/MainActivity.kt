@@ -55,6 +55,10 @@ class MainActivity : AppCompatActivity() {
     lateinit var pointViewModelFactory: PointViewModelFactory
     lateinit var pointViewModel: PointViewModel
 
+    @Inject
+    lateinit var carViewModelFactory: CarViewModelFactory
+    lateinit var carViewModel: CarViewModel
+
     private lateinit var binding : ActivityMainBinding
     lateinit var userViewModel: UserViewModel
     lateinit var navigationDrawer : DrawerLayout
@@ -87,6 +91,7 @@ class MainActivity : AppCompatActivity() {
         searchViewModel = ViewModelProvider(this,searchViewModelFactory)[SearchViewModel::class.java]
         shareParkingLotViewModel = ViewModelProvider(this, shareParkingLotViewModelFactory)[ShareParkingLotViewModel::class.java]
         pointViewModel = ViewModelProvider(this,pointViewModelFactory)[PointViewModel::class.java]
+        carViewModel = ViewModelProvider(this,carViewModelFactory)[CarViewModel::class.java]
         setProfileFragmentNavigation()
     }
 
@@ -159,6 +164,10 @@ class MainActivity : AppCompatActivity() {
         }
         headerBinding.buttonSideHeader.setOnClickListener {
             navController.navigate(R.id.action_map_fragment_to_myShareParkingLotFragment)
+            binding.drawer.closeDrawers()
+        }
+        headerBinding.textMyCarSideHeader.setOnClickListener {
+            navController.navigate(R.id.action_map_fragment_to_myCarFragment)
             binding.drawer.closeDrawers()
         }
     }

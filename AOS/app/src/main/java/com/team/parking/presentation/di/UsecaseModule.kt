@@ -1,9 +1,6 @@
 package com.team.parking.presentation.di
 
-import com.team.parking.domain.repository.MapRepository
-import com.team.parking.domain.repository.PointRepository
-import com.team.parking.domain.repository.SearchRepository
-import com.team.parking.domain.repository.ShareLotRepository
+import com.team.parking.domain.repository.*
 import com.team.parking.domain.usecase.*
 import dagger.Module
 import dagger.Provides
@@ -118,5 +115,29 @@ class UsecaseModule {
         pointRepository: PointRepository
     ) : GetSpentPointUseCase{
         return GetSpentPointUseCase(pointRepository)
+    }
+
+    @Singleton
+    @Provides
+    fun provideSetRepCarUseCase(
+        carRepository: CarRepository
+    ) : SetRepCarUseCase{
+        return SetRepCarUseCase(carRepository)
+    }
+
+    @Singleton
+    @Provides
+    fun provideGetCarListUseCase(
+        carRepository: CarRepository
+    ) : GetCarListUseCase{
+        return GetCarListUseCase(carRepository)
+    }
+
+    @Singleton
+    @Provides
+    fun providePostCarUseCase(
+        carRepository: CarRepository
+    ) : PostCarUseCase{
+        return PostCarUseCase(carRepository)
     }
 }

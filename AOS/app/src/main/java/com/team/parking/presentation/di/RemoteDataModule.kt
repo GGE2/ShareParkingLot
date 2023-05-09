@@ -1,17 +1,8 @@
 package com.team.parking.presentation.di
 
-import com.team.parking.data.api.MapAPIService
-import com.team.parking.data.api.PointAPIService
-import com.team.parking.data.api.SearchAPIService
-import com.team.parking.data.api.ShareLotAPIService
-import com.team.parking.data.repository.dataSource.MapRemoteDataSource
-import com.team.parking.data.repository.dataSource.PointRemoteDataSource
-import com.team.parking.data.repository.dataSource.SearchRemoteDataSource
-import com.team.parking.data.repository.dataSource.ShareLotRemoteDataSource
-import com.team.parking.data.repository.dataSourceImpl.MapRemoteDataSourceImpl
-import com.team.parking.data.repository.dataSourceImpl.PointRemoteDataSourceImpl
-import com.team.parking.data.repository.dataSourceImpl.SearchRemoteDataSourceImpl
-import com.team.parking.data.repository.dataSourceImpl.ShareLotRemoteDataSourceImpl
+import com.team.parking.data.api.*
+import com.team.parking.data.repository.dataSource.*
+import com.team.parking.data.repository.dataSourceImpl.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -52,5 +43,13 @@ class RemoteDataModule {
         pointAPIService: PointAPIService
     ) : PointRemoteDataSource{
         return PointRemoteDataSourceImpl(pointAPIService)
+    }
+
+    @Singleton
+    @Provides
+    fun provideCarRemoteDataSource(
+        carAPIService: CarAPIService
+    ) : CarRemoteDataSource{
+        return CarRemoteDataSourceImpl(carAPIService)
     }
 }

@@ -26,7 +26,9 @@ private const val TAG = "TransactionHistoryFragm"
 
 @AndroidEntryPoint
 class TransactionHistoryFragment : Fragment() {
+
     private lateinit var fragmentTransactionHistoryBinding: FragmentTransactionHistoryBinding
+
     @Inject
     lateinit var transactionHistoryViewModelFactory: TransactionHistoryViewModelFactory
     private lateinit var transactionHistoryViewModel: TransactionHistoryViewModel

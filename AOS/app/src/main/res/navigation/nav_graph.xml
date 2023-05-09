@@ -50,6 +50,9 @@
         <action
             android:id="@+id/action_map_fragment_to_parkinLotDetailFragment"
             app:destination="@id/parkinLotDetailFragment" />
+        <action
+            android:id="@+id/action_map_fragment_to_myCarFragment"
+            app:destination="@id/myCarFragment" />
     </fragment>
     <fragment
         android:id="@+id/pointFragment"
