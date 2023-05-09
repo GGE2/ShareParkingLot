@@ -30,6 +30,10 @@ class CarViewModel(
 
     var selectedCar: CarListResponse? = null
 
+    fun resetList(){
+        _carList.value = _carList.value
+    }
+
     fun setRepCar(userId: Long) = viewModelScope.launch(Dispatchers.IO){
         try {
             if(application.isNetworkAvailable(app)){

@@ -25,6 +25,7 @@ class MyCarFragment : Fragment() {
     private lateinit var carViewModel: CarViewModel
     private lateinit var userViewModel: UserViewModel
     private lateinit var carListAdapter: CarListAdapter
+    var previousView: View? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,8 +43,18 @@ class MyCarFragment : Fragment() {
         carListAdapter.setOnCarClickListener(object : CarListAdapter.CarOnClickListener {
             override fun onClick(view: View, position: Int, data: CarListResponse) {
                 if(!data.carRep){
-                    view.background = ResourcesCompat.getDrawable(resources, R.drawable.day_selected_background, null)
-                    carViewModel.selectedCar = data
+                    if(previousView != null){
+                        previousView!!.background = ResourcesCompat.getDrawable(resources, R.drawable.day_select_white_background, null)
+                    }
+                    if(previousView != null && previousView == view){
+                        previousView!!.background = ResourcesCompat.getDrawable(resources, R.drawable.day_select_white_background, null)
+                        previousView = null
+                        carViewModel.selectedCar = null
+                    } else {
+                        view.background = ResourcesCompat.getDrawable(resources, R.drawable.day_selected_background, null)
+                        carViewModel.selectedCar = data
+                        previousView = view
+                    }
                 }
             }
         })
@@ -53,6 +64,7 @@ class MyCarFragment : Fragment() {
         }
         carViewModel.carList.observe(viewLifecycleOwner){
             carListAdapter.differ.submitList(it)
+            previousView = null
         }
         carViewModel.getCarList(userViewModel.user!!.user_id)
         binding.imageBackMyCar.setOnClickListener {
