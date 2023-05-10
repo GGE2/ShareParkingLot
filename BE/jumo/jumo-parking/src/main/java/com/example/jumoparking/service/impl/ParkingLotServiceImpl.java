@@ -107,20 +107,10 @@ public class ParkingLotServiceImpl implements ParkingLotService {
                 String[] oldAddrs = oldAddr.split(" ");
                 String checkStr = new String();
 
-                if (zoom >= 13.8 && 14.2 > zoom){
-                    for (int i = oldAddrs.length -1 ; i >=1 ; i--){
-                        checkStr = oldAddrs[i];
-                        if (checkStr.endsWith("읍") || checkStr.endsWith("면") || checkStr.endsWith("시") || checkStr.endsWith("구")){
-                            break;
-                        }
-                    }
-                }
-                else{
-                    for (int i = oldAddrs.length -1 ; i >=1 ; i--){
-                        checkStr = oldAddrs[i];
-                        if (checkStr.endsWith("동") || checkStr.endsWith("리") || checkStr.endsWith("가") || checkStr.endsWith("길")){
-                            break;
-                        }
+                for (int i = oldAddrs.length -1 ; i >=1 ; i--){
+                    checkStr = oldAddrs[i];
+                    if (checkStr.endsWith("동") || checkStr.endsWith("리") || checkStr.endsWith("가") || checkStr.endsWith("길")|| checkStr.endsWith("읍") || checkStr.endsWith("면") || checkStr.endsWith("시") || checkStr.endsWith("구")){
+                        break;
                     }
                 }
 
