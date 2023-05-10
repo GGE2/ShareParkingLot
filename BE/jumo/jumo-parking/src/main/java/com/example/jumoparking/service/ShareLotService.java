@@ -2,8 +2,7 @@ package com.example.jumoparking.service;
 
 
 
-import com.example.domain.dto.*;
-import org.springframework.web.bind.annotation.RequestPart;
+import com.example.domain.dto.parking.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;

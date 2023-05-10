@@ -1,4 +1,4 @@
-package com.example.domain.dto;
+package com.example.domain.dto.parking;
 
 
 import com.example.domain.entity.ParkingLot;
@@ -23,6 +23,8 @@ public class ParkingBottomListDto {
 
     private int meter;
 
+    private String jibun;
+
 
     @Builder
     public ParkingBottomListDto(ShareLot shareLot){
@@ -34,6 +36,7 @@ public class ParkingBottomListDto {
         this.payType = "포인트결제";
         this.feeBasic = shareLot.getShaFee();
         this.meter = 0;
+        this.jibun = shareLot.getSha_jibun();
     }
 
     @Builder
@@ -46,6 +49,7 @@ public class ParkingBottomListDto {
         this.payType = parkingLot.getLot_part() + " "+ parkingLot.getPay_type();
         this.feeBasic = parkingLot.getPerBasic() * 2;
         this.meter = 0;
+        this.jibun = parkingLot.getOld_addr();
     }
 
     @Builder
@@ -58,6 +62,7 @@ public class ParkingBottomListDto {
         this.payType = parkingLot.getLot_part() + " "+ parkingLot.getPay_type();
         this.feeBasic = parkingLot.getPerBasic() * 2;
         this.meter = meter;
+        this.jibun = parkingLot.getOld_addr();
     }
 
     @Builder
@@ -70,6 +75,7 @@ public class ParkingBottomListDto {
         this.payType = "포인트결제";
         this.feeBasic = shareLot.getShaFee();
         this.meter = meter;
+        this.jibun = shareLot.getSha_jibun();
     }
 
 }

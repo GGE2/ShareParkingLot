@@ -1,4 +1,4 @@
-package com.example.domain.dto;
+package com.example.domain.dto.parking;
 
 import com.example.domain.entity.DayData;
 import com.example.domain.entity.Image;
@@ -63,7 +63,7 @@ public class ParkingDetailDto {
         this.openDay = openDayString;
         this.feeData = "유료";
         this.feeBasic = shareLot.getShaFee();
-        this.dayFee = shareLot.getShaFee() * 48;
+        this.dayFee = shareLot.getShaFee() * 24;
         this.payType = "포인트결제";
         this.specialProp = shareLot.getSha_prop();
         List<Image> images = shareLot.getImages();

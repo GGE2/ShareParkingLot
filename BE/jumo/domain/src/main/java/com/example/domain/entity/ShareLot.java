@@ -1,7 +1,7 @@
 package com.example.domain.entity;
 
 
-import com.example.domain.dto.ShareSaveDto;
+import com.example.domain.dto.parking.ShareSaveDto;
 import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

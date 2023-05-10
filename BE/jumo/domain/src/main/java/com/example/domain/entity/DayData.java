@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 import com.example.domain.etc.DayName;
 
-import com.example.domain.dto.DaySaveDto;
+import com.example.domain.dto.parking.DaySaveDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

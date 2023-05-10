@@ -1,6 +1,6 @@
 package com.example.jumoparking.service.impl;
 
-import com.example.domain.dto.*;
+import com.example.domain.dto.parking.*;
 import com.example.domain.entity.*;
 import com.example.domain.etc.DayName;
 import com.example.domain.repo.*;
@@ -9,7 +9,6 @@ import com.google.cloud.storage.Acl;
 import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

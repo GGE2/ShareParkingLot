@@ -1,6 +1,6 @@
 package com.example.jumoparking.service.impl;
 
-import com.example.domain.dto.DaySaveDto;
+import com.example.domain.dto.parking.DaySaveDto;
 import com.example.domain.entity.DayData;
 import com.example.domain.entity.ShareLot;
 import com.example.domain.repo.DayDataRepo;

@@ -1,7 +1,7 @@
 package com.example.jumoparking.service.impl;
 
-import com.example.domain.dto.CarInfoDto;
-import com.example.domain.dto.CarSaveDto;
+import com.example.domain.dto.parking.CarInfoDto;
+import com.example.domain.dto.parking.CarSaveDto;
 import com.example.domain.entity.CarInfo;
 import com.example.domain.repo.CarInfoRepo;
 import com.example.domain.repo.UserRepo;

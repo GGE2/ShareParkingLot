@@ -1,7 +1,6 @@
 package com.example.jumoparking.service;
 
-import com.example.domain.dto.DaySaveDto;
-import com.example.domain.entity.DayData;
+import com.example.domain.dto.parking.DaySaveDto;
 
 import java.util.List;
 

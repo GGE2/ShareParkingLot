@@ -1,9 +1,9 @@
 package com.example.jumoparking.controller;
 
-import com.example.domain.dto.ParkingBottomListDto;
-import com.example.domain.dto.ParkingDetailDto;
-import com.example.domain.dto.ParkingInDto;
-import com.example.domain.dto.ParkingListDto;
+import com.example.domain.dto.parking.ParkingBottomListDto;
+import com.example.domain.dto.parking.ParkingDetailDto;
+import com.example.domain.dto.parking.ParkingInDto;
+import com.example.domain.dto.parking.ParkingListDto;
 import com.example.jumoparking.service.ParkingLotService;
 import com.example.jumoparking.service.ShareLotService;
 import io.swagger.annotations.Api;

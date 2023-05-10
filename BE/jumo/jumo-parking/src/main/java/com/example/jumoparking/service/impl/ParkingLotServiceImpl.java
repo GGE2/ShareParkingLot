@@ -1,9 +1,9 @@
 package com.example.jumoparking.service.impl;
 
-import com.example.domain.dto.ParkingBottomListDto;
-import com.example.domain.dto.ParkingDetailDto;
-import com.example.domain.dto.ParkingInDto;
-import com.example.domain.dto.ParkingListDto;
+import com.example.domain.dto.parking.ParkingBottomListDto;
+import com.example.domain.dto.parking.ParkingDetailDto;
+import com.example.domain.dto.parking.ParkingInDto;
+import com.example.domain.dto.parking.ParkingListDto;
 import com.example.domain.entity.*;
 import com.example.domain.etc.DayName;
 import com.example.domain.etc.OutTiming;
@@ -11,9 +11,7 @@ import com.example.domain.repo.*;
 import com.example.jumoparking.service.ParkingLotService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.yaml.snakeyaml.util.EnumUtils;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.TextStyle;

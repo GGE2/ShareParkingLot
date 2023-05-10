@@ -1,14 +1,12 @@
 package com.example.jumoparking.controller;
 
-import com.example.domain.dto.*;
-import com.example.domain.entity.ShareLot;
+import com.example.domain.dto.parking.*;
 import com.example.jumoparking.service.DayDataService;
 import com.example.jumoparking.service.ParkingLotService;
 import com.example.jumoparking.service.ShareLotService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.annotations.Parameter;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
