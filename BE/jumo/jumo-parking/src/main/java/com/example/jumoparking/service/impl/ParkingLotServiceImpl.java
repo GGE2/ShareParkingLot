@@ -106,23 +106,54 @@ public class ParkingLotServiceImpl implements ParkingLotService {
         }).collect(Collectors.toList());
     }
     private List<ParkingListDto> clusterByDivide(ParkingInDto parkingInDto){
-        List<ParkingListDto> parkingLotList = new ArrayList<>();
+        List<ParkingListDto> notCntOneLotList = new ArrayList<>();
+        List<ParkingListDto> cntOneLotList = new ArrayList<>();
         for(int a=0; a<16; a++){
             ParkingListDto pld = divideByNum(parkingInDto.getStartLat(),parkingInDto.getEndLat()
-                    ,parkingInDto.getStartLng(), parkingInDto.getEndLng(),a);
+                    ,parkingInDto.getStartLng(), parkingInDto.getEndLng(),a,0);
             if (pld != null){
-                parkingLotList.add(pld);
+                if(pld.getClusteringCnt() != 1){
+                    notCntOneLotList.add(pld);
+                }else{
+                    cntOneLotList.add(pld);
+                }
             }
         }
-        return parkingLotList;
+
+        if(cntOneLotList.size() >= 3){
+            List<ParkingListDto> parkingLotList = new ArrayList<>();
+           for(int a=0; a<4; a++){
+               ParkingListDto pld = divideByNum(parkingInDto.getStartLat(),parkingInDto.getEndLat()
+                       ,parkingInDto.getStartLng(), parkingInDto.getEndLng(),a,1);
+               if (pld != null){
+                   parkingLotList.add(pld);
+               }
+           }
+           return parkingLotList;
+        }
+
+        notCntOneLotList.addAll(cntOneLotList);
+        return notCntOneLotList;
     }
 
     // 가장 왼쪽 위부터 오른쪽으로 0,1,2,3,4 ..., 15
-    private ParkingListDto divideByNum(float startLat, float endLat, float startLng, float endLng, int num){
-        float sL = startLat + (endLat - startLat)*(num%4)/4;
-        float eL = startLat + (endLat - startLat)*(num%4+1)/4;
-        float sN = startLng + (endLng-startLng)*(num/4)/4;
-        float eN = startLng + (endLng-startLng)*(num/4+1)/4;
+    private ParkingListDto divideByNum(float startLat, float endLat, float startLng, float endLng, int num, int type){
+        float sL = 0f;
+        float eL = 0f;
+        float sN = 0f;
+        float eN = 0f;
+
+        if(type == 0){
+            sL = startLat + (endLat - startLat)*(num%4)/4;
+            eL = startLat + (endLat - startLat)*(num%4+1)/4;
+            sN = startLng + (endLng-startLng)*(num/4)/4;
+            eN = startLng + (endLng-startLng)*(num/4+1)/4;
+        }else{
+            sL = startLat + (endLat - startLat)*(num%2)/2;
+            eL = startLat + (endLat - startLat)*(num%2+1)/2;
+            sN = startLng + (endLng-startLng)*(num/2)/2;
+            eN = startLng + (endLng-startLng)*(num/2+1)/2;
+        }
 
         List<ParkingLot> parkingLots = parkingLotRepo.findAllByLatitudeGreaterThanAndLatitudeLessThanAndLongitudeGreaterThanAndLongitudeLessThan(
                 sL,eL,sN, eN);
