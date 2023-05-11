@@ -3,22 +3,34 @@ package com.example.jumouser.service.impl;
 import com.example.domain.dto.user.SignUpRequestDto;
 import com.example.domain.dto.user.UserProfileResponseDto;
 import com.example.domain.entity.FcmToken;
+import com.example.domain.entity.PhoneValidation;
 import com.example.domain.entity.User;
 import com.example.domain.repo.NotiRepo;
 import com.example.domain.repo.UserRepo;
+import com.example.domain.repo.ValidationRepo;
 import com.example.jumouser.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.api.client.util.DateTime;
 import com.google.cloud.storage.Acl;
 import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
 import lombok.RequiredArgsConstructor;
+
+import net.nurigo.sdk.NurigoApp;
+import net.nurigo.sdk.message.model.Message;
+import net.nurigo.sdk.message.request.SingleMessageSendingRequest;
+import net.nurigo.sdk.message.response.SingleMessageSentResponse;
+import net.nurigo.sdk.message.service.DefaultMessageService;
+import net.nurigo.sdk.message.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -26,9 +38,15 @@ import java.util.*;
 public class UserServiceImpl implements UserService {
     private final UserRepo userRepo;
     private final NotiRepo notiRepo;
+    private final ValidationRepo validationRepo;
     @Value("${spring.cloud.gcp.storage.bucket}")
     private String drawingStorage;
+    private DefaultMessageService messageService;
+    @Value("${Cool-API-KEY}")
+    private String Cool_API_KEY;
 
+    @Value("${Cool-SECRET}")
+    private String Cool_SECRET;
     private final Storage storage;
 
     public boolean emailCheck(String email){
@@ -39,6 +57,12 @@ public class UserServiceImpl implements UserService {
         return false;
     }
 
+    @PostConstruct
+    public void initMessageService(){
+        messageService = NurigoApp
+                .INSTANCE
+                .initialize(Cool_API_KEY, Cool_SECRET, "https://api.coolsms.co.kr");
+    }
 
     @Transactional
     public Optional<User> signUp(SignUpRequestDto requestDto){
@@ -103,5 +127,46 @@ public class UserServiceImpl implements UserService {
         notiRepo.save(new FcmToken(user_id,fcm_token));
         System.out.println(notiRepo.findById(user_id).get().getToken());
         return true;
+    }
+
+    @Override
+    @Transactional
+    public Boolean sendAuthMessage(String phone) {
+        Message message = new Message();
+
+        message.setFrom("01083623107");
+        message.setTo(phone);
+
+        String code="";
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+        for(int i = 0; i < 6; i++) {
+            int ranNum = (int) (Math.random()*36);
+
+            code += possible.charAt(ranNum);
+        }
+        message.setText("안녕하세요. 주차장의 모든것 인증번호는 [ " +code + "] 입니다.");
+
+
+        SingleMessageSentResponse response = messageService.sendOne(new SingleMessageSendingRequest(message));
+        validationRepo.save(new PhoneValidation(phone, code, true));
+
+
+        return true;
+    }
+
+    @Override
+    public Boolean certificatePhone(String phone, String code) {
+        Optional<PhoneValidation> phoneValidation = validationRepo.findById(phone);
+        if(phoneValidation.isPresent()){
+            if(phoneValidation.get().getValidation_value().equals(code)){
+                validationRepo.save(phoneValidation.get().changeFlag());
+                return true;
+            }else{
+
+                return false;
+            }
+        }
+        return false;
     }
 }

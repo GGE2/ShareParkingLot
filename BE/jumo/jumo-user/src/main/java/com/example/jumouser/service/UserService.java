@@ -17,4 +17,8 @@ public interface UserService {
     public String updateProfileImg(Long user_id, MultipartFile file) throws IOException;
 
     Boolean updateFcmToken(Long user_id, String fcm_token);
+
+    Boolean sendAuthMessage(String phone);
+
+    Boolean certificatePhone(String phone,String code);
 }

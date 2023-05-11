@@ -12,6 +12,7 @@ public class FcmToken {
 
     private String token;
 
+
     public FcmToken(Long user_id, String token){
         this.user_id = user_id;
         this.token = token;

@@ -98,6 +98,7 @@ project(':jumo-user') {
 //		implementation project(':firebase')
 		implementation group: 'org.springframework.cloud', name: 'spring-cloud-gcp-starter', version: '1.2.5.RELEASE'
 		implementation group: 'org.springframework.cloud', name: 'spring-cloud-gcp-storage', version: '1.2.5.RELEASE'
+		implementation 'net.nurigo:sdk:4.2.7'
 	}
 }
 project(':jumo-parking') {
@@ -122,6 +123,9 @@ project(':error'){
 project(':notification'){
 	dependencies {
 		implementation project(':core-web')
-		implementation group: 'com.google.firebase', name: 'firebase-admin', version: '8.1.0'
+		implementation project(':domain')
+		implementation 'com.google.firebase:firebase-admin:9.1.1'
+		implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
 	}
 }
