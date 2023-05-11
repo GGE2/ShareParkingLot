@@ -32,8 +32,10 @@ public class ParkingDetailDto {
     private String specialProp;
     private List<String> imageUrl;
 
+    private boolean isFavorite;
+
     @Builder
-    public ParkingDetailDto(ParkingLot parkingLot){
+    public ParkingDetailDto(ParkingLot parkingLot, boolean isFavorite){
         this.parkId = parkingLot.getLotId();
         this.lotName = parkingLot.getLot_name();
         this.lotType = parkingLot.getLot_type();
@@ -46,10 +48,11 @@ public class ParkingDetailDto {
         this.payType = parkingLot.getPay_type();
         this.specialProp = parkingLot.getSpecial_prop();
         this.imageUrl = new ArrayList<>();
+        this.isFavorite = isFavorite;
     }
 
     @Builder
-    public ParkingDetailDto(ShareLot shareLot){
+    public ParkingDetailDto(ShareLot shareLot, boolean isFavorite){
         this.parkId = shareLot.getShaId();
         this.lotName = shareLot.getSha_name();
         this.lotType = "공유";
@@ -72,5 +75,6 @@ public class ParkingDetailDto {
             imageUrl.add(image.getUrl());
         }
         this.imageUrl = imageUrl;
+        this.isFavorite = isFavorite;
     }
 }

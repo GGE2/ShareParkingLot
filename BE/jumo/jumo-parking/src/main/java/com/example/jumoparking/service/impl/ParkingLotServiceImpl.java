@@ -316,8 +316,17 @@ public class ParkingLotServiceImpl implements ParkingLotService {
     }
 
     @Override
-    public ParkingDetailDto getDetail(Long parkId) {
-        return new ParkingDetailDto(parkingLotRepo.findById(parkId).get());
+    public ParkingDetailDto getDetail(Long parkId, Long userId) {
+        ParkingLot parkingLot = parkingLotRepo.findById(parkId).get();
+        List<Favorite> favorites = parkingLot.getFavoriteList();
+        boolean isFavorite = false;
+        for (Favorite favorite: favorites){
+            if (favorite.getUser().getUserId() == userId){
+                isFavorite = true;
+                break;
+            }
+        }
+        return new ParkingDetailDto(parkingLot, isFavorite);
     }
 
     @Override

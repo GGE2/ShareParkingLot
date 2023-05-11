@@ -13,7 +13,7 @@ public interface ParkingLotService {
 
     List<ParkingBottomListDto> getBottomListOfPoint(ParkingInDto parkingInDto);
 
-    ParkingDetailDto getDetail(Long parkId);
+    ParkingDetailDto getDetail(Long parkId,Long userId);
 
     boolean checkFavorite(Long userId, Long lotId);
 

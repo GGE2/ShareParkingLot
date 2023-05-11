@@ -20,10 +20,9 @@ public class ParkingBottomListDto {
     private String parkingName;
     private String payType;
     private int feeBasic;
-
     private int meter;
-
     private String jibun;
+    private int parkType;
 
 
     @Builder
@@ -37,6 +36,7 @@ public class ParkingBottomListDto {
         this.feeBasic = shareLot.getShaFee();
         this.meter = 0;
         this.jibun = shareLot.getSha_jibun();
+        this.parkType = 1;
     }
 
     @Builder
@@ -50,6 +50,7 @@ public class ParkingBottomListDto {
         this.feeBasic = parkingLot.getPerBasic() * 2;
         this.meter = 0;
         this.jibun = parkingLot.getOld_addr();
+        this.parkType = 0;
     }
 
     @Builder
@@ -63,6 +64,7 @@ public class ParkingBottomListDto {
         this.feeBasic = parkingLot.getPerBasic() * 2;
         this.meter = meter;
         this.jibun = parkingLot.getOld_addr();
+        this.parkType = 0;
     }
 
     @Builder
@@ -76,6 +78,7 @@ public class ParkingBottomListDto {
         this.feeBasic = shareLot.getShaFee();
         this.meter = meter;
         this.jibun = shareLot.getSha_jibun();
+        this.parkType = 1;
     }
 
 }

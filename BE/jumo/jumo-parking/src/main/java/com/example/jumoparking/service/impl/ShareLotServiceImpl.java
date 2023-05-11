@@ -127,8 +127,17 @@ public class ShareLotServiceImpl implements ShareLotService {
     }
 
     @Override
-    public ParkingDetailDto getDetail(Long parkId) {
-        return new ParkingDetailDto(shareLotRepo.findById(parkId).get());
+    public ParkingDetailDto getDetail(Long parkId, Long userId) {
+        ShareLot shareLot = shareLotRepo.findById(parkId).get();
+        List<Favorite> favorites = shareLot.getFavoriteList();
+        boolean isFavorite = false;
+        for (Favorite favorite: favorites){
+            if (favorite.getUser().getUserId() == userId){
+                isFavorite = true;
+                break;
+            }
+        }
+        return new ParkingDetailDto(shareLot, isFavorite);
     }
 
     @Override

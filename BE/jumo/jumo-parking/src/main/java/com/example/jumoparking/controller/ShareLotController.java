@@ -54,9 +54,9 @@ public class ShareLotController {
     }
 
 
-    @ApiOperation(value = "공유주차장 상세", notes = "일반 주차장과 리턴은 동일하지만, parkType 같은거 param 들어가는 거 싫어서 일단 분리함")
+    @ApiOperation(value = "공유주차장 상세", notes = "일반 주차장과 리턴은 동일, url 다름, 즐겨찾기 때문에 userId param 추가됨")
     @GetMapping("/detail")
-    public ParkingDetailDto shareLotDetail(@RequestParam Long parkId){ return shareLotService.getDetail(parkId);}
+    public ParkingDetailDto shareLotDetail(@RequestParam Long parkId, @RequestParam Long userId){ return shareLotService.getDetail(parkId, userId);}
 
     @ApiOperation(value = "공유주차장 개요 리스트", notes = "나의 공유주차장에서 표시해줄 간단한 데이터들 리스트")
     @GetMapping("/myList")

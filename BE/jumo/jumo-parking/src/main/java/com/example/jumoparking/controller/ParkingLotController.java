@@ -37,9 +37,9 @@ public class ParkingLotController {
     public List<ParkingBottomListDto> getParkingBottomList(@Validated @RequestBody ParkingInDto parkingInDto){
         return parkingLotService.getBottomListOfPoint(parkingInDto);
     }
-    @ApiOperation(value = "주차장 상세", notes = "임의로 공유랑 일반 주차장 상세 통일함, 혹시 분리하고 싶거나 더 필요한 데이터 있으면 말해줘 이미지 url 또한 포함 됨")
+    @ApiOperation(value = "주차장 상세", notes = "임의로 공유랑 일반 주차장 상세 통일함, isFavorite Dto 에 추가함, userId parameter 추가")
     @GetMapping("/detail")
-    public ParkingDetailDto shareLotDetail(@RequestParam Long parkId){ return parkingLotService.getDetail(parkId);}
+    public ParkingDetailDto shareLotDetail(@RequestParam Long parkId, @RequestParam Long userId){ return parkingLotService.getDetail(parkId,userId);}
 
     @ApiOperation(value = "즐겨찾기", notes = "필요한 param 이 좀 많음, parkType 은 공유주차장인지 일반주차장인지 구분")
     @GetMapping("/favorite")

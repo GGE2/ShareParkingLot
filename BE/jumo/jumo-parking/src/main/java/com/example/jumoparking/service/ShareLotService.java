@@ -15,7 +15,7 @@ public interface ShareLotService {
 
     List<ParkingListDto> getListOfPoint(ParkingInDto parkingInDto);
 
-    ParkingDetailDto getDetail(Long parkId);
+    ParkingDetailDto getDetail(Long parkId, Long userId);
 
     boolean checkFavorite(Long userId, Long lotId);
 
