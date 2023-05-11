@@ -161,7 +161,7 @@ class PurchaseTicketFragment : Fragment() {
                 if(checkAgreementPurchaseTicket.isChecked){
                     //purchase
                     if(purchaseTicketViewModel.ticketCreateRequest.type != -1){
-                        if(purchaseTicketViewModel.expectedPrice.value!! < userViewModel.user!!.pt_has){
+                        if(purchaseTicketViewModel.expectedPrice.value!! <= userViewModel.user!!.pt_has){
                             if(carAvailable){
                                 purchaseTicketViewModel.postTicketAvailable(userViewModel.user!!.user_id)
                                 Toast.makeText(requireContext(), "주차권이 구매되었습니다.", Toast.LENGTH_SHORT).show()

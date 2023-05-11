@@ -13,6 +13,7 @@ import com.team.parking.domain.usecase.GetFavoriteListUseCase
 import com.team.parking.domain.usecase.SetFavoriteUseCase
 import com.team.parking.presentation.utils.App
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 private const val TAG = "FavoriteViewModel"
@@ -30,11 +31,27 @@ class FavoriteViewModel(
     private var _favoriteList = MutableLiveData<List<FavoriteListResponse>>(listOf())
     val favoriteList: LiveData<List<FavoriteListResponse>> get() = _favoriteList
 
+    var parkId: Int = -1
+
     fun setFavorite(parkId: Long, parkType: Int, userId: Long) = viewModelScope.launch(Dispatchers.IO) {
         try{
             if(application.isNetworkAvailable(app)){
                 val apiResult = setFavoriteUseCase.execute(parkId, parkType, userId)
                 _favorite.postValue(apiResult.data!!)
+            }else{
+                Log.d(TAG, "get: 네트워크 문제")
+            }
+        }catch(e:Exception){
+            Log.d(TAG, "get: ${e.message}")
+        }
+    }
+
+    fun setFavoriteInList(parkId: Long, parkType: Int, userId: Long) = viewModelScope.launch(Dispatchers.IO) {
+        try{
+            if(application.isNetworkAvailable(app)){
+                val apiResult = setFavoriteUseCase.execute(parkId, parkType, userId)
+                delay(500)
+                getFavoriteList(userId)
             }else{
                 Log.d(TAG, "get: 네트워크 문제")
             }
