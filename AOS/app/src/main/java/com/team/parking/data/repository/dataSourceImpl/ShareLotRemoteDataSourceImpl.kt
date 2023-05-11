@@ -15,8 +15,8 @@ class ShareLotRemoteDataSourceImpl(private val shareLotAPIService: ShareLotAPISe
         return shareLotAPIService.deleteShareLot(parkId)
     }
 
-    override suspend fun getShareLotDetail(parkId: Long): Response<MapDetailResponse> {
-        return shareLotAPIService.getShareLotDetail(parkId)
+    override suspend fun getShareLotDetail(parkId: Long, userId: Long): Response<MapDetailResponse> {
+        return shareLotAPIService.getShareLotDetail(parkId, userId)
     }
 
     override suspend fun getShareLotList(userId: Long): Response<List<ShareLotResponse>> {

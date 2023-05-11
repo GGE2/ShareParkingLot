@@ -223,4 +223,20 @@ class UsecaseModule {
     ) : PutTicketSellConfirmUseCase{
         return PutTicketSellConfirmUseCase(ticketRepository)
     }
+
+    @Singleton
+    @Provides
+    fun provideSetFavoriteUseCase(
+        favoriteRepository: FavoriteRepository
+    ) : SetFavoriteUseCase{
+        return SetFavoriteUseCase(favoriteRepository)
+    }
+
+    @Singleton
+    @Provides
+    fun provideGetFavoriteListUseCase(
+        favoriteRepository: FavoriteRepository
+    ) : GetFavoriteListUseCase{
+        return GetFavoriteListUseCase(favoriteRepository)
+    }
 }

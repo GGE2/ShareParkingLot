@@ -87,11 +87,11 @@ class MapViewModel(
      * 선택된 공유 주차장 데이터 받기
      */
 
-    fun getSharedParkingLotDetail(parkId : Long) = viewModelScope.launch {
+    fun getSharedParkingLotDetail(parkId : Long, userId: Long) = viewModelScope.launch {
         _sharedPark.postValue(Resource.Loading())
         try{
             if(application.isNetworkAvailable(app)){
-                val apiResult = getSelectedSharedLotUseCase.execute(parkId)
+                val apiResult = getSelectedSharedLotUseCase.execute(parkId, userId)
                 _sharedPark.postValue(apiResult)
             }else{
                 _sharedPark.postValue(Resource.Error("인터넷 사용 불가"))
@@ -159,11 +159,11 @@ class MapViewModel(
     /**
      * 주차장 상세 데이터 받기
      */
-    fun getDetailMapData(parkId : Int) = viewModelScope.launch(Dispatchers.IO){
+    fun getDetailMapData(parkId : Int, userId: Long) = viewModelScope.launch(Dispatchers.IO){
         _parkingLot.postValue(Resource.Loading())
         try{
             if(application.isNetworkAvailable(app)){
-                val apiResult = getMapDetailDataUseCase.execute(parkId)
+                val apiResult = getMapDetailDataUseCase.execute(parkId, userId)
                 _parkingLot.postValue(apiResult)
             }else{
                 _parkingLot.postValue(Resource.Error("인터넷 사용이 불가능합니다."))

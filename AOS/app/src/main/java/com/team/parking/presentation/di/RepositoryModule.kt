@@ -61,4 +61,12 @@ class RepositoryModule {
     ) : TicketRepository{
         return TicketRepositoryImpl(ticketRemoteDataSource)
     }
+
+    @Singleton
+    @Provides
+    fun provideFavoriteRepositoryy(
+        favoriteRemoteDataSource: FavoriteRemoteDataSource
+    ) : FavoriteRepository{
+        return FavoriteRepositoryImpl(favoriteRemoteDataSource)
+    }
 }

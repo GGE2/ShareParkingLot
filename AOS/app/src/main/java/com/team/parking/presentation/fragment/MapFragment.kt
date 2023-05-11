@@ -16,6 +16,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.AppCompatButton
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -42,6 +43,7 @@ import com.team.parking.databinding.FragmentMapBinding
 import com.team.parking.presentation.viewmodel.MapViewModel
 import com.team.parking.presentation.viewmodel.MyTicketViewModel
 import com.team.parking.presentation.viewmodel.SearchViewModel
+import com.team.parking.presentation.viewmodel.UserViewModel
 import java.util.*
 import kotlin.collections.LinkedHashMap
 
@@ -56,6 +58,7 @@ class MapFragment : Fragment() , OnMapReadyCallback{
     private lateinit var mapViewModel: MapViewModel
     private lateinit var searchViewModel: SearchViewModel
     private lateinit var myTicketViewModel: MyTicketViewModel
+    private lateinit var userViewModel: UserViewModel
     private val permissionList = Manifest.permission.ACCESS_FINE_LOCATION
     private lateinit var clickBottomSheet  : BottomSheetBehavior<View>
     private lateinit var listBottomSheet : BottomSheetBehavior<View>
@@ -110,9 +113,13 @@ class MapFragment : Fragment() , OnMapReadyCallback{
         mapViewModel = (activity as MainActivity).mapViewModel
         searchViewModel = (activity as MainActivity).searchViewModel
         myTicketViewModel = (activity as MainActivity).myTicketViewModel
+        userViewModel = (activity as MainActivity).userViewModel
         init()
         fragmentMapBinding.bottomSheetOpen.buttonPurchaseParkingLotDetail.setOnClickListener {
             findNavController().navigate(R.id.action_map_fragment_to_purchaseTicketFragment)
+        }
+        fragmentMapBinding.bottomSheetOpen.imageFavoriteParkingLotDetail.setOnClickListener {
+            //set favorite
         }
     }
 
@@ -213,7 +220,7 @@ class MapFragment : Fragment() , OnMapReadyCallback{
      */
     
     private fun getMapDetailData(lotId:Int){
-        mapViewModel.getDetailMapData(lotId)
+        mapViewModel.getDetailMapData(lotId, userViewModel.user!!.user_id)
         mapViewModel.parkingLot.observe(viewLifecycleOwner){ response->
             when (response){
                 is Resource.Success ->{
@@ -221,6 +228,22 @@ class MapFragment : Fragment() , OnMapReadyCallback{
                     mapViewModel.updateSelectedPark(0)
                     Glide.with(this).load(R.drawable.icon_no_image).skipMemoryCache(true).diskCacheStrategy(
                             DiskCacheStrategy.NONE).into(fragmentMapBinding.bottomSheetOpen.imageView2)
+                    mapViewModel.park.observe(viewLifecycleOwner){
+                        fragmentMapBinding.bottomSheetOpen.imageFavoriteParkingLotDetail.background =
+                        if(it.favorite){
+                            ResourcesCompat.getDrawable(
+                                resources,
+                                R.drawable.icon_star_filled,
+                                null
+                            )
+                        } else {
+                            ResourcesCompat.getDrawable(
+                                resources,
+                                R.drawable.icon_star_outline,
+                                null
+                            )
+                        }
+                    }
                     clickBottomSheet.state = BottomSheetBehavior.STATE_COLLAPSED
                 }
                 is Resource.Error ->{
@@ -238,7 +261,7 @@ class MapFragment : Fragment() , OnMapReadyCallback{
      * 공유 주차장 상세 가져오기
      */
     private fun getSharedLotDetail(lotId:Long){
-        mapViewModel.getSharedParkingLotDetail(lotId)
+        mapViewModel.getSharedParkingLotDetail(lotId, userViewModel.user!!.user_id)
         mapViewModel.sharedPark.observe(viewLifecycleOwner){ response ->
             when (response){
                 is Resource.Success ->{
@@ -250,6 +273,22 @@ class MapFragment : Fragment() , OnMapReadyCallback{
                     }else{
                         Glide.with(this).load(R.drawable.icon_no_image).skipMemoryCache(true).diskCacheStrategy(
                             DiskCacheStrategy.NONE).into(fragmentMapBinding.bottomSheetOpen.imageView2)
+                    }
+                    mapViewModel.park.observe(viewLifecycleOwner){
+                        fragmentMapBinding.bottomSheetOpen.imageFavoriteParkingLotDetail.background =
+                            if(it.favorite){
+                                ResourcesCompat.getDrawable(
+                                    resources,
+                                    R.drawable.icon_star_filled,
+                                    null
+                                )
+                            } else {
+                                ResourcesCompat.getDrawable(
+                                    resources,
+                                    R.drawable.icon_star_outline,
+                                    null
+                                )
+                            }
                     }
                     clickBottomSheet.state = BottomSheetBehavior.STATE_COLLAPSED
                 }

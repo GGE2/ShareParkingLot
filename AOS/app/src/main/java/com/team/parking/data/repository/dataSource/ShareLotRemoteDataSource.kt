@@ -10,7 +10,7 @@ import retrofit2.Response
 
 interface ShareLotRemoteDataSource {
     suspend fun deleteShareLot(parkId: Long) : Response<Unit>
-    suspend fun getShareLotDetail(parkId: Long) : Response<MapDetailResponse>
+    suspend fun getShareLotDetail(parkId: Long, userId: Long) : Response<MapDetailResponse>
     suspend fun getShareLotList(userId: Long) : Response<List<ShareLotResponse>>
     suspend fun getShareLotDay(parkId: Long) : Response<List<DayRequest>>
     suspend fun postShareLot(

@@ -21,7 +21,7 @@ interface ShareLotAPIService {
     suspend fun deleteShareLot(@Query("parkId") parkId: Long) : Response<Unit>
 
     @GET("shareLot/detail")
-    suspend fun getShareLotDetail(@Query("parkId") parkId: Long) : Response<MapDetailResponse>
+    suspend fun getShareLotDetail(@Query("parkId") parkId: Long, @Query("userId") userId: Long) : Response<MapDetailResponse>
 
     @GET("shareLot/listDay")
     suspend fun getShareLotDay(@Query("parkId") parkId: Long) : Response<List<DayRequest>>

@@ -76,6 +76,12 @@ class NetModule {
 
     @Singleton
     @Provides
+    fun provideFavoriteService(@MapRetrofit mapRetrofit:Retrofit):FavoriteAPIService{
+        return mapRetrofit.create(FavoriteAPIService::class.java)
+    }
+
+    @Singleton
+    @Provides
     @UserRetrofit
     fun provideUserRetrofit():Retrofit{
         return Retrofit.Builder()

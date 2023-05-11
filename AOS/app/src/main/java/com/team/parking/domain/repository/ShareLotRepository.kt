@@ -12,7 +12,7 @@ import retrofit2.http.Query
 
 interface ShareLotRepository {
     suspend fun deleteShareLot(parkId: Long) : Resource<Unit>
-    suspend fun getShareLotDetail(parkId: Long) : Resource<MapDetailResponse>
+    suspend fun getShareLotDetail(parkId: Long, userId: Long) : Resource<MapDetailResponse>
     suspend fun getShareLotList(userId: Long) : Resource<List<ShareLotResponse>>
     suspend fun getShareLotDay(parkId: Long) : Resource<List<DayRequest>>
     suspend fun postShareLot(

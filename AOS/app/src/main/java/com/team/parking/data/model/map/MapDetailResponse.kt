@@ -6,6 +6,8 @@ import com.google.gson.annotations.SerializedName
 data class MapDetailResponse(
     @SerializedName("dayFee")
     val dayFee: Int,
+    @SerializedName("favorite")
+    val favorite: Boolean,
     @SerializedName("feeBasic")
     val feeBasic: Int,
     @SerializedName("feeData")

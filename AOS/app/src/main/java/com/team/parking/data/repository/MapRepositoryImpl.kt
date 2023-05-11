@@ -18,8 +18,8 @@ class MapRepositoryImpl(
         return responseToMapResource(mapRemoteDatasource.getParkingLots(mapRequest))
     }
 
-    override suspend fun getParkingLotDetail(parkId: Int): Resource<MapDetailResponse> {
-        return responseToMapDetailResource(mapRemoteDatasource.getParkingLotDetail(parkId))
+    override suspend fun getParkingLotDetail(parkId: Int, userId: Long): Resource<MapDetailResponse> {
+        return responseToMapDetailResource(mapRemoteDatasource.getParkingLotDetail(parkId, userId))
     }
 
     override suspend fun getParkingLotOrderByDistance(mapRequest: MapRequest): Resource<List<MapOrderResponse>> {

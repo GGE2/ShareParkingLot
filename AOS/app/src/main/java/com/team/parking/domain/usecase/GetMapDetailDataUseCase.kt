@@ -7,8 +7,7 @@ import com.team.parking.domain.repository.MapRepository
 class GetMapDetailDataUseCase(
     private val mapRepository: MapRepository
 ) {
-    suspend fun execute(parkId : Int ) : Resource<MapDetailResponse>{
-        return mapRepository.getParkingLotDetail(parkId)
+    suspend fun execute(parkId : Int, userId: Long) : Resource<MapDetailResponse>{
+        return mapRepository.getParkingLotDetail(parkId, userId)
     }
-
 }

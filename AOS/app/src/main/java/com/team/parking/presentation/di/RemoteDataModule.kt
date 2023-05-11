@@ -60,4 +60,12 @@ class RemoteDataModule {
     ) : TicketRemoteDataSource{
         return TicketRemoteDataSourceImpl(ticketAPIService)
     }
+
+    @Singleton
+    @Provides
+    fun provideFavoriteRemoteDataSource(
+        favoriteAPIService: FavoriteAPIService
+    ) : FavoriteRemoteDataSource{
+        return FavoriteRemoteDataSourceImpl(favoriteAPIService)
+    }
 }

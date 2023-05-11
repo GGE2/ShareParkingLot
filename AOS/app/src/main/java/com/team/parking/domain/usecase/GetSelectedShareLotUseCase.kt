@@ -8,5 +8,5 @@ import com.team.parking.domain.repository.ShareLotRepository
 class GetSelectedShareLotUseCase(
     private val sharedLotRepository: ShareLotRepository
 ) {
-    suspend fun execute(parkId: Long) : Resource<MapDetailResponse> = sharedLotRepository.getShareLotDetail(parkId)
+    suspend fun execute(parkId: Long, userId: Long) : Resource<MapDetailResponse> = sharedLotRepository.getShareLotDetail(parkId, userId)
 }

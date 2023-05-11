@@ -9,7 +9,7 @@ import retrofit2.Response
 interface MapRemoteDataSource {
 
     suspend fun getParkingLots(mapRequest: MapRequest) : Response<List<MapResponse>>
-    suspend fun getParkingLotDetail(parkId : Int) : Response<MapDetailResponse>
+    suspend fun getParkingLotDetail(parkId : Int, userId: Long) : Response<MapDetailResponse>
     suspend fun getParkingLotOrderByDistance(mapRequest: MapRequest) : Response<List<MapOrderResponse>>
     suspend fun getParkingLotOrderByPrice(mapRequest: MapRequest) : Response<List<MapOrderResponse>>
 

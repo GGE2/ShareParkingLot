@@ -16,7 +16,8 @@ interface MapAPIService {
 
     @GET("parkingLot/detail")
     suspend fun getMapDetailData(
-        @Query("parkId") parkId : Int
+        @Query("parkId") parkId : Int,
+        @Query("userId") userId : Long
     ) : Response<MapDetailResponse>
 
     @POST("parkingLot/list/bottom/dist")
