@@ -47,6 +47,7 @@ class RemoteDataModule {
         userAPIService: UserAPIService
     ) : UserRemoteDataSource {
         return UserRemoteDataSourceImpl(userAPIService)
+    }
 
     @Singleton
     @Provides

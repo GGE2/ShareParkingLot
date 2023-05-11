@@ -66,7 +66,7 @@ class MyCarFragment : Fragment() {
             carListAdapter.differ.submitList(it)
             previousView = null
         }
-        carViewModel.getCarList(userViewModel.user!!.user_id)
+        carViewModel.getCarList(userViewModel.userLiveData.value!!.user_id)
         binding.imageBackMyCar.setOnClickListener {
             requireActivity().onBackPressed()
         }
@@ -77,7 +77,7 @@ class MyCarFragment : Fragment() {
             if(carViewModel.selectedCar == null){
                 Toast.makeText(requireContext(), "차량을 먼저 선택해주세요.", Toast.LENGTH_SHORT).show()
             } else {
-                carViewModel.setRepCar(userViewModel.user!!.user_id)
+                carViewModel.setRepCar(userViewModel.userLiveData.value!!.user_id)
             }
         }
     }
@@ -90,7 +90,7 @@ class MyCarFragment : Fragment() {
         dialogBinding.apply {
             buttonAddDialogAddCar.setOnClickListener {
                 if(editTextNumberDialogAddCar.text.isNotEmpty()){
-                    carViewModel.postCar(editTextNumberDialogAddCar.text.toString(), userViewModel.user!!.user_id)
+                    carViewModel.postCar(editTextNumberDialogAddCar.text.toString(), userViewModel.userLiveData.value!!.user_id)
                     dialog.dismiss()
                 } else {
                     Toast.makeText(requireContext(), "차량 번호를 입력해주세요.", Toast.LENGTH_SHORT).show()

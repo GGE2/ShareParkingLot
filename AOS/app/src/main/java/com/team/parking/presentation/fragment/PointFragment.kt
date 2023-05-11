@@ -39,7 +39,7 @@ class PointFragment : Fragment() {
         userViewModel = (activity as MainActivity).userViewModel
         pointViewModel = (activity as MainActivity).pointViewModel
         pointViewModel.ptHas.observe(viewLifecycleOwner){
-            userViewModel.user!!.pt_has = it
+            userViewModel.userLiveData.value!!.pt_has = it
             fragmentPointBinding.apply {
                 textCurrentPointPoint.text = "${pointViewModel.ptHas.value} P"
                 textAfterPoint.text = "${pointViewModel.ptHas.value!! + pointViewModel.point.value!!} P"
@@ -52,14 +52,14 @@ class PointFragment : Fragment() {
                 textPricePoint.text = "${pointViewModel.point.value} 원"
             }
         }
-        pointViewModel.getCurrentPoint(userViewModel.user!!.user_id)
+        pointViewModel.getCurrentPoint(userViewModel.userLiveData.value!!.user_id)
         fragmentPointBinding.apply {
-            textNicknamePoint.text = userViewModel.user!!.name
+            textNicknamePoint.text = userViewModel.userLiveData.value!!.name
             textCurrentPointPoint.text = "${pointViewModel.ptHas.value} P"
         }
         fragmentPointBinding.apply {
             Glide.with(requireContext())
-                .load(userViewModel.user!!.profile_img)
+                .load(userViewModel.userLiveData.value!!.profile_img)
                 .error(R.drawable.ic_baseline_person_24)
                 .into(imageProfilePoint)
             select1000Point.isChecked = true
@@ -91,8 +91,8 @@ class PointFragment : Fragment() {
                 requireActivity().onBackPressed()
             }
             buttonPayPoint.setOnClickListener {
-                val phoneOrigin = userViewModel.user!!.phone
-                val phone = if (userViewModel.user!!.phone.isNotEmpty())"${phoneOrigin.substring(0 until 3)}-${phoneOrigin.substring(3 until 7)}-${phoneOrigin.substring(7 until 11)}"
+                val phoneOrigin = userViewModel.userLiveData.value!!.phone
+                val phone = if (userViewModel.userLiveData.value!!.phone.isNotEmpty())"${phoneOrigin.substring(0 until 3)}-${phoneOrigin.substring(3 until 7)}-${phoneOrigin.substring(7 until 11)}"
                 else "010-1234-5678"
                 //bootpay
                 val payload = Payload().setApplicationId(BuildConfig.BOOTPAY_CLIENT_KEY)
@@ -107,7 +107,7 @@ class PointFragment : Fragment() {
                     ))
                     .setUser(BootUser()
                             //번호 받을 시 지울 것
-                        .setPhone(if(userViewModel.user!!.phone.isEmpty()) "010-1234-5678" else phone)
+                        .setPhone(if(userViewModel.userLiveData.value!!.phone.isEmpty()) "010-1234-5678" else phone)
                     )
                 Bootpay.init(requireActivity(), requireContext())
                     .setPayload(payload)
@@ -137,7 +137,7 @@ class PointFragment : Fragment() {
 
                         override fun onDone(data: String?) {
                             Toast.makeText(requireContext(), "결제가 완료되었습니다.", Toast.LENGTH_SHORT).show()
-                            pointViewModel.putChargePoint(userViewModel.user!!.user_id)
+                            pointViewModel.putChargePoint(userViewModel.userLiveData.value!!.user_id)
                             Bootpay.removePaymentWindow()
                         }
                     }).requestPayment()

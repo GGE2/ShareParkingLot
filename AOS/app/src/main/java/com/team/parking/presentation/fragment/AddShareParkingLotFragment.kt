@@ -75,7 +75,7 @@ class AddShareParkingLotFragment : Fragment() {
                     if(binding.editTextAdditionalInfoAddShareParkingLot.text.isEmpty()) "" else binding.editTextAdditionalInfoAddShareParkingLot.text.toString(),
                     searchAddressViewModel.searchedAddress.value!!.y.toFloat(),
                     searchAddressViewModel.searchedAddress.value!!.x.toFloat(),
-                    userViewModel.user!!.user_id
+                    userViewModel.userLiveData.value!!.user_id
                 )
                 binding.apply {
                     editTextParkingLotNameAddShareParkingLot.text.clear()

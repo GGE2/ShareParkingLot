@@ -62,12 +62,12 @@ class MyTicketFragment : Fragment() {
         if(myTicketViewModel.bought){
             binding.textTitleMyShareParkingLotTicket.text = "내 주차권"
             binding.recyclerViewMyShareParkingLotTicket.adapter = boughtTicketAdapter
-            myTicketViewModel.getBoughtList(userViewModel.user!!.user_id)
+            myTicketViewModel.getBoughtList(userViewModel.userLiveData.value!!.user_id)
             //bought
         } else {
             binding.textTitleMyShareParkingLotTicket.text = "구매 요청"
             binding.recyclerViewMyShareParkingLotTicket.adapter = soldTicketAdapter
-            myTicketViewModel.getSoldList(userViewModel.user!!.user_id, shareParkingLotViewModel.sharelotId)
+            myTicketViewModel.getSoldList(userViewModel.userLiveData.value!!.user_id, shareParkingLotViewModel.sharelotId)
             //sold
         }
         myTicketViewModel.boughtList.observe(viewLifecycleOwner){

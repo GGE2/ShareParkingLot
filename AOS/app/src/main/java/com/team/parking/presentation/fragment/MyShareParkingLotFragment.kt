@@ -71,12 +71,12 @@ class MyShareParkingLotFragment : Fragment() {
         shareParkingLotViewModel.shareLotList.observe(viewLifecycleOwner){
             shareParkingLotListAdapter.differ.submitList(it)
         }
-        shareParkingLotViewModel.getShareLotList(userViewModel.user!!.user_id)
+        shareParkingLotViewModel.getShareLotList(userViewModel.userLiveData.value!!.user_id)
     }
 
     override fun onResume() {
         super.onResume()
-        shareParkingLotViewModel.getShareLotList(userViewModel.user!!.user_id)
+        shareParkingLotViewModel.getShareLotList(userViewModel.userLiveData.value!!.user_id)
     }
 
     fun showCheckDialog(parkId: Long){
@@ -89,7 +89,7 @@ class MyShareParkingLotFragment : Fragment() {
                 dialog.dismiss()
             }
             buttonOkCheckDialog.setOnClickListener {
-                shareParkingLotViewModel.deleteShareLot(parkId, userViewModel.user!!.user_id)
+                shareParkingLotViewModel.deleteShareLot(parkId, userViewModel.userLiveData.value!!.user_id)
                 dialog.dismiss()
             }
         }

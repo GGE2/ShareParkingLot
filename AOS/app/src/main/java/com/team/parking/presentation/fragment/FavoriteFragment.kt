@@ -49,7 +49,7 @@ class FavoriteFragment : Fragment() {
         })
         favoriteAdapter.setOnFavoriteImageClickListener(object : FavoriteAdapter.FavoriteImageClickListener{
             override fun onClick(view: View, position: Int, data: FavoriteListResponse) {
-                favoriteViewModel.setFavoriteInList(data.parkId.toLong(), data.parkType, userViewModel.user!!.user_id)
+                favoriteViewModel.setFavoriteInList(data.parkId.toLong(), data.parkType, userViewModel.userLiveData.value!!.user_id)
             }
         })
         fragmentFavoriteBinding.recyclerView.apply {
@@ -60,7 +60,7 @@ class FavoriteFragment : Fragment() {
         favoriteViewModel.favoriteList.observe(viewLifecycleOwner){
             favoriteAdapter.differ.submitList(it)
         }
-        favoriteViewModel.getFavoriteList(userViewModel.user!!.user_id)
+        favoriteViewModel.getFavoriteList(userViewModel.userLiveData.value!!.user_id)
         fragmentFavoriteBinding.imageBackFavorite.setOnClickListener {
             requireActivity().onBackPressed()
         }

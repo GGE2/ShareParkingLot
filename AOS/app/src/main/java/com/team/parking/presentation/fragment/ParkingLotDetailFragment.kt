@@ -44,7 +44,7 @@ class ParkingLotDetailFragment : BottomSheetDialogFragment() {
         userViewModel = (activity as MainActivity).userViewModel
         if (mapViewModel.selectedPark.value == 0) {
             binding.buttonPurchaseParkingLotDetail.visibility = View.INVISIBLE
-            mapViewModel.getDetailMapData(favoriteViewModel.parkId, userViewModel.user!!.user_id)
+            mapViewModel.getDetailMapData(favoriteViewModel.parkId, userViewModel.userLiveData.value!!.user_id)
             mapViewModel.parkingLot.observe(viewLifecycleOwner) { response ->
                 when (response) {
                     is Resource.Success -> {
@@ -71,7 +71,7 @@ class ParkingLotDetailFragment : BottomSheetDialogFragment() {
             binding.buttonPurchaseParkingLotDetail.visibility = View.VISIBLE
             mapViewModel.getSharedParkingLotDetail(
                 favoriteViewModel.parkId.toLong(),
-                userViewModel.user!!.user_id
+                userViewModel.userLiveData.value!!.user_id
             )
             mapViewModel.sharedPark.observe(viewLifecycleOwner) { response ->
                 when (response) {
@@ -122,7 +122,7 @@ class ParkingLotDetailFragment : BottomSheetDialogFragment() {
                 favoriteViewModel.setFavorite(
                     mapViewModel.park.value!!.parkId.toLong(),
                     mapViewModel.selectedPark.value!!,
-                    userViewModel.user!!.user_id
+                    userViewModel.userLiveData.value!!.user_id
                 )
             }
             buttonPurchaseParkingLotDetail.setOnClickListener {

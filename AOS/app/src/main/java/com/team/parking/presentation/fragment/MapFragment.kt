@@ -125,7 +125,7 @@ class MapFragment : Fragment() , OnMapReadyCallback{
         }
         fragmentMapBinding.bottomSheetOpen.imageFavoriteParkingLotDetail.setOnClickListener {
             //set favorite
-            favoriteViewModel.setFavorite(mapViewModel.park.value!!.parkId.toLong(), mapViewModel.selectedPark.value!!, userViewModel.user!!.user_id)
+            favoriteViewModel.setFavorite(mapViewModel.park.value!!.parkId.toLong(), mapViewModel.selectedPark.value!!, userViewModel.userLiveData.value!!.user_id)
         }
         favoriteViewModel.favorite.observe(viewLifecycleOwner){
             setFavoriteDrawable(it)
@@ -347,7 +347,7 @@ class MapFragment : Fragment() , OnMapReadyCallback{
      */
     
     private fun getMapDetailData(lotId:Int){
-        mapViewModel.getDetailMapData(lotId, userViewModel.user!!.user_id)
+        mapViewModel.getDetailMapData(lotId, userViewModel.userLiveData.value!!.user_id)
         mapViewModel.parkingLot.observe(viewLifecycleOwner){ response->
             when (response){
                 is Resource.Success ->{
@@ -375,7 +375,7 @@ class MapFragment : Fragment() , OnMapReadyCallback{
      * 공유 주차장 상세 가져오기
      */
     private fun getSharedLotDetail(lotId:Long){
-        mapViewModel.getSharedParkingLotDetail(lotId, userViewModel.user!!.user_id)
+        mapViewModel.getSharedParkingLotDetail(lotId, userViewModel.userLiveData.value!!.user_id)
         mapViewModel.sharedPark.observe(viewLifecycleOwner){ response ->
             when (response){
                 is Resource.Success ->{

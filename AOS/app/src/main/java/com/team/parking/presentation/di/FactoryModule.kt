@@ -57,15 +57,20 @@ class FactoryModule {
         putProfileImageUseCase: PutProfileImageUseCase,
         getUserInfoUseCase: GetUserInfoUseCase
         ) : UserViewModelFactory {
-        return UserViewModelFactory(app,getUserUseCase,
-        getEmailUseCase,
-        postAuthMessageUseCase,
-        postUserUseCase,
-        putFcmTokenUseCase,
-        getAuthMessageUseCase,
-        putProfileImageUseCase,
-        getUserInfoUseCase)
+        return UserViewModelFactory(
+            app, getUserUseCase,
+            getEmailUseCase,
+            postAuthMessageUseCase,
+            postUserUseCase,
+            putFcmTokenUseCase,
+            getAuthMessageUseCase,
+            putProfileImageUseCase,
+            getUserInfoUseCase
+        )
+    }
 
+    @Singleton
+    @Provides
     fun provideSearchAddressViewModelFactory(
         app:Application,searchAddressUseCase: GetSearchAddressUseCase
     ) : SearchAddressViewModelFactory{
