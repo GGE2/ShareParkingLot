@@ -1,6 +1,7 @@
 package com.team.parking.data.model.ticket
 
 data class TicketDetailResponse(
+    val address: String,
     val buyConfirm: Boolean,
     val carNumber: String,
     val cost: Int,

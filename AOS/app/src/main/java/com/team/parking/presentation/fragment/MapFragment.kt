@@ -40,6 +40,7 @@ import com.team.parking.data.model.map.MapRequest
 import com.team.parking.data.util.Resource
 import com.team.parking.databinding.FragmentMapBinding
 import com.team.parking.presentation.viewmodel.MapViewModel
+import com.team.parking.presentation.viewmodel.MyTicketViewModel
 import com.team.parking.presentation.viewmodel.SearchViewModel
 import java.util.*
 import kotlin.collections.LinkedHashMap
@@ -54,6 +55,7 @@ class MapFragment : Fragment() , OnMapReadyCallback{
     private lateinit var locationClient : FusedLocationProviderClient
     private lateinit var mapViewModel: MapViewModel
     private lateinit var searchViewModel: SearchViewModel
+    private lateinit var myTicketViewModel: MyTicketViewModel
     private val permissionList = Manifest.permission.ACCESS_FINE_LOCATION
     private lateinit var clickBottomSheet  : BottomSheetBehavior<View>
     private lateinit var listBottomSheet : BottomSheetBehavior<View>
@@ -107,6 +109,7 @@ class MapFragment : Fragment() , OnMapReadyCallback{
         fragmentMapBinding = DataBindingUtil.bind<FragmentMapBinding>(view)!!
         mapViewModel = (activity as MainActivity).mapViewModel
         searchViewModel = (activity as MainActivity).searchViewModel
+        myTicketViewModel = (activity as MainActivity).myTicketViewModel
         init()
         fragmentMapBinding.bottomSheetOpen.buttonPurchaseParkingLotDetail.setOnClickListener {
             findNavController().navigate(R.id.action_map_fragment_to_purchaseTicketFragment)
@@ -565,6 +568,7 @@ class MapFragment : Fragment() , OnMapReadyCallback{
                     findNavController().navigate(R.id.action_map_fragment_to_transactionHistoryFragment)
                 }
                 R.id.item_my_ticket ->{
+                    myTicketViewModel.bought = true
                     findNavController().navigate(R.id.action_map_fragment_to_myTicketFragment)
                 }
                 else -> {

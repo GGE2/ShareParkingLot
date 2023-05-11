@@ -8,6 +8,6 @@ data class TicketBoughtListResponse(
     val parkingRegion: String,
     val ptToLose: Int,
     val sellConfirm: Boolean,
-    val shaId: Int,
-    val ticketId: Int
+    val shaId: Long,
+    val ticketId: Long
 )

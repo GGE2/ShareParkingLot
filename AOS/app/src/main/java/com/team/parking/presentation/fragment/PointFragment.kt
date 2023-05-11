@@ -91,6 +91,9 @@ class PointFragment : Fragment() {
                 requireActivity().onBackPressed()
             }
             buttonPayPoint.setOnClickListener {
+                val phoneOrigin = userViewModel.user!!.phone
+                val phone = if (userViewModel.user!!.phone.isNotEmpty())"${phoneOrigin.substring(0 until 3)}-${phoneOrigin.substring(3 until 7)}-${phoneOrigin.substring(7 until 11)}"
+                else "010-1234-5678"
                 //bootpay
                 val payload = Payload().setApplicationId(BuildConfig.BOOTPAY_CLIENT_KEY)
                     .setOrderName("${pointViewModel.point.value} P")
@@ -104,7 +107,7 @@ class PointFragment : Fragment() {
                     ))
                     .setUser(BootUser()
                             //번호 받을 시 지울 것
-                        .setPhone(if(userViewModel.user!!.phone.isEmpty()) "010-1234-5678" else userViewModel.user!!.phone)
+                        .setPhone(if(userViewModel.user!!.phone.isEmpty()) "010-1234-5678" else phone)
                     )
                 Bootpay.init(requireActivity(), requireContext())
                     .setPayload(payload)

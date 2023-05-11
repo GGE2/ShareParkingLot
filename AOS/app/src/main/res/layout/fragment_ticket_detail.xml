@@ -137,7 +137,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginTop="16dp"
-            android:text="2000원 / 시간"
+            android:text="2000원"
             android:textColor="#38000000"
             android:textSize="24sp"
             android:textStyle="bold"
@@ -181,18 +181,19 @@
             android:textColor="@color/black"
             android:textSize="24sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/image_picture_ticket_detail"
+            app:layout_constraintBottom_toTopOf="@+id/recycler_view_image_picture_ticket_detail"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_price_ticket_detail" />
 
-        <ImageView
-            android:id="@+id/image_picture_ticket_detail"
-            android:layout_width="64dp"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_image_picture_ticket_detail"
+            android:layout_width="0dp"
             android:layout_height="64dp"
-            android:layout_marginStart="24dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
-            android:src="@drawable/ic_launcher_background"
+            android:layout_marginEnd="24dp"
             app:layout_constraintBottom_toTopOf="@+id/text_title_status_ticket_detail"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_title_picture_ticket_detail" />
 
@@ -207,12 +208,12 @@
             android:textColor="@color/black"
             android:textSize="24sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/button_add_ticket_detail"
+            app:layout_constraintBottom_toTopOf="@+id/button_sell_confirm_ticket_detail"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/image_picture_ticket_detail" />
+            app:layout_constraintTop_toBottomOf="@+id/recycler_view_image_picture_ticket_detail" />
 
         <Button
-            android:id="@+id/button_add_ticket_detail"
+            android:id="@+id/button_sell_confirm_ticket_detail"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
@@ -221,22 +222,22 @@
             android:backgroundTint="@color/main_color2"
             android:text="등록 완료"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/button_exit_ticket_detail"
+            app:layout_constraintEnd_toStartOf="@+id/button_buy_confirm_ticket_detail"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_title_status_ticket_detail" />
 
         <Button
-            android:id="@+id/button_exit_ticket_detail"
+            android:id="@+id/button_buy_confirm_ticket_detail"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="32dp"
-            android:layout_marginBottom="16dp"
             android:backgroundTint="@color/main_color2"
             android:text="출차 완료"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/button_sell_confirm_ticket_detail"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/button_add_ticket_detail" />
+            app:layout_constraintStart_toEndOf="@+id/button_sell_confirm_ticket_detail"
+            app:layout_constraintTop_toTopOf="@+id/button_sell_confirm_ticket_detail" />
 
         <TextView
             android:id="@+id/text_car_customer_info_ticket_detail"
@@ -250,6 +251,18 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_title_customer_info_ticket_detail" />
+
+        <TextView
+            android:id="@+id/text_status_ticket_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="24dp"
+            android:text="등록 대기중"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="@+id/text_title_status_ticket_detail"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/text_title_status_ticket_detail" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -59,6 +59,14 @@ class MainActivity : AppCompatActivity() {
     lateinit var carViewModelFactory: CarViewModelFactory
     lateinit var carViewModel: CarViewModel
 
+    @Inject
+    lateinit var myTicketViewModelFactory: MyTicketViewModelFactory
+    lateinit var myTicketViewModel: MyTicketViewModel
+
+    @Inject
+    lateinit var ticketDetailViewModelFactory: TicketDetailViewModelFactory
+    lateinit var ticketDetailViewModel: TicketDetailViewModel
+
     private lateinit var binding : ActivityMainBinding
     lateinit var userViewModel: UserViewModel
     lateinit var navigationDrawer : DrawerLayout
@@ -92,6 +100,8 @@ class MainActivity : AppCompatActivity() {
         shareParkingLotViewModel = ViewModelProvider(this, shareParkingLotViewModelFactory)[ShareParkingLotViewModel::class.java]
         pointViewModel = ViewModelProvider(this,pointViewModelFactory)[PointViewModel::class.java]
         carViewModel = ViewModelProvider(this,carViewModelFactory)[CarViewModel::class.java]
+        myTicketViewModel = ViewModelProvider(this, myTicketViewModelFactory)[MyTicketViewModel::class.java]
+        ticketDetailViewModel = ViewModelProvider(this, ticketDetailViewModelFactory)[TicketDetailViewModel::class.java]
         setProfileFragmentNavigation()
     }
 

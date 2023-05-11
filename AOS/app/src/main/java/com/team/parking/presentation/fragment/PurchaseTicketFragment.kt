@@ -25,6 +25,7 @@ class PurchaseTicketFragment : Fragment() {
     private lateinit var userViewModel: UserViewModel
     private lateinit var mapViewModel: MapViewModel
     private lateinit var carViewModel: CarViewModel
+    private var carAvailable = false
 
     @Inject
     lateinit var purchaseTicketViewModelFactory: PurchaseTicketViewModelFactory
@@ -49,6 +50,7 @@ class PurchaseTicketFragment : Fragment() {
         carViewModel.carList.observe(viewLifecycleOwner){
             if (it.isNotEmpty()){
                 purchaseTicketViewModel.ticketCreateRequest.carNumber = carViewModel.carList.value!![0].carStr
+                carAvailable = true
             }
         }
         purchaseTicketViewModel.ticketAvailable.observe(viewLifecycleOwner){
@@ -160,9 +162,13 @@ class PurchaseTicketFragment : Fragment() {
                     //purchase
                     if(purchaseTicketViewModel.ticketCreateRequest.type != -1){
                         if(purchaseTicketViewModel.expectedPrice.value!! < userViewModel.user!!.pt_has){
-                            purchaseTicketViewModel.postTicketAvailable(userViewModel.user!!.user_id)
-                            Toast.makeText(requireContext(), "주차권이 구매되었습니다.", Toast.LENGTH_SHORT).show()
-                            requireActivity().onBackPressed()
+                            if(carAvailable){
+                                purchaseTicketViewModel.postTicketAvailable(userViewModel.user!!.user_id)
+                                Toast.makeText(requireContext(), "주차권이 구매되었습니다.", Toast.LENGTH_SHORT).show()
+                                requireActivity().onBackPressed()
+                            } else {
+                                Toast.makeText(requireContext(), "차량을 등록해주세요.", Toast.LENGTH_SHORT).show()
+                            }
                         } else {
                             Toast.makeText(requireContext(), "포인트 잔액이 부족합니다.", Toast.LENGTH_SHORT).show()
                         }
@@ -182,6 +188,7 @@ class PurchaseTicketFragment : Fragment() {
     fun showTimePickerDialog(onTimeSetListener: OnTimeSetListener){
         val timePickerDialog = TimePickerDialog.newInstance(onTimeSetListener, false)
         timePickerDialog.enableMinutes(false)
+        timePickerDialog.setMinTime(Calendar.getInstance().get(Calendar.HOUR_OF_DAY) + 1, 0, 0)
         timePickerDialog.show(parentFragmentManager, "")
     }
 

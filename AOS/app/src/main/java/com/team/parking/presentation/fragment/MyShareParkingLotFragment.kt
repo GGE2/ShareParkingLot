@@ -13,6 +13,7 @@ import com.team.parking.R
 import com.team.parking.databinding.DialogCheckBinding
 import com.team.parking.databinding.FragmentMyShareParkingLotBinding
 import com.team.parking.presentation.adapter.ShareParkingLotListAdapter
+import com.team.parking.presentation.viewmodel.MyTicketViewModel
 import com.team.parking.presentation.viewmodel.ShareParkingLotViewModel
 import com.team.parking.presentation.viewmodel.UserViewModel
 
@@ -20,6 +21,7 @@ class MyShareParkingLotFragment : Fragment() {
 
     private lateinit var binding: FragmentMyShareParkingLotBinding
     private lateinit var shareParkingLotViewModel: ShareParkingLotViewModel
+    private lateinit var myTicketViewModel: MyTicketViewModel
     private lateinit var shareParkingLotListAdapter: ShareParkingLotListAdapter
     private lateinit var userViewModel: UserViewModel
 
@@ -34,6 +36,7 @@ class MyShareParkingLotFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         shareParkingLotViewModel = (activity as MainActivity).shareParkingLotViewModel
+        myTicketViewModel = (activity as MainActivity).myTicketViewModel
         userViewModel = (activity as MainActivity).userViewModel
         binding.imageBackMyShareParkingLot.setOnClickListener {
             requireActivity().onBackPressed()
@@ -50,6 +53,8 @@ class MyShareParkingLotFragment : Fragment() {
         shareParkingLotListAdapter.setShareParkingLotCheckClickListener(object :ShareParkingLotListAdapter.ShareParkingLotCheckClickListener{
             override fun onClick(view: View, position: Int, data: Long) {
                 //check ticket
+                myTicketViewModel.bought = false
+                shareParkingLotViewModel.sharelotId = data
                 findNavController().navigate(R.id.action_myShareParkingLotFragment_to_myShareParkingLotTicketFragment)
             }
         })
