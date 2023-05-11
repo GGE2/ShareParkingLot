@@ -22,6 +22,7 @@ public class TicketDetailResponseDto {
 
     private Long ticketId;
     private String parkingRegion;
+    private String address;
     private String nickname;
     private String carNumber;
     private String parkingDate;
@@ -38,6 +39,7 @@ public class TicketDetailResponseDto {
         this.outTiming = outTiming;
         this.ticketId = ticket.getTicket_id();
         this.parkingRegion = ticket.getParkingRegion();
+        this.address = ticket.getAddress();
         this.nickname = ticket.getBuyer().getName();
         this.carNumber = ticket.getCar_number();
         this.parkingDate = ticket.getParkingDate();
