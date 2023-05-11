@@ -1,6 +1,5 @@
 package com.team.parking.presentation.fragment
 
-import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -9,11 +8,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContentProviderCompat
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import com.kakao.sdk.auth.model.OAuthToken
-import com.kakao.sdk.common.KakaoSdk
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
@@ -24,10 +25,8 @@ import com.navercorp.nid.profile.NidProfileCallback
 import com.navercorp.nid.profile.data.NidProfileResponse
 import com.team.parking.MainActivity
 import com.team.parking.R
-import com.team.parking.data.api.UserService
-import com.team.parking.data.model.user.LoginRequest
+import com.team.parking.data.api.UserAPIService
 import com.team.parking.data.model.user.LoginResponse
-import com.team.parking.data.model.user.UpdateFcmTokenRequest
 import com.team.parking.databinding.FragmentLoginBinding
 import com.team.parking.presentation.utils.App
 import com.team.parking.presentation.viewmodel.UserViewModel
@@ -35,11 +34,9 @@ import com.team.parking.presentation.viewmodel.UserViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.create
 
 
 private const val TAG = "LoginFragment종건"
@@ -67,7 +64,60 @@ class LoginFragment : Fragment() {
             lifecycleOwner = this@LoginFragment
             viewModel = userViewModel
         }
-//        findNavController().navigate(R.id.action_loginFragment_to_mapFragment)
+
+
+        userViewModel.loginResponse.observe(viewLifecycleOwner, Observer {
+            when (it.data?.type) {
+                "kakao" -> {
+                    if (it.data?.user_id == null) {
+                        userViewModel._profileImage.postValue(it.data?.profile_img.toString())
+                        userViewModel._social_id = it.data?.social_id.toString()
+                        userViewModel._type = it.data?.type.toString()
+                        requireActivity().runOnUiThread {
+                            findNavController().navigate(R.id.action_login_fragment_to_signUpFragment)
+                        }
+                    } else {
+                        userViewModel.login(it)
+                        requireActivity().runOnUiThread {
+                            findNavController().navigate(R.id.action_loginFragment_to_mapFragment)
+                        }
+                    }
+                }
+                "naver" -> {
+                    if (it.data?.user_id == null) {
+                        userViewModel._profileImage.postValue(it.data?.profile_img.toString())
+                        userViewModel._social_id = it.data?.social_id.toString()
+                        userViewModel._userName.postValue(it.data?.name.toString())
+                        userViewModel._type = it.data?.type.toString()
+                        requireActivity().runOnUiThread {
+                            findNavController().navigate(R.id.action_login_fragment_to_signUpFragment)
+                        }
+                    } else {
+                        userViewModel.login(it)
+                        requireActivity().runOnUiThread {
+                            findNavController().navigate(R.id.action_loginFragment_to_mapFragment)
+                        }
+                    }
+                }
+                else -> {
+                    if (it.data?.user_id == null) {
+                        requireActivity().runOnUiThread {
+                            Log.d(TAG, "setOnJumoLogin: Bad")
+                            Toast.makeText(requireContext(), "${R.string.dialog_login_failed}", Toast.LENGTH_SHORT).show()
+                        }
+                    } else {
+                        requireActivity().runOnUiThread {
+                            Log.d(TAG, "setOnJumoLogin: Good")
+                            userViewModel.login(it)
+
+                            findNavController().navigate(R.id.action_loginFragment_to_mapFragment)
+                        }
+                    }
+                }
+
+            }
+
+        })
     }
 
     override fun onAttach(context: Context) {
@@ -77,55 +127,7 @@ class LoginFragment : Fragment() {
 
 
     fun setOnJumoLogin() {
-        CoroutineScope(Dispatchers.IO).launch {
-            getFCMToken { fcm_token ->
-                Log.d(TAG, "setOnJumoLogin: ${userViewModel._login_password}")
-                val response = App.userRetrofit.create(UserService::class.java).login(
-                    type = "jumo",
-                    email = userViewModel._login_email,
-                    password = userViewModel._login_password,
-                    fcm_token = userViewModel.fcm_token.value
-                ).enqueue(object : Callback<LoginResponse> {
-                    override fun onResponse(
-                        call: Call<LoginResponse>,
-                        response: Response<LoginResponse>
-                    ) {
-                        Log.d(TAG, "setOnJumoLogin: responsejumo")
-                        if (response.isSuccessful) {
-                            if (response.body()!!.user_id == null) {
-
-                                requireActivity().runOnUiThread {
-                                    Log.d(TAG, "setOnJumoLogin: Bad")
-                                    Toast.makeText(
-                                        requireContext(),
-                                        "${R.string.dialog_login_failed}",
-                                        Toast.LENGTH_SHORT
-                                    )
-                                }
-
-                            } else {
-
-
-                                requireActivity().runOnUiThread {
-                                    Log.d(TAG, "setOnJumoLogin: Good")
-                                    userViewModel.login(response.body()!!)
-
-                                    findNavController().navigate(R.id.action_loginFragment_to_mapFragment)
-                                }
-
-                            }
-                        }
-                    }
-
-                    override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                        TODO("Not yet implemented")
-                    }
-
-                })
-
-            }
-
-        }
+        userViewModel.setOnJumoLogin()
     }
 
     fun setOnKakaoLogin() {
@@ -164,86 +166,12 @@ class LoginFragment : Fragment() {
 
                     UserApiClient.instance.me { user, error ->
                         CoroutineScope(Dispatchers.IO).launch {
-                            getFCMToken { fcm_token ->
-                                val response =
-                                    App.userRetrofit.create(UserService::class.java).login(
-                                        type = "kakao",
-                                        accessToken = token.accessToken,
-                                        social_id = user?.id.toString(),
-                                        fcm_token = userViewModel.fcm_token.value
-                                    ).enqueue(object : Callback<LoginResponse> {
-                                        override fun onResponse(
-                                            call: Call<LoginResponse>,
-                                            response: Response<LoginResponse>
-                                        ) {
-                                            if (response.isSuccessful) {
-                                                userViewModel._type = "kakao"
-                                                if (response.body()!!.user_id == null) {
-                                                    userViewModel._profileImage =
-                                                        response.body()!!.profile_img.toString()
-                                                    userViewModel._social_id =
-                                                        response.body()!!.social_id.toString()
-                                                    userViewModel._type =
-                                                        response.body()!!.type.toString()
-
-                                                    requireActivity().runOnUiThread {
-                                                        findNavController().navigate(R.id.action_login_fragment_to_signUpFragment)
-                                                    }
-                                                } else {
-
-                                                    userViewModel.login(response.body()!!)
-                                                    requireActivity().runOnUiThread {
-                                                        findNavController().navigate(R.id.action_loginFragment_to_mapFragment)
-                                                    }
-
-                                                }
-                                            }
-                                        }
-
-                                        override fun onFailure(
-                                            call: Call<LoginResponse>,
-                                            t: Throwable
-                                        ) {
-                                            Log.i(TAG, "onFailure: ${t.message}")
-                                        }
-
-                                    })
-
-                                Log.d(
-                                    TAG,
-                                    "setOnKakaoLogin: ${user?.id.toString()}, ${token.accessToken}"
-                                )
-                            }
-
-                            /*if (response.isSuccessful) {
-                                userViewModel._type = "kakao"
-                                if (response.body()!!.user_id == null) {
-                                    userViewModel._profileImage =
-                                        response.body()!!.profile_img.toString()
-                                    userViewModel._social_id =
-                                        response.body()!!.social_id.toString()
-                                    userViewModel._type = response.body()!!.type.toString()
-
-                                    withContext(Dispatchers.Main) {
-                                        requireActivity().runOnUiThread {
-                                            findNavController().navigate(R.id.action_login_fragment_to_signUpFragment)
-                                        }
-                                    }
-                                } else {
-
-                                    userViewModel.login(response.body()!!)
-                                    withContext(Dispatchers.Main) {
-                                        requireActivity().runOnUiThread {
-                                            findNavController().navigate(R.id.action_loginFragment_to_mapFragment)
-                                        }
-                                    }
-                                }
-                            } else {
-                                Log.d(TAG, "login: ${response.code()}")
-                            }*/
+                            userViewModel.setOnKakaoLogin(
+                                user!!.id.toString(),
+                                token.accessToken
+                            )
                         }
                     }
-
                 }
             }
         } else {
@@ -264,61 +192,7 @@ class LoginFragment : Fragment() {
                 Log.d(TAG, "onSuccess: $userName")
                 val userImage = response.profile?.profileImage
                 CoroutineScope(Dispatchers.IO).launch {
-                    getFCMToken { fcmToken ->
-                        Log.d(TAG, "token: ${fcmToken}")
-
-                        val service = App.userRetrofit.create(UserService::class.java).login(
-                            type = "naver",
-                            name = userName,
-                            social_id = userId,
-                            profile_img = userImage,
-                            fcm_token = fcmToken
-                        ).enqueue(object : Callback<LoginResponse> {
-                            override fun onResponse(
-                                call: Call<LoginResponse>,
-                                response: Response<LoginResponse>
-                            ) {
-                                if (response.isSuccessful) {
-                                    userViewModel._type = "naver"
-                                    if (response.body()!!.user_id == null) {
-                                        Log.d(TAG, "onSuccess: ${response.body()!!.name}")
-                                        userViewModel._userName = response.body()!!.name.toString()
-                                        userViewModel._profileImage =
-                                            response.body()!!.profile_img.toString()
-                                        userViewModel._social_id =
-                                            response.body()!!.social_id.toString()
-                                        userViewModel._type = response.body()!!.type.toString()
-
-
-                                        requireActivity().runOnUiThread {
-                                            findNavController().navigate(R.id.action_login_fragment_to_signUpFragment)
-                                        }
-
-                                    } else {
-                                        println(response.body()!!.name)
-                                        userViewModel.login(response.body()!!)
-                                        userViewModel.user!!.fcm_token!!.let {
-                                            Log.d(TAG, "token" + it)
-                                        }
-
-                                        requireActivity().runOnUiThread {
-                                            findNavController().navigate(R.id.action_loginFragment_to_mapFragment)
-                                        }
-
-                                    }
-                                } else {
-                                    Log.d(TAG, "login: ${response.code()}")
-                                }
-                            }
-
-                            override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                                TODO("Not yet implemented")
-                            }
-
-                        })
-
-
-                    }
+                    userViewModel.setOnNaverLogin(userId,userName,userImage)
                 }
             }
 
@@ -372,24 +246,5 @@ class LoginFragment : Fragment() {
         findNavController().navigate(R.id.action_login_fragment_to_signUpFragment)
     }
 
-    private fun getFCMToken(callback: (String?) -> Unit) {
-        var token: String? = null
-
-        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
-            if (!task.isSuccessful) {
-                Log.w(TAG, "Fetching FCM registration token failed", task.exception)
-                callback(null)
-            }
-
-            // Get new FCM registration token
-            token = task.result
-
-            userViewModel.updateFcmToken(token!!)
-            // Log and toast
-            Log.d(TAG, "FCM Token is ${token}")
-            callback(token)
-        })
-
-    }
 
 }

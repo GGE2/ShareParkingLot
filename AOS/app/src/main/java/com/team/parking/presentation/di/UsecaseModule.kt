@@ -1,6 +1,11 @@
 package com.team.parking.presentation.di
 
 
+import com.team.parking.domain.repository.MapRepository
+import com.team.parking.domain.repository.SearchRepository
+import com.team.parking.domain.repository.UserRepository
+
+
 import com.team.parking.domain.repository.*
 import com.team.parking.domain.usecase.*
 import dagger.Module
@@ -40,6 +45,12 @@ class UsecaseModule {
 
     @Singleton
     @Provides
+
+    fun provideGetUserUsecase(
+        userRepository: UserRepository
+    ) : GetUserUseCase {
+        return GetUserUseCase(userRepository)
+
     fun provideGetParkingOrderByDistanceUseCase(
         mapRepository: MapRepository
     ): GetParkingOrderByDistanceDataUseCase {
@@ -118,18 +129,39 @@ class UsecaseModule {
         pointRepository: PointRepository
     ): PutChargePointUseCase {
         return PutChargePointUseCase(pointRepository)
+
     }
 
     @Singleton
     @Provides
+
+    fun providePostUserUsecase(
+        userRepository: UserRepository
+    ) : PostUserUseCase {
+        return PostUserUseCase(userRepository)
+
     fun provideGetEarnedPointUseCase(
         pointRepository: PointRepository
     ): GetEarnedPointUseCase {
         return GetEarnedPointUseCase(pointRepository)
+
     }
 
     @Singleton
     @Provides
+
+    fun providePostAuthMessageUseCase(
+        userRepository: UserRepository
+    ) : PostAuthMessageUseCase {
+        return PostAuthMessageUseCase(userRepository)
+    }
+    @Singleton
+    @Provides
+    fun providePutFcmTokenUsecase(
+        userRepository: UserRepository
+    ) : PutFcmTokenUseCase {
+        return PutFcmTokenUseCase(userRepository)
+
     fun provideGetSpentPointUseCase(
         pointRepository: PointRepository
     ): GetSpentPointUseCase {
@@ -214,18 +246,48 @@ class UsecaseModule {
         ticketRepository: TicketRepository
     ) : PutTicketBuyConfirmUseCase{
         return PutTicketBuyConfirmUseCase(ticketRepository)
+
     }
 
     @Singleton
     @Provides
+
+    fun provideGetEmailUsecase(
+        userRepository: UserRepository
+    ) : GetEmailUseCase {
+        return GetEmailUseCase(userRepository)
+
     fun providePutTicketSellConfirmUseCase(
         ticketRepository: TicketRepository
     ) : PutTicketSellConfirmUseCase{
         return PutTicketSellConfirmUseCase(ticketRepository)
+
     }
 
     @Singleton
     @Provides
+
+    fun provideGetAuthMessageUsecase(
+        userRepository: UserRepository
+    ) : GetAuthMessageUseCase {
+        return GetAuthMessageUseCase(userRepository)
+    }
+    @Singleton
+    @Provides
+    fun providePutProfileImageUsecase(
+        userRepository: UserRepository
+    ) : PutProfileImageUseCase {
+        return PutProfileImageUseCase(userRepository)
+    }
+    @Singleton
+    @Provides
+    fun provideGetUserInfoUsecase(
+        userRepository: UserRepository
+    ) : GetUserInfoUseCase {
+        return GetUserInfoUseCase(userRepository)
+    }
+}
+
     fun provideSetFavoriteUseCase(
         favoriteRepository: FavoriteRepository
     ) : SetFavoriteUseCase{
@@ -240,3 +302,4 @@ class UsecaseModule {
         return GetFavoriteListUseCase(favoriteRepository)
     }
 }
+

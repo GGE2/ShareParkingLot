@@ -1,4 +1,4 @@
-package com.team.parking.data.repository.dataSourceImpl
+package com.team.parking.data.repository.localSource.dataSourceImpl
 
 import com.team.parking.data.api.MapAPIService
 import com.team.parking.data.model.map.MapDetailResponse

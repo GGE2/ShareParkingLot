@@ -3,7 +3,14 @@ package com.team.parking.presentation.di
 import android.app.Application
 import com.team.parking.domain.usecase.*
 
+import com.team.parking.presentation.viewmodel.MapViewModelFactory
+import com.team.parking.presentation.viewmodel.SearchViewModelFactory
+import com.team.parking.presentation.viewmodel.UserViewModel
+import com.team.parking.presentation.viewmodel.UserViewModelFactory
+
+
 import com.team.parking.presentation.viewmodel.*
+
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -39,6 +46,26 @@ class FactoryModule {
 
     @Singleton
     @Provides
+    fun provideUserViewModelFactory(
+        app:Application,
+        getUserUseCase: GetUserUseCase,
+        postUserUseCase: PostUserUseCase,
+        putFcmTokenUseCase : PutFcmTokenUseCase,
+        postAuthMessageUseCase: PostAuthMessageUseCase,
+        getAuthMessageUseCase: GetAuthMessageUseCase,
+        getEmailUseCase: GetEmailUseCase,
+        putProfileImageUseCase: PutProfileImageUseCase,
+        getUserInfoUseCase: GetUserInfoUseCase
+        ) : UserViewModelFactory {
+        return UserViewModelFactory(app,getUserUseCase,
+        getEmailUseCase,
+        postAuthMessageUseCase,
+        postUserUseCase,
+        putFcmTokenUseCase,
+        getAuthMessageUseCase,
+        putProfileImageUseCase,
+        getUserInfoUseCase)
+
     fun provideSearchAddressViewModelFactory(
         app:Application,searchAddressUseCase: GetSearchAddressUseCase
     ) : SearchAddressViewModelFactory{
@@ -124,5 +151,6 @@ class FactoryModule {
         putTicketSellConfirmUseCase: PutTicketSellConfirmUseCase
     ) : TicketDetailViewModelFactory{
         return TicketDetailViewModelFactory(app, getTicketDetailUseCase, putTicketBuyConfirmUseCase, putTicketSellConfirmUseCase)
+
     }
 }
