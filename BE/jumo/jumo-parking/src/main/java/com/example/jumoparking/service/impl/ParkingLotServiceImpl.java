@@ -12,8 +12,8 @@ import com.example.jumoparking.service.ParkingLotService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.TextStyle;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -65,17 +65,16 @@ public class ParkingLotServiceImpl implements ParkingLotService {
 
     private  List<ShareLot> filteringByDay(List<ShareLot> originShareLots){
         return originShareLots.stream().filter(shareLot -> {
-            DayName dayOfWeek = DayName.valueOf(LocalDate.now().getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.US));
+
+            DayName dayOfWeek = DayName.valueOf(ZonedDateTime.now(ZoneId.of("Asia/Seoul")).getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.US));
             Optional <DayData> dayData= dayDataRepo.findDayDataByShareLot_ShaIdAndDayStrEquals(shareLot.getShaId(), dayOfWeek);
 
-            System.out.println(dayData.get().getDayStr());
 
             if(dayData.get().isEnable()){
                 int [] enableTimeList = new int[24];
                 Arrays.fill(enableTimeList, 0);
-                int nowHour = LocalDateTime.now().getHour();
-                System.out.println(nowHour);
-                System.out.println(dayData.get().getDay_end() );
+                int nowHour = ZonedDateTime.now(ZoneId.of("Asia/Seoul")).getHour();
+
                 if (dayData.get().getDay_end() <= nowHour ){
                     return false;
                 }else{
