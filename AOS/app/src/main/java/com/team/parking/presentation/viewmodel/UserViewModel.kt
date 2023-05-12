@@ -55,7 +55,8 @@ class UserViewModel(
     val profileImage: LiveData<String> get() = _profileImage
     var _phone: MutableLiveData<String> = MutableLiveData()
     val phone : LiveData<String> get() = _phone
-    var _code : String = ""
+    var _code : MutableLiveData<String>  = MutableLiveData()
+    val code : LiveData<String> get() = _code
     var _password: MutableLiveData<String> = MutableLiveData()
     val password: LiveData<String> get() = _password
     var _email: MutableLiveData<String> = MutableLiveData()
@@ -256,17 +257,25 @@ class UserViewModel(
     }
 
     fun confirmAuthMessage() = viewModelScope.launch(Dispatchers.IO) {
-        val result = getAuthMessageUseCase.execute(phone.value!!,_code)
-        if(result.data == true){
-            _check_phone.postValue(true)
-        }
-        else{
-            if(++`try` == 3){
-                `try` = 0
-                _changePhone.postValue(true)
-                _check_phone.postValue(false)
+        Log.d(TAG, "confirmAuthMessage: ${phone.value}")
+        Log.d(TAG, "confirmAuthMessage: ${_code.value}")
+
+        if(!_code.value.isNullOrBlank()){
+            val result = getAuthMessageUseCase.execute(phone.value!!,_code.value!!)
+            if(result.data == true){
+                _check_phone.postValue(true)
             }
+            else{
+                if(++`try` == 3){
+                    `try` = 0
+                    _changePhone.postValue(true)
+                    _check_phone.postValue(false)
+                }
+            }
+        }else{
+
         }
+
     }
     fun getProfile()= viewModelScope.launch (Dispatchers.IO){
         val result = getUserInfoUseCase.execute(userLiveData.value!!.user_id)

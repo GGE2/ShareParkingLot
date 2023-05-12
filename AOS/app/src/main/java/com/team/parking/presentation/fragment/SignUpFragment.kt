@@ -176,15 +176,21 @@ class SignUpFragment : Fragment() {
         })
         fragmentSignUpBinding.messageBtn.setOnClickListener(){
             userViewModel.sendAuthMessage()
+            fragmentSignUpBinding.remainTime.visibility = View.VISIBLE
+            fragmentSignUpBinding.remainTimeText.visibility = View.VISIBLE
             fragmentSignUpBinding.certificationNumberText.visibility = View.VISIBLE
             fragmentSignUpBinding.certificationNumberInput.visibility = View.VISIBLE
             fragmentSignUpBinding.certificationBtn.visibility = View.VISIBLE
         }
 
-
+        userViewModel.check_phone.observe(viewLifecycleOwner, Observer {
+            if(it){
+                fragmentSignUpBinding.signUpBtn.visibility = View.VISIBLE
+            }
+        })
         fragmentSignUpBinding.certificationBtn.setOnClickListener {
             userViewModel.confirmAuthMessage()
-            fragmentSignUpBinding.signUpBtn.visibility = View.VISIBLE
+
         }
         fragmentSignUpBinding.signUpBtn.setOnClickListener {
             Log.i(TAG, "OnViewCreate: $it")
@@ -247,9 +253,9 @@ class SignUpFragment : Fragment() {
         findNavController().navigate(R.id.action_signUpFragment_to_login_fragment)
     }
 
-
     fun checkPhone() {
         Log.d(TAG,"asd")
-        userViewModel.sendAuthMessage()
+//        userViewModel.sendAuthMessage()
     }
+
 }
