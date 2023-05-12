@@ -289,7 +289,7 @@ public class TicketServiceImpl implements TicketService {
     }
 
     public void sendNotification(String title, String body, Long user_id){
-        String reqURL = "http://localhost:8083/noti/send";
+        String reqURL = "http://k8d108.p.ssafy.io:8083/noti/send";
         try {
             WebClient webClient = WebClient.create();
 
