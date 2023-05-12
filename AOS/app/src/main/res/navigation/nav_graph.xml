@@ -71,7 +71,11 @@
         android:id="@+id/favoriteFragment"
         android:name="com.team.parking.presentation.fragment.FavoriteFragment"
         android:label="fragment_favorite"
-        tools:layout="@layout/fragment_favorite" />
+        tools:layout="@layout/fragment_favorite" >
+        <action
+            android:id="@+id/action_favoriteFragment_to_parkinLotDetailFragment"
+            app:destination="@id/parkinLotDetailFragment" />
+    </fragment>
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.team.parking.presentation.fragment.SearchFragment"

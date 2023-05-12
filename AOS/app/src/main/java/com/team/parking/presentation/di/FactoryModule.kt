@@ -57,15 +57,20 @@ class FactoryModule {
         putProfileImageUseCase: PutProfileImageUseCase,
         getUserInfoUseCase: GetUserInfoUseCase
         ) : UserViewModelFactory {
-        return UserViewModelFactory(app,getUserUseCase,
-        getEmailUseCase,
-        postAuthMessageUseCase,
-        postUserUseCase,
-        putFcmTokenUseCase,
-        getAuthMessageUseCase,
-        putProfileImageUseCase,
-        getUserInfoUseCase)
+        return UserViewModelFactory(
+            app, getUserUseCase,
+            getEmailUseCase,
+            postAuthMessageUseCase,
+            postUserUseCase,
+            putFcmTokenUseCase,
+            getAuthMessageUseCase,
+            putProfileImageUseCase,
+            getUserInfoUseCase
+        )
+    }
 
+    @Singleton
+    @Provides
     fun provideSearchAddressViewModelFactory(
         app:Application,searchAddressUseCase: GetSearchAddressUseCase
     ) : SearchAddressViewModelFactory{
@@ -152,5 +157,15 @@ class FactoryModule {
     ) : TicketDetailViewModelFactory{
         return TicketDetailViewModelFactory(app, getTicketDetailUseCase, putTicketBuyConfirmUseCase, putTicketSellConfirmUseCase)
 
+    }
+
+    @Singleton
+    @Provides
+    fun provideFavoriteViewModelFactory(
+        app:Application,
+        setFavoriteUseCase: SetFavoriteUseCase,
+        getFavoriteListUseCase: GetFavoriteListUseCase
+    ) : FavoriteViewModelFactory{
+        return FavoriteViewModelFactory(app, setFavoriteUseCase, getFavoriteListUseCase)
     }
 }

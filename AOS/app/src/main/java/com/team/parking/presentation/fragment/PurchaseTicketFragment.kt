@@ -44,7 +44,7 @@ class PurchaseTicketFragment : Fragment() {
         mapViewModel = (activity as MainActivity).mapViewModel
         userViewModel = (activity as MainActivity).userViewModel
         carViewModel = (activity as MainActivity).carViewModel
-        carViewModel.getCarList(userViewModel.user!!.user_id)
+        carViewModel.getCarList(userViewModel.userLiveData.value!!.user_id)
         purchaseTicketViewModel = ViewModelProvider(this, purchaseTicketViewModelFactory)[PurchaseTicketViewModel::class.java]
         purchaseTicketViewModel.ticketCreateRequest.shaId = mapViewModel.sharedPark.value!!.data!!.parkId.toLong()
         carViewModel.carList.observe(viewLifecycleOwner){
@@ -116,7 +116,7 @@ class PurchaseTicketFragment : Fragment() {
             select3HourTicket.isEnabled = false
             select5HourTicket.isEnabled = false
             selectAllDayTicket.isEnabled = false
-            textRemainPointPurchaseTicket.text = "${userViewModel.user!!.pt_has} P"
+            textRemainPointPurchaseTicket.text = "${userViewModel.userLiveData.value!!.pt_has} P"
             textExpectedPricePurchaseTicket.text = "0 P"
             layoutStartTimePurchaseTicket.setOnClickListener {
                 showTimePickerDialog { view, hourOfDay, minute, second ->
@@ -161,9 +161,9 @@ class PurchaseTicketFragment : Fragment() {
                 if(checkAgreementPurchaseTicket.isChecked){
                     //purchase
                     if(purchaseTicketViewModel.ticketCreateRequest.type != -1){
-                        if(purchaseTicketViewModel.expectedPrice.value!! < userViewModel.user!!.pt_has){
+                        if(purchaseTicketViewModel.expectedPrice.value!! <= userViewModel.userLiveData.value!!.pt_has){
                             if(carAvailable){
-                                purchaseTicketViewModel.postTicketAvailable(userViewModel.user!!.user_id)
+                                purchaseTicketViewModel.postTicketAvailable(userViewModel.userLiveData.value!!.user_id)
                                 Toast.makeText(requireContext(), "주차권이 구매되었습니다.", Toast.LENGTH_SHORT).show()
                                 requireActivity().onBackPressed()
                             } else {

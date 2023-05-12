@@ -66,10 +66,10 @@ class TicketDetailFragment : Fragment() {
         }
         binding.apply {
             buttonSellConfirmTicketDetail.setOnClickListener {
-                ticketDetailViewModel.putTicketSellConfirm(userViewModel.user!!.user_id)
+                ticketDetailViewModel.putTicketSellConfirm(userViewModel.userLiveData.value!!.user_id)
             }
             buttonBuyConfirmTicketDetail.setOnClickListener {
-                ticketDetailViewModel.putTicketBuyConfirm(userViewModel.user!!.user_id)
+                ticketDetailViewModel.putTicketBuyConfirm(userViewModel.userLiveData.value!!.user_id)
             }
         }
     }

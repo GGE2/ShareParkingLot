@@ -57,18 +57,18 @@ class TransactionHistoryFragment : Fragment() {
             calendar.set(Calendar.MONTH, it-1)
             setMonthText()
             if(transactionHistoryViewModel.earned){
-                transactionHistoryViewModel.getEarnedPoint(userViewModel.user!!.user_id)
+                transactionHistoryViewModel.getEarnedPoint(userViewModel.userLiveData.value!!.user_id)
             } else {
-                transactionHistoryViewModel.getSpentPoint(userViewModel.user!!.user_id)
+                transactionHistoryViewModel.getSpentPoint(userViewModel.userLiveData.value!!.user_id)
             }
         }
         transactionHistoryViewModel.year.observe(viewLifecycleOwner){
             calendar.set(Calendar.YEAR, it)
             setMonthText()
             if(transactionHistoryViewModel.earned){
-                transactionHistoryViewModel.getEarnedPoint(userViewModel.user!!.user_id)
+                transactionHistoryViewModel.getEarnedPoint(userViewModel.userLiveData.value!!.user_id)
             } else {
-                transactionHistoryViewModel.getSpentPoint(userViewModel.user!!.user_id)
+                transactionHistoryViewModel.getSpentPoint(userViewModel.userLiveData.value!!.user_id)
             }
         }
         transactionHistoryViewModel.earnedPointList.observe(viewLifecycleOwner){

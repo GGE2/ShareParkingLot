@@ -48,7 +48,10 @@ class RepositoryModule {
         userRemoteDataSource: UserRemoteDataSource
     ) : UserRepository {
         return UserRepositoryImpl(userRemoteDataSource)
+    }
 
+    @Singleton
+    @Provides
     fun provideShareLotRepository(
         shareLotRemoteDatasource: ShareLotRemoteDataSource
     ) : ShareLotRepository{

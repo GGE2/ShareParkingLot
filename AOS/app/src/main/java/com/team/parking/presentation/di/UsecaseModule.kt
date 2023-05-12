@@ -50,7 +50,10 @@ class UsecaseModule {
         userRepository: UserRepository
     ) : GetUserUseCase {
         return GetUserUseCase(userRepository)
+    }
 
+    @Singleton
+    @Provides
     fun provideGetParkingOrderByDistanceUseCase(
         mapRepository: MapRepository
     ): GetParkingOrderByDistanceDataUseCase {
@@ -68,7 +71,6 @@ class UsecaseModule {
 
     @Singleton
     @Provides
-
     fun provideGetSearchAddressUseCase(
         searchRepository: SearchRepository
     ): GetSearchAddressUseCase {
@@ -134,12 +136,14 @@ class UsecaseModule {
 
     @Singleton
     @Provides
-
     fun providePostUserUsecase(
         userRepository: UserRepository
     ) : PostUserUseCase {
         return PostUserUseCase(userRepository)
+    }
 
+    @Singleton
+    @Provides
     fun provideGetEarnedPointUseCase(
         pointRepository: PointRepository
     ): GetEarnedPointUseCase {
@@ -161,7 +165,10 @@ class UsecaseModule {
         userRepository: UserRepository
     ) : PutFcmTokenUseCase {
         return PutFcmTokenUseCase(userRepository)
+    }
 
+    @Singleton
+    @Provides
     fun provideGetSpentPointUseCase(
         pointRepository: PointRepository
     ): GetSpentPointUseCase {
@@ -251,12 +258,14 @@ class UsecaseModule {
 
     @Singleton
     @Provides
-
     fun provideGetEmailUsecase(
         userRepository: UserRepository
     ) : GetEmailUseCase {
         return GetEmailUseCase(userRepository)
+    }
 
+    @Singleton
+    @Provides
     fun providePutTicketSellConfirmUseCase(
         ticketRepository: TicketRepository
     ) : PutTicketSellConfirmUseCase{
@@ -266,7 +275,6 @@ class UsecaseModule {
 
     @Singleton
     @Provides
-
     fun provideGetAuthMessageUsecase(
         userRepository: UserRepository
     ) : GetAuthMessageUseCase {
@@ -286,8 +294,9 @@ class UsecaseModule {
     ) : GetUserInfoUseCase {
         return GetUserInfoUseCase(userRepository)
     }
-}
 
+    @Singleton
+    @Provides
     fun provideSetFavoriteUseCase(
         favoriteRepository: FavoriteRepository
     ) : SetFavoriteUseCase{
