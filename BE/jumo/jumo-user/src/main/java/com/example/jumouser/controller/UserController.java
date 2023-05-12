@@ -90,8 +90,8 @@ public class UserController {
 
     @ApiOperation(value = "프로필이미지 변경", notes = "file, user_id @Part로 보내주셈")
     @PutMapping("/profile-img")
-    public String updateProfileImg(@RequestPart("image") MultipartFile file, @RequestPart Long user_id) throws IOException {
-        return userService.updateProfileImg(user_id, file);
+    public UpdateProfileImageResponseDto updateProfileImg(@RequestPart("image") MultipartFile file, @RequestPart Long user_id) throws IOException {
+        return new UpdateProfileImageResponseDto(userService.updateProfileImg(user_id, file));
     }
 
     @PostMapping("/fcm-token")

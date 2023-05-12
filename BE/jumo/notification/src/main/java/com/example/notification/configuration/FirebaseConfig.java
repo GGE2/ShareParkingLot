@@ -27,7 +27,7 @@ public class FirebaseConfig {
         try {
 
             // Service Account를 이용하여 Fireabse Admin SDK 초기화
-            InputStream serviceAccount = getClass().getResourceAsStream("/jumo-google.json");
+            InputStream serviceAccount = getClass().getResourceAsStream("jumo-google.json");
 
             FirebaseOptions options = new FirebaseOptions.Builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
