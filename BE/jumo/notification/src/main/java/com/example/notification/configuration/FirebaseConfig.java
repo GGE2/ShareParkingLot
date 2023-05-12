@@ -14,6 +14,7 @@ import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 
 import java.io.FileInputStream;
+import java.io.InputStream;
 
 @Configuration
 public class FirebaseConfig {
@@ -26,8 +27,7 @@ public class FirebaseConfig {
         try {
 
             // Service Account를 이용하여 Fireabse Admin SDK 초기화
-
-            FileInputStream serviceAccount = new FileInputStream(new ClassPathResource("jumo-google.json").getFile());
+            InputStream serviceAccount = getClass().getResourceAsStream("/jumo-google.json");
 
             FirebaseOptions options = new FirebaseOptions.Builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
