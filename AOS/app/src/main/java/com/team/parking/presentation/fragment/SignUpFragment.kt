@@ -6,20 +6,19 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.team.parking.MainActivity
 import com.team.parking.R
-import com.team.parking.data.api.UserAPIService
-import com.team.parking.data.model.user.SignUpRequest
 import com.team.parking.databinding.FragmentSignUpBinding
-import com.team.parking.presentation.utils.App
 import com.team.parking.presentation.viewmodel.UserViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import java.util.regex.Matcher
+import java.util.regex.Pattern
+
 
 private val TAG = "SignUp종건"
 
@@ -45,6 +44,16 @@ class SignUpFragment : Fragment() {
             lifecycleOwner = this@SignUpFragment
             viewModel = userViewModel
         }
+
+        requireActivity().onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                // 뒤로가기 눌렀을 때 동작할 코드
+                Log.i(TAG, "handleOnBackPressed: ")
+                userViewModel.signReset()
+                findNavController().popBackStack()
+            }
+        })
+
         Log.i(TAG, "onViewCreated: ${userViewModel._email}")
         fragmentSignUpBinding.nameText.visibility=View.VISIBLE
         fragmentSignUpBinding.nameInput.visibility=View.VISIBLE
@@ -72,26 +81,28 @@ class SignUpFragment : Fragment() {
             }
         })
 
+
+
         userViewModel._email.observe(viewLifecycleOwner, Observer {
             Log.i(TAG, "onViewCreated: $it")
             if(!it.isNullOrBlank()) {
                 checkEmail(it)
-                fragmentSignUpBinding.passwordText.visibility = View.VISIBLE
-                fragmentSignUpBinding.passwordInput.visibility = View.VISIBLE
-                fragmentSignUpBinding.passwordDesc.visibility = View.VISIBLE
+//                fragmentSignUpBinding.passwordText.visibility = View.VISIBLE
+//                fragmentSignUpBinding.passwordInput.visibility = View.VISIBLE
+//                fragmentSignUpBinding.passwordDesc.visibility = View.VISIBLE
             }else{
 
-                fragmentSignUpBinding.passwordText.visibility=View.INVISIBLE
-                fragmentSignUpBinding.passwordInput.visibility=View.INVISIBLE
-                fragmentSignUpBinding.passwordDesc.visibility=View.INVISIBLE
-                fragmentSignUpBinding.certificationNumberText.visibility = View.INVISIBLE
-                fragmentSignUpBinding.certificationNumberInput.visibility = View.INVISIBLE
-                fragmentSignUpBinding.signUpBtn.visibility = View.INVISIBLE
-                fragmentSignUpBinding.messageBtn.visibility = View.INVISIBLE
-                fragmentSignUpBinding.callText.visibility=View.INVISIBLE
-                fragmentSignUpBinding.callInput.visibility=View.INVISIBLE
-                fragmentSignUpBinding.remainTimeText.visibility=View.INVISIBLE
-                fragmentSignUpBinding.remainTime.visibility=View.INVISIBLE
+//                fragmentSignUpBinding.passwordText.visibility=View.INVISIBLE
+//                fragmentSignUpBinding.passwordInput.visibility=View.INVISIBLE
+//                fragmentSignUpBinding.passwordDesc.visibility=View.INVISIBLE
+//                fragmentSignUpBinding.certificationNumberText.visibility = View.INVISIBLE
+//                fragmentSignUpBinding.certificationNumberInput.visibility = View.INVISIBLE
+//                fragmentSignUpBinding.signUpBtn.visibility = View.INVISIBLE
+//                fragmentSignUpBinding.messageBtn.visibility = View.INVISIBLE
+//                fragmentSignUpBinding.callText.visibility=View.INVISIBLE
+//                fragmentSignUpBinding.callInput.visibility=View.INVISIBLE
+//                fragmentSignUpBinding.remainTimeText.visibility=View.INVISIBLE
+//                fragmentSignUpBinding.remainTime.visibility=View.INVISIBLE
             }
         })
         userViewModel._check_email.observe(viewLifecycleOwner, Observer {
@@ -175,7 +186,8 @@ class SignUpFragment : Fragment() {
             }
         })
         fragmentSignUpBinding.messageBtn.setOnClickListener(){
-            userViewModel.sendAuthMessage()
+//            userViewModel.sendAuthMessage()
+            userViewModel._check_phone.postValue(true)
             fragmentSignUpBinding.remainTime.visibility = View.VISIBLE
             fragmentSignUpBinding.remainTimeText.visibility = View.VISIBLE
             fragmentSignUpBinding.certificationNumberText.visibility = View.VISIBLE
@@ -200,6 +212,8 @@ class SignUpFragment : Fragment() {
 
     }
 
+
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mainActivity = context as MainActivity
@@ -207,9 +221,22 @@ class SignUpFragment : Fragment() {
     }
 
 
-    fun checkEmail(email: String) {
 
-            userViewModel.checkEmail(email)
+    fun checkEmail(email: String) {
+        val p: Pattern = Pattern.compile("^[a-zA-Z0-9]+@[a-zA-Z0-9]+\\.[a-zA-Z0-9]+$")
+        val m: Matcher = p.matcher(email)
+
+        if (!m.matches()) {
+            fragmentSignUpBinding.emailInput.error = "이메일 형식으로 입력하세요"
+            
+            Log.d(TAG, "checkEmail: $email")
+            return
+        } else {
+            // Email format is valid, proceed with further actions
+        }
+
+
+        userViewModel.checkEmail(email)
     }
 
     fun checkPassword(password: String) {
@@ -247,7 +274,7 @@ class SignUpFragment : Fragment() {
             userViewModel._check_phone.postValue(true)
             return
         }
-
+        Log.d(TAG, "signUp: asdaqwaqfq")
         userViewModel.signUp()
 
         findNavController().navigate(R.id.action_signUpFragment_to_login_fragment)

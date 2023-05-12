@@ -9,7 +9,7 @@ data class User(
     var fcm_token: String?=null,
     var profile_img: String?=null,
     var pt_has: Int=0,
-    var social_id: String,
+    var social_id: String?,
 
     var type: String,
 
@@ -23,7 +23,7 @@ data class User(
         profile_img: String?,
         pt_has: Int,
         type: String,
-        social_id:String,
+        social_id:String?,
         fcm_token: String?,
 
     )

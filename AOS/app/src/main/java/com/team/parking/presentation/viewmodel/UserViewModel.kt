@@ -77,8 +77,9 @@ class UserViewModel(
     var `try`: Int = 0
     var rep_car : MutableLiveData<String> = MutableLiveData()
     var total_transaction : MutableLiveData<Int> = MutableLiveData()
+    var jumo : MutableLiveData<Boolean> = MutableLiveData()
 
-    private var _loginResponse: MutableLiveData<Resource<LoginResponse>> = MutableLiveData()
+    var _loginResponse: MutableLiveData<Resource<LoginResponse>> = MutableLiveData()
     val loginResponse: LiveData<Resource<LoginResponse>> get() = _loginResponse
 
     // 여기까지 login 전
@@ -105,8 +106,12 @@ class UserViewModel(
                         profile_img = null,
                         social_id = null
                     )
+                    if(result.data?.user_id!=null) {
+                        _loginResponse.postValue(result)
 
-                    _loginResponse.postValue(result)
+                    }else{
+                        jumo.postValue(false)
+                    }
                 } catch (e: Exception) {
                     _loginResponse.postValue(Resource.Error(e.message.toString()))
                 }
@@ -206,8 +211,9 @@ class UserViewModel(
                 _social_id
             )
         )
-
+        Log.d(TAG, "signUp: sadaqgqweg")
         signReset()
+        Log.d(TAG, "signUp: ${result.data?.email}")
         _login_email = result.data?.email!!
         _login_password = result.data?.password!!
     }
@@ -242,9 +248,9 @@ class UserViewModel(
             loginResponse.data?.name!!,
             loginResponse.data?.profile_img,
             loginResponse.data.ptHas,
-            loginResponse.data.type!!,
-            loginResponse.data.social_id!!,
-            loginResponse.data.fcm_token,
+            loginResponse.data?.type!!,
+            loginResponse.data?.social_id,
+            loginResponse.data?.fcm_token,
         )
 
         _userLiveData.postValue(user)
@@ -280,8 +286,10 @@ class UserViewModel(
     fun getProfile()= viewModelScope.launch (Dispatchers.IO){
         val result = getUserInfoUseCase.execute(userLiveData.value!!.user_id)
 
+        _userLiveData.value!!.pt_has = result.data!!.pt_has
+
         if(result.data?.car_str.isNullOrBlank()){
-            rep_car.postValue("대표 차량 없음")
+            rep_car.postValue("대표 차량이 없어요!\n 대표 차량을 설정해주세요!")
         }else{
 
             rep_car.postValue(result.data?.car_str!!)
@@ -291,10 +299,11 @@ class UserViewModel(
     }
 
     fun updateProfileImage(image : MultipartBody.Part)=viewModelScope.launch (Dispatchers.IO){
-
+        Log.d(TAG, "updateProfileImage: zxc")
         val result = putProfileImageUseCase.execute(image, userLiveData.value!!.user_id)
-
+        Log.d(TAG, "updateProfileImage: asd")
         userLiveData.value!!.profile_img = result.data!!.image
+        _userLiveData.postValue(_userLiveData.value)
     }
 
 

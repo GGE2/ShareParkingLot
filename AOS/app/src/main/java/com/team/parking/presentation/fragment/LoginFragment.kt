@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContentProviderCompat
 import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.tasks.OnCompleteListener
@@ -27,6 +28,7 @@ import com.team.parking.MainActivity
 import com.team.parking.R
 import com.team.parking.data.api.UserAPIService
 import com.team.parking.data.model.user.LoginResponse
+import com.team.parking.data.util.Resource
 import com.team.parking.databinding.FragmentLoginBinding
 import com.team.parking.presentation.utils.App
 import com.team.parking.presentation.viewmodel.UserViewModel
@@ -73,6 +75,7 @@ class LoginFragment : Fragment() {
                         userViewModel._profileImage.postValue(it.data?.profile_img.toString())
                         userViewModel._social_id = it.data?.social_id.toString()
                         userViewModel._type = it.data?.type.toString()
+                        userViewModel._loginResponse = MutableLiveData<Resource<LoginResponse>>()
                         requireActivity().runOnUiThread {
                             findNavController().navigate(R.id.action_login_fragment_to_signUpFragment)
                         }
@@ -89,6 +92,7 @@ class LoginFragment : Fragment() {
                         userViewModel._social_id = it.data?.social_id.toString()
                         userViewModel._userName.postValue(it.data?.name.toString())
                         userViewModel._type = it.data?.type.toString()
+                        userViewModel._loginResponse = MutableLiveData<Resource<LoginResponse>>()
                         requireActivity().runOnUiThread {
                             findNavController().navigate(R.id.action_login_fragment_to_signUpFragment)
                         }
@@ -117,6 +121,13 @@ class LoginFragment : Fragment() {
 
             }
 
+        })
+
+        userViewModel.jumo.observe(viewLifecycleOwner, Observer {
+            if(!it){
+                Toast.makeText(requireContext(),"로그인 정보가 일치하지 않습니다",Toast.LENGTH_SHORT).show()
+            }
+            userViewModel.jumo= MutableLiveData()
         })
     }
 
