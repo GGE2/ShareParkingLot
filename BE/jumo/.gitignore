@@ -4,7 +4,6 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
-
 ### STS ###
 .apt_generated
 .classpath
@@ -17,8 +16,7 @@ bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
 
-*.json
-*.properties
+
 ### IntelliJ IDEA ###
 .idea
 *.iws

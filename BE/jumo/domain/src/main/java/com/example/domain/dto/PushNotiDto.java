@@ -10,6 +10,5 @@ import lombok.NoArgsConstructor;
 public class PushNotiDto {
     private String title;
     private String body;
-    private String image;
     private Long user_id;
 }

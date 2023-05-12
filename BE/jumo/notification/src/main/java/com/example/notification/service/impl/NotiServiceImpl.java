@@ -39,7 +39,8 @@ public class NotiServiceImpl implements NotiService {
 
 
     public Message makeMessage(String targetToken, String title, String body) throws JsonProcessingException {
-        Notification notification = Notification.builder().setTitle(title).setBody(body).build();
+
+        Notification notification = Notification.builder().setTitle(title).setBody(body).setImage("http://k8d108.p.ssafy.io:8083/static/logo.png").build();
         System.out.println(targetToken);
         Message message = Message.builder()
                 .setToken(targetToken)

@@ -1,7 +1,9 @@
 package com.example.jumouser.service.impl;
 
+import com.example.domain.dto.PushNotiDto;
 import com.example.domain.dto.point.request.TicketCreateRequestDto;
 import com.example.domain.dto.point.response.*;
+import com.example.domain.dto.user.UserInfoDto;
 import com.example.domain.entity.*;
 import com.example.domain.etc.DayName;
 import com.example.domain.etc.OutTiming;
@@ -9,19 +11,26 @@ import com.example.domain.repo.*;
 import com.example.error.exception.InputException;
 import com.example.error.exception.SaveException;
 import com.example.jumouser.service.TicketService;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.reactive.ClientHttpRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.reactive.function.BodyInserter;
+import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import javax.validation.constraints.AssertFalse;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -130,6 +139,11 @@ public class TicketServiceImpl implements TicketService {
                 // 주차권 생성 및 저장
                 Ticket ticket = Ticket.builder(shareLot.get(), user.get(), ticketCreateRequestDto).build();
                 ticketRepo.save(ticket);
+
+                String title = "판매 완료";
+                String body = "주차권 판매가 완료되었습니다";
+                sendNotification(title, body, shareLot.get().getUser().getUserId());
+
                 return new TicketCreateResponseDto(outTiming, ticket);
             } else throw new SaveException("Point is NOT enough to buy ticket");
         }
@@ -186,6 +200,10 @@ public class TicketServiceImpl implements TicketService {
             if(seller.get().getUserId() == currTicket.get().getSellerId()) {
                 currTicket.get().setSell_confirm(true);
                 ticketRepo.save(currTicket.get());
+
+                String title = "판매 확정";
+                String body = "판매자가 판매를 확정했습니다.";
+                sendNotification(title,body, currTicket.get().getBuyer().getUserId());
                 return new TicketSellConfirmResponseDto(currTicket.get());
             } else throw new InputException("this user is not seller");
 
@@ -248,6 +266,11 @@ public class TicketServiceImpl implements TicketService {
                 transactionRepo.save(sell_transaction);
                 /*-----------판매자 끝-----------*/
 
+                String title = "구매 확정";
+                String body = "구매자가 구매를 확정했습니다.";
+                sendNotification(title,body, sellerUser.getUserId());
+
+
                 // DTO return
                 return new TicketBuyConfirmResponseDto(
                         buy_transaction.getCredit_id(),
@@ -263,5 +286,28 @@ public class TicketServiceImpl implements TicketService {
             }
         }
         throw new SaveException("Unable to Save");
+    }
+
+    public void sendNotification(String title, String body, Long user_id){
+        String reqURL = "http://localhost:8083/noti/send";
+        try {
+            WebClient webClient = WebClient.create();
+
+            PushNotiDto pushNotiDto = new PushNotiDto(title,body,user_id);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            webClient.post()
+                    .uri(reqURL)
+                    .body(BodyInserters.fromValue(pushNotiDto))
+                    .headers(httpHeaders -> httpHeaders.addAll(headers))
+                    .retrieve()
+                    .bodyToMono(Void.class)
+                    .block();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("not authorized");
+        }
     }
 }
