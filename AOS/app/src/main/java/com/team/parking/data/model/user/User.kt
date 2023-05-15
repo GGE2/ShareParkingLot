@@ -1,5 +1,7 @@
 package com.team.parking.data.model.user
 
+import com.team.parking.data.util.Resource
+
 data class User(
     var user_id: Long,
     var phone: String,
@@ -28,4 +30,12 @@ data class User(
 
     )
             : this(user_id, phone, email, "", name, fcm_token, profile_img, pt_has, social_id, type)
+
+    constructor(loginResponse: Resource<LoginResponse>): this(loginResponse.data?.user_id!!,
+        loginResponse.data.phone!!, loginResponse.data.email!!, loginResponse.data.name!!, loginResponse.data.profile_img,
+        loginResponse.data.ptHas, loginResponse.data.type!!, loginResponse.data.social_id, loginResponse.data.fcm_token
+        )
+    constructor(): this(
+        0,"","","","",null,null,0,null,""
+    )
 }

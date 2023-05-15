@@ -1,5 +1,6 @@
 package com.team.parking
 
+import android.content.SharedPreferences
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -91,6 +92,7 @@ class MainActivity : AppCompatActivity() {
         userViewModel = ViewModelProvider(this,userViewModelFactory)[UserViewModel::class.java]
         initMapViewModel()
         onLoginSuccess()
+
 
     }
 

@@ -1,7 +1,9 @@
 package com.team.parking.presentation.fragment
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -28,6 +30,7 @@ import com.team.parking.MainActivity
 import com.team.parking.R
 import com.team.parking.data.api.UserAPIService
 import com.team.parking.data.model.user.LoginResponse
+import com.team.parking.data.model.user.User
 import com.team.parking.data.util.Resource
 import com.team.parking.databinding.FragmentLoginBinding
 import com.team.parking.presentation.utils.App
@@ -39,6 +42,7 @@ import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.prefs.Preferences
 
 
 private const val TAG = "LoginFragment종건"
@@ -48,7 +52,8 @@ class LoginFragment : Fragment() {
     private lateinit var fragmentLoginBinding: FragmentLoginBinding
     private lateinit var mainActivity: MainActivity
     private lateinit var userViewModel: UserViewModel
-
+    private lateinit var sp : SharedPreferences
+    private lateinit var editor : SharedPreferences.Editor
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -65,6 +70,23 @@ class LoginFragment : Fragment() {
             handlers = this@LoginFragment
             lifecycleOwner = this@LoginFragment
             viewModel = userViewModel
+            sp = PreferenceManager.getDefaultSharedPreferences(requireContext())
+
+            editor = sp.edit()
+
+            if(sp.getBoolean("auto_login",false)){
+                userViewModel.login(User(sp.getLong("user_id", 0),
+                    sp.getString("phone","00000000000")!!,
+                    sp.getString("email","000@000.com")!!,
+                    sp.getString("name","oooo")!!,
+                    sp.getString("profile_img", ""),
+                    sp.getInt("pt_has",0),
+                    sp.getString("type", "")!!,
+                    sp.getString("social_id", ""),
+                    sp.getString("fcm_token",""),
+                    ))
+                findNavController().navigate(R.id.action_loginFragment_to_mapFragment)
+            }
         }
 
 
@@ -80,10 +102,7 @@ class LoginFragment : Fragment() {
                             findNavController().navigate(R.id.action_login_fragment_to_signUpFragment)
                         }
                     } else {
-                        userViewModel.login(it)
-                        requireActivity().runOnUiThread {
-                            findNavController().navigate(R.id.action_loginFragment_to_mapFragment)
-                        }
+                        login(it)
                     }
                 }
                 "naver" -> {
@@ -97,10 +116,7 @@ class LoginFragment : Fragment() {
                             findNavController().navigate(R.id.action_login_fragment_to_signUpFragment)
                         }
                     } else {
-                        userViewModel.login(it)
-                        requireActivity().runOnUiThread {
-                            findNavController().navigate(R.id.action_loginFragment_to_mapFragment)
-                        }
+                        login(it)
                     }
                 }
                 else -> {
@@ -110,12 +126,7 @@ class LoginFragment : Fragment() {
                             Toast.makeText(requireContext(), "${R.string.dialog_login_failed}", Toast.LENGTH_SHORT).show()
                         }
                     } else {
-                        requireActivity().runOnUiThread {
-                            Log.d(TAG, "setOnJumoLogin: Good")
-                            userViewModel.login(it)
-
-                            findNavController().navigate(R.id.action_loginFragment_to_mapFragment)
-                        }
+                        login(it)
                     }
                 }
 
@@ -136,6 +147,24 @@ class LoginFragment : Fragment() {
         mainActivity = context as MainActivity
     }
 
+
+    fun login(loginResponse: Resource<LoginResponse>){
+        userViewModel.login(User(loginResponse))
+        editor.putBoolean("auto_login",true)
+        editor.putLong("user_id", loginResponse.data?.user_id!!)
+        editor.putString("phone", loginResponse.data.phone)
+        editor.putString("email", loginResponse.data.email)
+        editor.putString("name", loginResponse.data.name)
+        editor.putString("profile_img", loginResponse.data.profile_img)
+        editor.putInt("pt_has", loginResponse.data.ptHas)
+        editor.putString("type", loginResponse.data.type)
+        editor.putString("social_id", loginResponse.data.social_id)
+        editor.putString("fcm_token", loginResponse.data.fcm_token)
+        editor.apply();
+        requireActivity().runOnUiThread {
+            findNavController().navigate(R.id.action_loginFragment_to_mapFragment)
+        }
+    }
 
     fun setOnJumoLogin() {
         userViewModel.setOnJumoLogin()

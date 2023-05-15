@@ -70,6 +70,7 @@ class UserViewModel(
     var _login_email: String = ""
     var _login_password: String = ""
     var _social_id: String = ""
+
     var validTime: MutableLiveData<String> = MutableLiveData()
     val timeLiveData: LiveData<String> get() = validTime
     var _changePhone : MutableLiveData<Boolean> = MutableLiveData(true)
@@ -239,21 +240,22 @@ class UserViewModel(
     }
 
     fun login(
-        loginResponse: Resource<LoginResponse>
+        loginUser: User
     ) {
         val user: User = User(
-            loginResponse.data?.user_id!!,
-            loginResponse.data?.phone!!,
-            loginResponse.data?.email!!,
-            loginResponse.data?.name!!,
-            loginResponse.data?.profile_img,
-            loginResponse.data.ptHas,
-            loginResponse.data?.type!!,
-            loginResponse.data?.social_id,
-            loginResponse.data?.fcm_token,
+            loginUser.user_id!!,
+            loginUser.phone!!,
+            loginUser.email!!,
+            loginUser.name!!,
+            loginUser.profile_img,
+            loginUser.pt_has,
+            loginUser.type!!,
+            loginUser.social_id,
+            loginUser.fcm_token,
         )
 
         _userLiveData.postValue(user)
+
     }
 
     fun sendAuthMessage() = viewModelScope.launch (Dispatchers.IO){

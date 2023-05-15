@@ -87,7 +87,7 @@ dependencies {
     implementation "androidx.coordinatorlayout:coordinatorlayout:1.2.0"
     implementation "com.kakao.sdk:v2-all:2.13.0"
 
-
+    implementation 'androidx.preference:preference-ktx:1.1.1'
 
     // 하단 슬라이드 바 생성
     implementation 'com.sothree.slidinguppanel:library:3.4.0'
