@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/item_point"
+        android:icon="@drawable/icon_coin"
+        android:title="포인트 충전"/>
+    <item
+        android:id="@+id/item_trasaction"
+        android:icon="@drawable/icon_euro"
+        android:title="거래 내역"/>
+    <item
+        android:id="@+id/item_favorite"
+        android:icon="@drawable/icon_star_outline"
+        android:title="즐겨찾기"/>
+    <item
+        android:id="@+id/item_my_ticket"
+        android:icon="@drawable/icon_send_mail"
+        android:title="내 주차권"/>
+
+
+
+</menu>
