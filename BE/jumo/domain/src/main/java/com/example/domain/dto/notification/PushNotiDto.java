@@ -1,4 +1,4 @@
-package com.example.domain.dto;
+package com.example.domain.dto.notification;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

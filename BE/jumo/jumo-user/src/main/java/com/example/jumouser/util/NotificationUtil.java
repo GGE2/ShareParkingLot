@@ -1,15 +1,12 @@
 package com.example.jumouser.util;
 
-import com.example.domain.dto.PushNotiDto;
+import com.example.domain.dto.notification.PushNotiDto;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 @Component

@@ -1,5 +1,6 @@
 package com.example.notification.service.impl;
 
+import com.example.domain.dto.notification.GetNotiListResponseDto;
 import com.example.domain.repo.NotiRepo;
 import com.example.domain.repo.TokenRepo;
 import com.example.notification.service.NotiService;
@@ -19,6 +20,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -51,6 +53,23 @@ public class NotiServiceImpl implements NotiService {
                 com.example.notification.util.Message.getMessage(type).getBody());
 
         firebaseMessaging.send(message);
+    }
+
+    @Override
+    public List<GetNotiListResponseDto> getNotiList(Long user_id) {
+        List<com.example.domain.entity.Notification> notification = notiRepo.findByCompositeKeyStartsWith(Long.toString(user_id));
+        List<GetNotiListResponseDto> response = notification.stream().filter(e -> e.getStatus()!= false).map(e -> new GetNotiListResponseDto(e)).collect(Collectors.toList());
+        response.stream().map(e -> {
+            e.setTitle(com.example.notification.util.Message.getMessage(e.getType()).getTitle());
+            e.setBody(com.example.notification.util.Message.getMessage(e.getType()).getBody());
+            return e;
+        });
+        return response;
+    }
+
+    @Override
+    public void readNotification() {
+
     }
 
 

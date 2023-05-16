@@ -1,6 +1,5 @@
 package com.example.jumouser.service.impl;
 
-import com.example.domain.dto.PushNotiDto;
 import com.example.domain.dto.point.request.TicketCreateRequestDto;
 import com.example.domain.dto.point.response.*;
 import com.example.domain.entity.*;
@@ -12,6 +11,11 @@ import com.example.error.exception.SaveException;
 import com.example.jumouser.service.TicketService;
 
 import com.example.jumouser.util.NotificationUtil;
+<<<<<<< HEAD
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+=======
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -23,6 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
+>>>>>>> 1f245f225c46bb3aaf3d3563d907f15366f19ef6
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
