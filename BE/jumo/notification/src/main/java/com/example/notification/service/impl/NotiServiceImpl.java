@@ -1,6 +1,7 @@
 package com.example.notification.service.impl;
 
 import com.example.domain.repo.NotiRepo;
+import com.example.domain.repo.TokenRepo;
 import com.example.notification.service.NotiService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.auth.oauth2.GoogleCredentials;
@@ -13,26 +14,41 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 public class NotiServiceImpl implements NotiService {
     private final FirebaseMessaging firebaseMessaging;
+    private final TokenRepo tokenRepo;
     private final NotiRepo notiRepo;
-
     @Value("${Firebase-API-URL}")
     private String API_URL;
 
     @Value("${Google-AUTH-URL}")
     private String Google_Auth_URL;
 
-    public void sendNotification(Long user_id, String title, String body) throws IOException, FirebaseMessagingException {
 
-        String targetToken = notiRepo.findById(user_id).get().getToken();
 
-        Message message = makeMessage(targetToken, title, body);
+    public void sendNotification(Map<String,String> data) throws IOException, FirebaseMessagingException {
+        String targetToken = tokenRepo.findById(Long.parseLong(data.get("user_id"))).get().getToken();
+        int type = Integer.parseInt(data.get("type"));
+        if(type != 0){
+            //db에 저장
+            String composite_key = data.get("user_id") + ":" + data.get("ticket_id");
+            com.example.domain.entity.Notification noti =
+                    new com.example.domain.entity.Notification(composite_key, true, type);
+            notiRepo.save(noti);
+        }else{
+
+        }
+
+        Message message = makeMessage(targetToken, com.example.notification.util.Message.getMessage(type).getTitle(),
+                com.example.notification.util.Message.getMessage(type).getBody());
 
         firebaseMessaging.send(message);
     }
@@ -50,7 +66,7 @@ public class NotiServiceImpl implements NotiService {
         return message;
     }
 
-    private String getAccessToken() throws IOException {
+    public String getAccessToken() throws IOException {
         String firebaseConfigPath = "jumo-google.json";
 
         GoogleCredentials googleCredentials = GoogleCredentials
@@ -60,5 +76,10 @@ public class NotiServiceImpl implements NotiService {
         googleCredentials.refreshIfExpired();
         return googleCredentials.getAccessToken().getTokenValue();
     }
+
+    public void readNoti(){
+
+    }
+
 
 }

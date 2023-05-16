@@ -5,12 +5,12 @@ import com.example.domain.dto.user.UserProfileResponseDto;
 import com.example.domain.entity.FcmToken;
 import com.example.domain.entity.PhoneValidation;
 import com.example.domain.entity.User;
-import com.example.domain.repo.NotiRepo;
+import com.example.domain.repo.TokenRepo;
 import com.example.domain.repo.UserRepo;
 import com.example.domain.repo.ValidationRepo;
 import com.example.jumouser.service.UserService;
+import com.example.jumouser.util.NotificationUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.api.client.util.DateTime;
 import com.google.cloud.storage.Acl;
 import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
@@ -21,8 +21,6 @@ import net.nurigo.sdk.message.model.Message;
 import net.nurigo.sdk.message.request.SingleMessageSendingRequest;
 import net.nurigo.sdk.message.response.SingleMessageSentResponse;
 import net.nurigo.sdk.message.service.DefaultMessageService;
-import net.nurigo.sdk.message.service.MessageService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,14 +28,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepo userRepo;
-    private final NotiRepo notiRepo;
+    private final TokenRepo tokenRepo;
     private final ValidationRepo validationRepo;
     @Value("${spring.cloud.gcp.storage.bucket}")
     private String drawingStorage;
@@ -123,10 +120,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Boolean updateFcmToken(Long user_id, String fcm_token) {
-        System.out.println(user_id);
-        notiRepo.save(new FcmToken(user_id,fcm_token));
-        System.out.println(notiRepo.findById(user_id).get().getToken());
-        return true;
+
+        Optional <FcmToken> token = tokenRepo.findById(user_id);
+        Boolean flag= true;
+        if(!token.isEmpty()){
+            System.out.println(tokenRepo.findById(user_id).get().getToken());
+            if(!token.get().getToken().equals(fcm_token)){
+                Map<String,String> data = new HashMap<>();
+                data.put("user_id",Long.toString(user_id));
+                data.put("type",Integer.toString(0));
+
+                NotificationUtil.sendNotification(data);
+                flag= false;
+            }
+        }
+        tokenRepo.save(new FcmToken(user_id,fcm_token));
+        return flag;
     }
 
     @Override

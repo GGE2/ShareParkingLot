@@ -17,6 +17,6 @@ public class NotiController {
     private final NotiService notiService;
     @PostMapping("/send")
     public void pushNotification(@RequestBody PushNotiDto pushNotiDto) throws IOException, FirebaseMessagingException {
-        notiService.sendNotification(pushNotiDto.getUser_id(), pushNotiDto.getTitle(), pushNotiDto.getBody());
+        notiService.sendNotification(pushNotiDto.getData());
     }
 }

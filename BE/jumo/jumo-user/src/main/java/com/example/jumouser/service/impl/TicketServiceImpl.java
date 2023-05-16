@@ -10,6 +10,12 @@ import com.example.domain.repo.*;
 import com.example.error.exception.InputException;
 import com.example.error.exception.SaveException;
 import com.example.jumouser.service.TicketService;
+
+import com.example.jumouser.util.NotificationUtil;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -138,11 +144,16 @@ public class TicketServiceImpl implements TicketService {
 
                 // 주차권 생성 및 저장
                 Ticket ticket = Ticket.builder(shareLot.get(), user.get(), ticketCreateRequestDto).build();
-                ticketRepo.save(ticket);
+                Ticket saveTicket = ticketRepo.save(ticket);
 
-                String title = "판매 완료";
-                String body = "주차권 판매가 완료되었습니다";
-                sendNotification(title, body, shareLot.get().getUser().getUserId());
+                System.out.println(saveTicket.getTicket_id());
+
+                Map<String,String> data = new HashMap<>();
+                data.put("user_id",Long.toString(shareLot.get().getUser().getUserId()));
+                data.put("ticket_id",Long.toString(saveTicket.getTicket_id()));
+                data.put("type",Integer.toString(1));
+
+                NotificationUtil.sendNotification(data);
 
                 return new TicketCreateResponseDto(outTiming, ticket);
             } else throw new SaveException("Point is NOT enough to buy ticket");
@@ -206,9 +217,13 @@ public class TicketServiceImpl implements TicketService {
                 currTicket.get().setSell_confirm(true);
                 ticketRepo.save(currTicket.get());
 
-                String title = "판매 확정";
-                String body = "판매자가 판매를 확정했습니다.";
-                sendNotification(title,body, currTicket.get().getBuyer().getUserId());
+                Map<String,String> data = new HashMap<>();
+                data.put("user_id",Long.toString(currTicket.get().getBuyer().getUserId()));
+                data.put("ticket_id",Long.toString(currTicket.get().getTicket_id()));
+                data.put("type",Integer.toString(2));
+
+                NotificationUtil.sendNotification(data);
+
                 return new TicketSellConfirmResponseDto(currTicket.get());
             } else throw new InputException("this user is not seller");
 
@@ -271,10 +286,12 @@ public class TicketServiceImpl implements TicketService {
                 transactionRepo.save(sell_transaction);
                 /*-----------판매자 끝-----------*/
 
-                String title = "구매 확정";
-                String body = "구매자가 구매를 확정했습니다.";
-                sendNotification(title,body, sellerUser.getUserId());
+                Map<String,String> data = new HashMap<>();
+                data.put("user_id",Long.toString(sellerUser.getUserId()));
+                data.put("ticket_id",Long.toString(buyerTicket.get().getTicket_id()));
+                data.put("type",Integer.toString(3));
 
+                NotificationUtil.sendNotification(data);
 
                 // DTO return
                 return new TicketBuyConfirmResponseDto(
@@ -293,26 +310,5 @@ public class TicketServiceImpl implements TicketService {
         throw new SaveException("Unable to Save");
     }
 
-    public void sendNotification(String title, String body, Long user_id){
-        String reqURL = "http://k8d108.p.ssafy.io:8083/noti/send";
-        try {
-            WebClient webClient = WebClient.create();
 
-            PushNotiDto pushNotiDto = new PushNotiDto(title,body,user_id);
-
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-            webClient.post()
-                    .uri(reqURL)
-                    .body(BodyInserters.fromValue(pushNotiDto))
-                    .headers(httpHeaders -> httpHeaders.addAll(headers))
-                    .retrieve()
-                    .bodyToMono(Void.class)
-                    .block();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("not authorized");
-        }
-    }
 }
