@@ -5,18 +5,19 @@ import lombok.Data;
 
 @Data
 public class GetNotiListResponseDto {
+    private Long noti_id;
     private Long user_id;
     private Long ticket_id;
     private String title;
     private String body;
-    private String parking_region;
+//    private String parking_region;
     private int type;
-    private String address;
+//    private String address;
 
     public GetNotiListResponseDto(Notification notification) {
-        String composite_key[] = notification.getUser_ticket_id().split(":");
-        this.user_id = Long.parseLong(composite_key[0]);
-        this.ticket_id = Long.parseLong(composite_key[1]);
+        this.noti_id = notification.getNoti_id();
+        this.user_id = notification.getUser_id();
+        this.ticket_id = notification.getTicket_id();
         this.type = notification.getType();
     }
 

@@ -23,12 +23,12 @@ public class NotiController {
     }
 
     @GetMapping("/list")
-    public List<GetNotiListResponseDto> getNotiList(@RequestParam Long user_id){
-        return notiService.getNotiList(user_id);
+    public List<GetNotiListResponseDto> getNotiList(@RequestParam Long noti_id){
+        return notiService.getNotiList(noti_id);
     }
 
     @PutMapping("/status")
-    public void readNotification(Long user_id, Long ticket_id){
+    public void readNotification(Long noti_id){
 
     }
 }
