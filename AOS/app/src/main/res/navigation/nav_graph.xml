@@ -58,6 +58,12 @@
         <action
             android:id="@+id/action_map_fragment_to_purchaseTicketFragment"
             app:destination="@id/purchaseTicketFragment" />
+        <action
+            android:id="@+id/action_map_fragment_to_notification_fragment"
+            app:destination="@id/notification_fragment" />
+        <action
+            android:id="@+id/action_map_fragment_to_ticketDetailFragment"
+            app:destination="@id/ticketDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/pointFragment"
@@ -181,5 +187,12 @@
         <action
             android:id="@+id/action_searchAddressFragment_to_addShareParkingLotFragment"
             app:destination="@id/addShareParkingLotFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/notification_fragment"
+        android:name="com.team.parking.presentation.fragment.NotificationFragment"
+        android:label="fragment_notification"
+        tools:layout="@layout/fragment_notification" >
+
     </fragment>
 </navigation>

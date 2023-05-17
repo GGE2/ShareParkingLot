@@ -5,19 +5,26 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.media.RingtoneManager
 import android.os.Build
+import android.preference.PreferenceManager
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.google.gson.Gson
+import com.kakao.sdk.common.KakaoSdk.type
 import com.team.parking.MainActivity
 import com.team.parking.R
+import com.team.parking.data.model.notification.GetNotiListRequest
 
 
 private const val TAG = "FirebaseMessage종건"
 class FirebaseMessagingServiceUtil : FirebaseMessagingService(){
-
+    var gson = Gson()
+    private lateinit var sp: SharedPreferences
+    private lateinit var editor: SharedPreferences.Editor
     override fun onNewToken(token: String) {
         super.onNewToken(token)
         Log.d(TAG, "onNewToken: ${token}")
@@ -46,10 +53,30 @@ class FirebaseMessagingServiceUtil : FirebaseMessagingService(){
         var title = remoteMessage.notification!!.title
         var body = remoteMessage.notification!!.body
 
-        
+
+        var data : GetNotiListRequest = gson.fromJson(body,GetNotiListRequest::class.java)
+        var content = data.content
 
         var intent = Intent(this, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        intent.setAction("NOTIFICATION_CLICK");
+
+        if(data.type == 0){
+            // 로그아웃
+            sp = PreferenceManager.getDefaultSharedPreferences(this)
+
+            editor = sp.edit()
+            editor.clear()
+            editor.commit()
+
+        }else {
+            Log.d(TAG, "sendNotification: ${data.ticket_id}")
+            intent.putExtra("noti_id", data.noti_id)
+            intent.putExtra("user_id", data.user_id)
+            intent.putExtra("type", data.type)
+            intent.putExtra("ticket_id", data.ticket_id)
+        }
+
         val pendingIntent = PendingIntent.getActivity(this, id, intent, PendingIntent.FLAG_IMMUTABLE)
 
         val channelId = "Channel ID"
@@ -57,7 +84,7 @@ class FirebaseMessagingServiceUtil : FirebaseMessagingService(){
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.mipmap.ic_launcher)
             .setContentTitle(title)
-            .setContentText(body)
+            .setContentText(content)
             .setAutoCancel(true)
             .setSound(soundUri)
             .setContentIntent(pendingIntent)

@@ -52,8 +52,8 @@ class LoginFragment : Fragment() {
     private lateinit var fragmentLoginBinding: FragmentLoginBinding
     private lateinit var mainActivity: MainActivity
     private lateinit var userViewModel: UserViewModel
-    private lateinit var sp : SharedPreferences
-    private lateinit var editor : SharedPreferences.Editor
+    private lateinit var sp: SharedPreferences
+    private lateinit var editor: SharedPreferences.Editor
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -64,29 +64,15 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        sp = PreferenceManager.getDefaultSharedPreferences(requireContext())
+        editor = sp.edit()
         fragmentLoginBinding = FragmentLoginBinding.bind(view)
         userViewModel = (activity as MainActivity).userViewModel
         fragmentLoginBinding.apply {
             handlers = this@LoginFragment
             lifecycleOwner = this@LoginFragment
             viewModel = userViewModel
-            sp = PreferenceManager.getDefaultSharedPreferences(requireContext())
 
-            editor = sp.edit()
-
-            if(sp.getBoolean("auto_login",false)){
-                userViewModel.login(User(sp.getLong("user_id", 0),
-                    sp.getString("phone","00000000000")!!,
-                    sp.getString("email","000@000.com")!!,
-                    sp.getString("name","oooo")!!,
-                    sp.getString("profile_img", ""),
-                    sp.getInt("pt_has",0),
-                    sp.getString("type", "")!!,
-                    sp.getString("social_id", ""),
-                    sp.getString("fcm_token",""),
-                    ))
-                findNavController().navigate(R.id.action_loginFragment_to_mapFragment)
-            }
         }
 
 

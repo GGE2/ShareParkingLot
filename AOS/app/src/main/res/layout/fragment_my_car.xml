@@ -30,8 +30,8 @@
 
     <ImageView
         android:id="@+id/image_back_my_car"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="19dp"
+        android:layout_height="24dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:src="@drawable/ic_baseline_arrow_back_24"
