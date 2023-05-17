@@ -33,7 +33,8 @@ public class NotiServiceImpl implements NotiService {
     private final FirebaseMessaging firebaseMessaging;
     private final TokenRepo tokenRepo;
     private final NotiRepo notiRepo;
-    private RedisTemplate<String, Long> redisTemplate;
+
+    private final RedisTemplate<String, Long> redisTemplate;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
     @Value("${Firebase-API-URL}")
@@ -96,8 +97,8 @@ public class NotiServiceImpl implements NotiService {
 
     public Message makeMessage(String targetToken, String title, String body) throws JsonProcessingException {
 
-        Notification notification = Notification.builder().setTitle(title).setBody(body).setImage("http://k8d108.p.ssafy.io:8083/static/logo.png").build();
-        System.out.println(targetToken);
+        Notification notification = Notification.builder().setTitle(title).setBody(body).build();
+
         Message message = Message.builder()
                 .setToken(targetToken)
                 .setNotification(notification)
@@ -119,7 +120,6 @@ public class NotiServiceImpl implements NotiService {
 
     private Long getNextNotiId() {
         String key = "Notification";
-
         Long id = redisTemplate.opsForValue().increment(key);
 
         return id;
