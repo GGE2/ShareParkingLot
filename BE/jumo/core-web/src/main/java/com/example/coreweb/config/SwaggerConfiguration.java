@@ -1,27 +1,44 @@
 package com.example.coreweb.config;
 
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
-import io.swagger.v3.oas.annotations.info.Info;
-import lombok.RequiredArgsConstructor;
-import org.springdoc.core.models.GroupedOpenApi;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Contact;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-@OpenAPIDefinition(
-        info = @Info(title = "PARKING HERE",
-                description = "주차장의 모든것 api명세",
-                version = "1.0.0"))
-@RequiredArgsConstructor
+import java.util.ArrayList;
+
 @Configuration
+@EnableSwagger2
 public class SwaggerConfiguration {
-
     @Bean
-    public GroupedOpenApi chatOpenApi() {
-        String[] paths = {"/v1/**"};
-
-        return GroupedOpenApi.builder()
-                .group("COUPLE API v1")
-                .pathsToMatch(paths)
-                .build();
+    public Docket apiV1() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .select()
+                .apis(RequestHandlerSelectors.withClassAnnotation(RestController.class))
+                .paths(PathSelectors.any())
+                .build()
+                .apiInfo(apiInfo());
     }
+
+
+    private ApiInfo apiInfo() {
+        return new ApiInfo(
+                "Ju, Mo",
+                "싸피 자율 프로젝트",
+                "version1.0",
+                "",
+                new Contact("Contact Me", "", "luminaries1@gmial.com"),
+                "Edit Licenses",
+                "",
+                new ArrayList<>()
+        );
+    }
+
 }

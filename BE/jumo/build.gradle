@@ -1,7 +1,7 @@
 buildscript {
 
 	ext {
-		springBootVersion = '3.0.5'
+		springBootVersion = '2.7.9'
 	}
 
 	repositories {
@@ -20,7 +20,7 @@ subprojects {
 
 	group = 'com.example'
 	version = '0.0.1-SNAPSHOT'
-	sourceCompatibility = '17'
+	sourceCompatibility = '11'
 
 	configurations {
 		compileOnly {
@@ -60,7 +60,8 @@ project(':core-web') {
 	}
 
 	dependencies {
-		implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
+		api group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
+		api group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
 		api 'org.springframework.boot:spring-boot-starter-web'
 		implementation 'org.springframework.boot:spring-boot-starter-web-services'
 		api 'org.springframework.boot:spring-boot-starter-jdbc'
@@ -69,7 +70,7 @@ project(':core-web') {
 	}
 }
 
-project(':domain-user') {
+project(':domain') {
 	bootJar {
 		enabled = false
 	}
@@ -78,46 +79,53 @@ project(':domain-user') {
 	}
 
 	dependencies {
-		implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-		runtimeOnly 'com.mysql:mysql-connector-j'
-	}
-}
-project(':domain-parking') {
-	bootJar {
-		enabled = false
-	}
-	jar {
-		enabled = true
-	}
-
-
-	dependencies {
-		implementation project(':domain-user')
+		implementation project(':core-web')
 		implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 		runtimeOnly 'com.mysql:mysql-connector-j'
 		implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
 		implementation group: 'com.google.code.geocoder-java', name: 'geocoder-java', 'version': '0.16'
+		api 'org.springframework.boot:spring-boot-starter-data-redis'
 	}
 }
 
 project(':jumo-user') {
 	dependencies {
+
 		implementation project(':core-web')
+		implementation project(':domain')
+		implementation project(':error')
+		implementation 'org.springframework.boot:spring-boot-starter-webflux'
+//		implementation project(':firebase')
 		implementation group: 'org.springframework.cloud', name: 'spring-cloud-gcp-starter', version: '1.2.5.RELEASE'
 		implementation group: 'org.springframework.cloud', name: 'spring-cloud-gcp-storage', version: '1.2.5.RELEASE'
-
+		implementation 'net.nurigo:sdk:4.2.7'
 	}
 }
 project(':jumo-parking') {
 	dependencies {
 		implementation project(':core-web')
-		implementation project(':domain-parking')
+		implementation project(':domain')
 		implementation project(':error')
+		implementation group: 'com.google.guava', name: 'guava', version: '31.1-jre'
+		implementation group: 'org.springframework.cloud', name: 'spring-cloud-gcp-starter', version: '1.2.5.RELEASE'
+		implementation group: 'org.springframework.cloud', name: 'spring-cloud-gcp-storage', version: '1.2.5.RELEASE'
 	}
 }
 
+
 project(':error'){
 	dependencies{
+		implementation project(':core-web')
 		api 'org.springframework.boot:spring-boot-starter-web'
+	}
+}
+
+project(':notification'){
+	dependencies {
+		implementation project(':core-web')
+		implementation project(':domain')
+		implementation 'com.google.firebase:firebase-admin:9.1.1'
+		implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
 	}
 }

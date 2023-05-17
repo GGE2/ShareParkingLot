@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public class NoDataException extends RuntimeException{
-    private String message;
+    private final String message;
 
     public NoDataException(String message){
         super(message);
