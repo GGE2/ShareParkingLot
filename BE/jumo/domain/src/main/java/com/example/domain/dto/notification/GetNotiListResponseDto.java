@@ -2,14 +2,16 @@ package com.example.domain.dto.notification;
 
 import com.example.domain.entity.Notification;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class GetNotiListResponseDto {
     private Long noti_id;
     private Long user_id;
     private Long ticket_id;
     private String title;
-    private String body;
+    private String content;
 //    private String parking_region;
     private int type;
 //    private String address;

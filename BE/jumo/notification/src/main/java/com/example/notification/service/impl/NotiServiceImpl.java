@@ -5,6 +5,7 @@ import com.example.domain.repo.NotiRepo;
 import com.example.domain.repo.TokenRepo;
 import com.example.notification.service.NotiService;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
@@ -34,6 +35,7 @@ public class NotiServiceImpl implements NotiService {
     private final NotiRepo notiRepo;
     private RedisTemplate<String, Long> redisTemplate;
 
+    private final ObjectMapper objectMapper = new ObjectMapper();
     @Value("${Firebase-API-URL}")
     private String API_URL;
 
@@ -41,22 +43,30 @@ public class NotiServiceImpl implements NotiService {
     private String Google_Auth_URL;
 
 
-
-    public void sendNotification(Map<String,String> data) throws IOException, FirebaseMessagingException {
+    public void sendNotification(Map<String, String> data) throws IOException, FirebaseMessagingException {
         String targetToken = tokenRepo.findById(Long.parseLong(data.get("user_id"))).get().getToken();
         int type = Integer.parseInt(data.get("type"));
-        if(type != 0){
+        GetNotiListResponseDto content = new GetNotiListResponseDto();
+        if (type != 0) {
             //db에 저장
             com.example.domain.entity.Notification noti =
                     new com.example.domain.entity.Notification(
                             getNextNotiId(), Long.parseLong(data.get("user_id")),
                             Long.parseLong(data.get("ticket_id")),
-                            true,type);
-            notiRepo.save(noti);
+                            true, type);
+            com.example.domain.entity.Notification saveNoti = notiRepo.save(noti);
+            content.setNoti_id(saveNoti.getNoti_id());
         }
+        content.setTitle(com.example.notification.util.Message.getMessage(type).getTitle());
+        content.setContent(com.example.notification.util.Message.getMessage(type).getBody());
+        content.setUser_id(Long.parseLong(data.get("user_id")));
+        content.setType(type);
+        content.setTicket_id(Long.parseLong(data.get("ticket_id")));
 
+        String msg = objectMapper.writeValueAsString(content);
+        System.out.println(msg);
         Message message = makeMessage(targetToken, com.example.notification.util.Message.getMessage(type).getTitle(),
-                com.example.notification.util.Message.getMessage(type).getBody());
+                msg);
 
         firebaseMessaging.send(message);
     }
@@ -64,10 +74,10 @@ public class NotiServiceImpl implements NotiService {
     @Override
     public List<GetNotiListResponseDto> getNotiList(Long noti_id) {
         List<com.example.domain.entity.Notification> notification = notiRepo.findAllById(noti_id);
-        List<GetNotiListResponseDto> response = notification.stream().filter(e -> e.getStatus()!= false).map(e -> new GetNotiListResponseDto(e)).collect(Collectors.toList());
+        List<GetNotiListResponseDto> response = notification.stream().filter(e -> e.getStatus() != false).map(e -> new GetNotiListResponseDto(e)).collect(Collectors.toList());
         response.stream().map(e -> {
             e.setTitle(com.example.notification.util.Message.getMessage(e.getType()).getTitle());
-            e.setBody(com.example.notification.util.Message.getMessage(e.getType()).getBody());
+            e.setContent(com.example.notification.util.Message.getMessage(e.getType()).getBody());
             return e;
         });
 
@@ -77,7 +87,7 @@ public class NotiServiceImpl implements NotiService {
     @Override
     public void readNotification(Long noti_id) {
         Optional<com.example.domain.entity.Notification> noti = notiRepo.findById(noti_id);
-        if(!noti.isEmpty()){
+        if (!noti.isEmpty()) {
             noti.get().setStatus(false);
             notiRepo.save(noti.get());
         }
