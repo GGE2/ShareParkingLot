@@ -52,7 +52,7 @@ public class NotiServiceImpl implements NotiService {
                             getNextNotiId(), Long.parseLong(data.get("user_id")),
                             Long.parseLong(data.get("ticket_id")),
                             true, type);
-            redisTemplate.opsForHash().put("Notification:" + getNextNotiId() + ":" + noti.getUser_id(),
+            redisTemplate.opsForHash().put("Notification:" + noti.getNoti_id() + ":" + noti.getUser_id(),
                     "key", noti);
 
             content.setNoti_id(noti.getNoti_id());
@@ -83,7 +83,9 @@ public class NotiServiceImpl implements NotiService {
         for (String hashKey : matchingKeys) {
             com.example.domain.entity.Notification notification = (com.example.domain.entity.Notification) redisTemplate.opsForHash().get(hashKey, "key");
             notifications.add(notification);
+            System.out.println(notification.getStatus());
         }
+
         List<GetNotiListResponseDto> response = notifications.stream().filter(e-> e.getStatus()!=false)
                 .filter(e-> e.getType()!=0)
                 .map(e->new GetNotiListResponseDto(e)).collect(Collectors.toList());;
@@ -99,6 +101,7 @@ public class NotiServiceImpl implements NotiService {
 
     @Override
     public Boolean readNotification(Long noti_id) {
+        System.out.println(noti_id);
         String hashKeyPattern = "Notification:" + noti_id + ":*";
         Set<String> matchingKeys = redisTemplate.keys(hashKeyPattern);
         List<com.example.domain.entity.Notification> notifications = new ArrayList<>();
@@ -109,12 +112,14 @@ public class NotiServiceImpl implements NotiService {
         }
         System.out.println(notifications);
         if (!notifications.isEmpty()) {
-            System.out.println(notifications.get(0).getNoti_id());
-            System.out.println(notifications.get(0));
             com.example.domain.entity.Notification noti = notifications.get(0);
+            System.out.println(noti.getUser_id());
+            System.out.println(noti.getNoti_id());
             noti.setStatus(false);
             redisTemplate.opsForHash().put("Notification:" + noti.getNoti_id() + ":" + noti.getUser_id(),
                     "key", noti);
+
+
             return true;
         }
         return false;
