@@ -87,7 +87,7 @@ public class NotiServiceImpl implements NotiService {
         List<GetNotiListResponseDto> response = notifications.stream().filter(e-> e.getStatus()!=false)
                 .filter(e-> e.getType()!=0)
                 .map(e->new GetNotiListResponseDto(e)).collect(Collectors.toList());;
-
+        System.out.println(response.get(0).getTitle());
         for(GetNotiListResponseDto dto:response){
             dto.setTitle(com.example.notification.util.Message.getMessage(dto.getType()).getTitle());
             dto.setContent(com.example.notification.util.Message.getMessage(dto.getType()).getBody());
@@ -122,7 +122,7 @@ public class NotiServiceImpl implements NotiService {
         String hashKeyPattern = "Notification:*:" + user_id;
 
         Set<String> matchingKeys = redisTemplate.keys(hashKeyPattern);
-
+        System.out.println(user_id);
         List<com.example.domain.entity.Notification> notifications = new ArrayList<>();
 
         for (String hashKey : matchingKeys) {
