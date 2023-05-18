@@ -87,12 +87,13 @@ public class NotiServiceImpl implements NotiService {
         List<GetNotiListResponseDto> response = notifications.stream().filter(e-> e.getStatus()!=false)
                 .filter(e-> e.getType()!=0)
                 .map(e->new GetNotiListResponseDto(e)).collect(Collectors.toList());;
-        System.out.println(response.get(0).getTitle());
+
         for(GetNotiListResponseDto dto:response){
             dto.setTitle(com.example.notification.util.Message.getMessage(dto.getType()).getTitle());
             dto.setContent(com.example.notification.util.Message.getMessage(dto.getType()).getBody());
         }
-
+        System.out.println("response");
+        System.out.println(response);
         return response;
     }
 
@@ -108,6 +109,7 @@ public class NotiServiceImpl implements NotiService {
         }
 
         if (!notifications.isEmpty()) {
+            System.out.println(notifications.get(0).getNoti_id());
             System.out.println(notifications.get(0));
             com.example.domain.entity.Notification noti = notifications.get(0);
             noti.setStatus(false);
