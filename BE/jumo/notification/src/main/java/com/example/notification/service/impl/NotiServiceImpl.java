@@ -75,7 +75,8 @@ public class NotiServiceImpl implements NotiService {
     public List<GetNotiListResponseDto> getNotiList(Long user_id) {
 
         String hashKeyPattern = "Notification:*:" + user_id;
-
+        System.out.println("hashKeyPattern");
+        System.out.println(hashKeyPattern);
         Set<String> matchingKeys = redisTemplate.keys(hashKeyPattern);
 
         List<com.example.domain.entity.Notification> notifications = new ArrayList<>();
