@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.team.parking.MainActivity
@@ -205,10 +206,9 @@ class PurchaseTicketFragment : Fragment() {
         }
     }
 
-    @SuppressLint("ResourceAsColor")
     fun showTimePickerDialog(onTimeSetListener: OnTimeSetListener) {
         val timePickerDialog = TimePickerDialog.newInstance(onTimeSetListener, false)
-        timePickerDialog.setAccentColor(R.color.main_color2)
+        timePickerDialog.accentColor = ResourcesCompat.getColor(resources, R.color.main_color2, null)
         timePickerDialog.enableMinutes(false)
         timePickerDialog.setMinTime(Calendar.getInstance().get(Calendar.HOUR_OF_DAY) + 1, 0, 0)
         timePickerDialog.show(parentFragmentManager, "")

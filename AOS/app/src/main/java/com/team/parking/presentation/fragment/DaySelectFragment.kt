@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.ColorInt
 import androidx.core.content.res.ResourcesCompat
 import com.team.parking.MainActivity
 import com.team.parking.R
@@ -131,10 +132,9 @@ class DaySelectFragment : Fragment() {
         it.background = ResourcesCompat.getDrawable(resources, R.drawable.day_selected_background, null)
     }
 
-    @SuppressLint("ResourceAsColor")
     fun showTimePickerDialog(onTimeSetListener: OnTimeSetListener, min: Boolean){
         val timePickerDialog = TimePickerDialog.newInstance(onTimeSetListener, false)
-        timePickerDialog.setAccentColor(R.color.main_color2)
+        timePickerDialog.accentColor = ResourcesCompat.getColor(resources, R.color.main_color2, null)
         timePickerDialog.enableMinutes(false)
         if(!min){
             timePickerDialog.setMinTime(

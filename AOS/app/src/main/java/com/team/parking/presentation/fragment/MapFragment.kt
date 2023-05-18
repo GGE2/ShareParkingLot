@@ -477,6 +477,7 @@ class MapFragment : Fragment() , OnMapReadyCallback{
                             val beforeMarkerSize = clusteringCache.size
                             //클러스러팅 마커
                             if(data!![0].parkId==-1){
+                                removeNoClusteringMapData()
                                 //이전 마커들이 더 많은경우 재사용후 남은것들은 삭제
                                 if(data.size<beforeMarkerSize){
                                     for(i in 0 until data.size){
@@ -726,6 +727,7 @@ class MapFragment : Fragment() , OnMapReadyCallback{
                     removeClusteringMapData()
                     removeNoClusteringMapData()
                     clusteringCache.clear()
+                    noClusteringCache.clear()
                 }
                 if(currentZoom<13.8){
                     fragmentMapBinding.tvToastLow.text = resources.getString(R.string.distance_low)
