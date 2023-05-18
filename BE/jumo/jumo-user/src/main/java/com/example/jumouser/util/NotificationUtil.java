@@ -16,7 +16,7 @@ public class NotificationUtil {
 
 
     public static void sendNotification(Map<String,String> data){
-        String reqURL = "http://localhost:8083/noti/send";
+        String reqURL = "http://k8d108.p.ssafy.io:8083/noti/send";
         try {
             WebClient webClient = WebClient.create();
             PushNotiDto pushNotiDto = new PushNotiDto(data);
