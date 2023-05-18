@@ -28,7 +28,12 @@ public class NotiController {
     }
 
     @PutMapping("/status")
-    public void readNotification(Long user_id, Long ticket_id){
+    public Boolean readNotification(@RequestParam Long noti_id){
+        return notiService.readNotification(noti_id);
+    }
 
+    @DeleteMapping("/all")
+    public Boolean removeAll(@RequestParam Long user_id){
+        return notiService.removeAll(user_id);
     }
 }

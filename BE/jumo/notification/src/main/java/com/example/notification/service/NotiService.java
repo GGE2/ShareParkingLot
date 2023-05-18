@@ -15,5 +15,7 @@ public interface NotiService {
     public void sendNotification(Map<String,String> data) throws IOException, FirebaseMessagingException;
     public List<GetNotiListResponseDto> getNotiList(Long user_id);
 
-    public void readNotification();
+    public Boolean readNotification(Long noti_id);
+
+    public Boolean removeAll(Long user_id);
 }
