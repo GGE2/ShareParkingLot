@@ -194,5 +194,8 @@
         android:label="fragment_notification"
         tools:layout="@layout/fragment_notification" >
 
+        <action
+            android:id="@+id/action_notification_fragment_to_ticketDetailFragment"
+            app:destination="@id/ticketDetailFragment" />
     </fragment>
 </navigation>

@@ -38,6 +38,28 @@ class NetModule {
     @Retention(AnnotationRetention.BINARY)
     annotation class UserRetrofit
 
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class NotiRetrofit
+
+
+    @Singleton
+    @Provides
+    @NotiRetrofit
+    fun provideNotiRetrofit():Retrofit{
+        return Retrofit.Builder()
+            .baseUrl("${BASE_URL}8083/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
+    @Singleton
+    @Provides
+    fun provideNotiService(@NotiRetrofit notiRetrofit:Retrofit):NotiAPIService{
+        return notiRetrofit.create(NotiAPIService::class.java)
+    }
+
+
+
     @Singleton
     @Provides
     @MapRetrofit

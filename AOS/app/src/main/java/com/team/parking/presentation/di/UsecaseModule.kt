@@ -310,5 +310,29 @@ class UsecaseModule {
     ) : GetFavoriteListUseCase{
         return GetFavoriteListUseCase(favoriteRepository)
     }
+
+    @Singleton
+    @Provides
+    fun provideGetNotiListUsecase(
+        notiRepository: NotiRepository
+    ) : GetNotiListUseCase {
+        return GetNotiListUseCase(notiRepository)
+    }
+
+    @Singleton
+    @Provides
+    fun providePutNotiUseCase(
+        notiRepository: NotiRepository
+    ) : PutNotiUseCase{
+        return PutNotiUseCase(notiRepository)
+    }
+
+    @Singleton
+    @Provides
+    fun provideDeleteAllNotiUseCase(
+        notiRepository: NotiRepository
+    ) : DeleteAllNotiUseCase{
+        return DeleteAllNotiUseCase(notiRepository)
+    }
 }
 

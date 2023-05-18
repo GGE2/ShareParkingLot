@@ -16,12 +16,14 @@ import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationView
+import com.team.parking.data.model.notification.GetNotiListRequest
 import com.team.parking.data.model.user.User
 import com.team.parking.databinding.ActivityMainBinding
 import com.team.parking.databinding.SideHeaderBinding
@@ -78,10 +80,15 @@ class MainActivity : AppCompatActivity() {
     lateinit var favoriteViewModelFactory: FavoriteViewModelFactory
     lateinit var favoriteViewModel: FavoriteViewModel
 
+    @Inject
+    lateinit var notificationViewModelFactory: NotificationViewModelFactory
+    lateinit var notificationViewModel: NotificationViewModel
+
     private lateinit var binding: ActivityMainBinding
     lateinit var userViewModel: UserViewModel
     lateinit var navigationDrawer: DrawerLayout
     lateinit var navigationView: NavigationView
+
 
     private lateinit var headerBinding: SideHeaderBinding
     lateinit var navController: NavController
@@ -114,6 +121,7 @@ class MainActivity : AppCompatActivity() {
         setNavigationDrawerInit()
         setOnClickNavigationDrawerItem()
         //setFullScreen()
+        notificationViewModel = ViewModelProvider(this,notificationViewModelFactory)[NotificationViewModel::class.java]
         userViewModel = ViewModelProvider(this, userViewModelFactory)[UserViewModel::class.java]
         initMapViewModel()
         onLoginSuccess()
@@ -122,7 +130,9 @@ class MainActivity : AppCompatActivity() {
         sp = PreferenceManager.getDefaultSharedPreferences(this)
 
         editor = sp.edit()
-
+        notificationViewModel.notiList.observe(this){
+            Log.i(TAG, "onCreate: $it")
+        }
         if (sp.getBoolean("auto_login", false)) {
             userViewModel.login(
                 User(
@@ -137,12 +147,14 @@ class MainActivity : AppCompatActivity() {
                     sp.getString("fcm_token", ""),
                 )
             )
-        
+            
+            notificationViewModel.getNotiList(sp.getLong("user_id",0)!!)
+            Log.d(TAG, "onCreate: gsdgsgdsgdsgsgd")
             if (intent != null && "NOTIFICATION_CLICK" == intent.action) {
                 // Retrieve any necessary data from the intent extras
-           
+                Log.i("종건", "onCreate: ${intent.action}")
                 val type: Int? = intent.getIntExtra("type",-1)
-
+                notificationViewModel.getNotiList(sp.getLong("user_id",-1))
                 when (type) {
                     0 -> {
 
@@ -154,16 +166,29 @@ class MainActivity : AppCompatActivity() {
                         val ticket_id = intent.getLongExtra("ticket_id", -1)
                         ticketDetailViewModel.buyer=true
                         ticketDetailViewModel.ticketId = ticket_id!!.toLong()
+                        notificationViewModel.readNoti(noti_id!!.toLong(),sp.getLong("user_id",0))
                         navController.navigate(R.id.action_loginFragment_to_mapFragment)
+                        Log.d(TAG, "onCreate: asdasdasdasdasdasdas")
                         navController.navigate(R.id.action_map_fragment_to_ticketDetailFragment)
                     }
                     else -> {
+                        Log.i("종건", "type : ${intent.getIntExtra("type",-1)}")
                         val noti_id = intent.getLongExtra("noti_id", -1)
+                        Log.d("종건", "onCreate: $noti_id")
+
                         val user_id = intent.getLongExtra("user_id", -1)
+                        Log.d("종건", "onCreate: $user_id")
+
                         val ticket_id = intent.getLongExtra("ticket_id", -1)
+                        Log.d("종건", "onCreate: $ticket_id")
+
+
+
                         ticketDetailViewModel.buyer=false
                         ticketDetailViewModel.ticketId = ticket_id!!.toLong()
-
+                        Log.d(TAG, "onCreate: asdasdasdasdasdasasdasddas")
+                        notificationViewModel.readNoti(noti_id!!,sp.getLong("user_id",0))
+                        
                         navController.navigate(R.id.action_loginFragment_to_mapFragment)
                         navController.navigate(R.id.action_map_fragment_to_ticketDetailFragment)
                     }
@@ -281,8 +306,18 @@ class MainActivity : AppCompatActivity() {
             navController.navigate(R.id.action_map_fragment_to_notification_fragment)
             binding.drawer.closeDrawers()
         }
+        notificationViewModel.notiList.observe(this ){
+            checkList(it!!)
+        }
     }
-
+    fun checkList(it : List<GetNotiListRequest>){
+        if (it!!.isNotEmpty()){
+            headerBinding.circle.visibility=View.VISIBLE
+        }else{
+            Log.d(TAG, "checkList: ${it}")
+            headerBinding.circle.visibility=View.GONE
+        }
+    }
 
     private fun onLoginSuccess() {
         userViewModel.userLiveData.observe(this) {

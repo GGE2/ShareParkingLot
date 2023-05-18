@@ -84,9 +84,17 @@ class RepositoryModule {
 
     @Singleton
     @Provides
-    fun provideFavoriteRepositoryy(
+    fun provideFavoriteRepository(
         favoriteRemoteDataSource: FavoriteRemoteDataSource
     ) : FavoriteRepository{
         return FavoriteRepositoryImpl(favoriteRemoteDataSource)
+    }
+
+    @Singleton
+    @Provides
+    fun provideNotiRepository(
+        notiRemoteDataSource: NotiRemoteDataSource
+    ) : NotiRepository{
+        return NotiRepositoryImpl(notiRemoteDataSource)
     }
 }

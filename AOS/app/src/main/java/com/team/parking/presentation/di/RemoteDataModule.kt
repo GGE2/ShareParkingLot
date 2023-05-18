@@ -14,6 +14,7 @@ import com.team.parking.data.repository.localSource.dataSourceImpl.UserRemoteDat
 import com.team.parking.data.api.*
 import com.team.parking.data.repository.dataSource.*
 import com.team.parking.data.repository.dataSourceImpl.*
+import com.team.parking.data.repository.localSource.dataSourceImpl.NotiRemoteDataSourceImpl
 
 import dagger.Module
 import dagger.Provides
@@ -88,5 +89,13 @@ class RemoteDataModule {
     ) : FavoriteRemoteDataSource{
         return FavoriteRemoteDataSourceImpl(favoriteAPIService)
 
+    }
+
+    @Singleton
+    @Provides
+    fun provideNotiRemoteDataSource(
+        notiAPIService: NotiAPIService
+    ) : NotiRemoteDataSource{
+        return NotiRemoteDataSourceImpl(notiAPIService)
     }
 }

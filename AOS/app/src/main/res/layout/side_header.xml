@@ -26,6 +26,17 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_baseline_notifications_none_24" />
 
+    <ImageView
+        android:id="@+id/circle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/red_circle"
+        android:visibility="gone"
+        app:layout_constraintLeft_toLeftOf="@+id/image_notification_side_header"
+        app:layout_constraintBottom_toBottomOf="@+id/image_notification_side_header"
+        android:layout_marginBottom="17dp"
+        android:layout_marginLeft="10dp"
+        />
     <TextView
         android:id="@+id/text_my_car_side_header"
         android:layout_width="wrap_content"

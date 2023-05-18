@@ -1,33 +1,30 @@
 package com.team.parking.presentation.adapter
 
-import android.view.ContextMenu
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.team.parking.data.model.car.CarListResponse
-import com.team.parking.data.model.notification.Notification
-import com.team.parking.data.model.ticket.TicketBoughtListResponse
-import com.team.parking.databinding.FragmentNotificationBinding
+import com.team.parking.data.model.notification.GetNotiListRequest
 import com.team.parking.databinding.ItemNotificationBinding
 
 class NotificationAdapter : RecyclerView.Adapter<NotificationAdapter.CustomViewHolder>() {
 
     private lateinit var onNotificationClickListener: NotificationAdapter.NotificationClickListener
+    private lateinit var onNotificationDragListener: NotificationAdapter.NotificationDragListener
 
-    private val callback = object : DiffUtil.ItemCallback<Notification>() {
+    private val callback = object : DiffUtil.ItemCallback<GetNotiListRequest>() {
         override fun areItemsTheSame(
-            oldItem: Notification,
-            newItem: Notification
+            oldItem: GetNotiListRequest,
+            newItem: GetNotiListRequest,
         ): Boolean {
-            return oldItem.place == newItem.place
+            return oldItem.noti_id == newItem.noti_id
         }
 
         override fun areContentsTheSame(
-            oldItem: Notification,
-            newItem: Notification
+            oldItem: GetNotiListRequest,
+            newItem: GetNotiListRequest
         ): Boolean {
             return oldItem == newItem
         }
@@ -36,13 +33,17 @@ class NotificationAdapter : RecyclerView.Adapter<NotificationAdapter.CustomViewH
 
     inner class CustomViewHolder(val binding: ItemNotificationBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(data : Notification){
+        fun bind(data : GetNotiListRequest){
             binding.apply {
                 root.setOnClickListener {
                     onNotificationClickListener.onClick(it, layoutPosition, data)
                 }
+                root.setOnDragListener{it,event ->
+                    onNotificationDragListener.onDrag(it,layoutPosition,data)
+                    true
+                }
                 title.text = data.title
-                body.text = data.body
+                body.text = data.content
             }
         }
     }
@@ -71,8 +72,14 @@ class NotificationAdapter : RecyclerView.Adapter<NotificationAdapter.CustomViewH
     fun setOnNotificationClickListener(onItemClickListener: NotificationAdapter.NotificationClickListener){
         this.onNotificationClickListener = onItemClickListener
     }
+    fun setOnNotificationDragListener(onItemDragListener: NotificationAdapter.NotificationDragListener){
+        this.onNotificationDragListener = onItemDragListener
+    }
 
     interface NotificationClickListener{
-        fun onClick(view: View,position:Int,data: Notification)
+        fun onClick(view: View,position:Int,data: GetNotiListRequest)
+    }
+    interface  NotificationDragListener{
+        fun onDrag(view:View,position: Int,data: GetNotiListRequest)
     }
 }

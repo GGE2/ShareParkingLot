@@ -5,7 +5,6 @@ import com.team.parking.domain.usecase.*
 
 import com.team.parking.presentation.viewmodel.MapViewModelFactory
 import com.team.parking.presentation.viewmodel.SearchViewModelFactory
-import com.team.parking.presentation.viewmodel.UserViewModel
 import com.team.parking.presentation.viewmodel.UserViewModelFactory
 
 
@@ -167,5 +166,16 @@ class FactoryModule {
         getFavoriteListUseCase: GetFavoriteListUseCase
     ) : FavoriteViewModelFactory{
         return FavoriteViewModelFactory(app, setFavoriteUseCase, getFavoriteListUseCase)
+    }
+
+    @Singleton
+    @Provides
+    fun provideNotificationViewModelFactory(
+        app:Application,
+        getNotiListUseCase: GetNotiListUseCase,
+        putNotiUseCase: PutNotiUseCase,
+        deleteAllNotiUseCase: DeleteAllNotiUseCase,
+    ) : NotificationViewModelFactory{
+        return NotificationViewModelFactory(app, getNotiListUseCase, putNotiUseCase,deleteAllNotiUseCase)
     }
 }

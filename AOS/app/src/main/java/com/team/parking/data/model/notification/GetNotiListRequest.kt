@@ -1,6 +1,6 @@
 package com.team.parking.data.model.notification
 
-class GetNotiListRequest (
+data class GetNotiListRequest (
     val noti_id: Long? = null,
     val user_id: Long? = null,
     val ticket_id: Long? = null,
