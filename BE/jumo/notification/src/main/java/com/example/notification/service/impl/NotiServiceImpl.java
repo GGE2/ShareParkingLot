@@ -107,7 +107,7 @@ public class NotiServiceImpl implements NotiService {
             com.example.domain.entity.Notification notification = (com.example.domain.entity.Notification) redisTemplate.opsForHash().get(hashKey, "key");
             notifications.add(notification);
         }
-
+        System.out.println(notifications);
         if (!notifications.isEmpty()) {
             System.out.println(notifications.get(0).getNoti_id());
             System.out.println(notifications.get(0));
