@@ -55,8 +55,10 @@ public class NotiServiceImpl implements NotiService {
                             getNextNotiId(), Long.parseLong(data.get("user_id")),
                             Long.parseLong(data.get("ticket_id")),
                             true, type);
-            com.example.domain.entity.Notification saveNoti = notiRepo.save(noti);
-            content.setNoti_id(saveNoti.getNoti_id());
+            redisTemplate.opsForHash().put("Notification:" + noti.getNoti_id().toString() + ":" + noti.getUser_id().toString(),
+                    "key", noti);
+
+            content.setNoti_id(noti.getNoti_id());
         }
         content.setTitle(com.example.notification.util.Message.getMessage(type).getTitle());
         content.setContent(com.example.notification.util.Message.getMessage(type).getBody());
@@ -97,8 +99,8 @@ public class NotiServiceImpl implements NotiService {
 
     public Message makeMessage(String targetToken, String title, String body) throws JsonProcessingException {
 
-        Notification notification = Notification.builder().setTitle(title).setBody(body).build();
-
+        Notification notification = Notification.builder().setTitle(title).setBody(body).setImage("http://k8d108.p.ssafy.io:8083/static/logo.png").build();
+        System.out.println(targetToken);
         Message message = Message.builder()
                 .setToken(targetToken)
                 .setNotification(notification)
@@ -120,7 +122,7 @@ public class NotiServiceImpl implements NotiService {
 
     private Long getNextNotiId() {
         String key = "Notification";
-        Long id = redisTemplate.opsForValue().increment(key);
+        Long id = redisTemplate.opsForValue().increment("noti_id");
 
         return id;
     }
