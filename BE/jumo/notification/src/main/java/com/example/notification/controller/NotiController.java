@@ -23,12 +23,17 @@ public class NotiController {
     }
 
     @GetMapping("/list")
-    public List<GetNotiListResponseDto> getNotiList(@RequestParam Long noti_id){
-        return notiService.getNotiList(noti_id);
+    public List<GetNotiListResponseDto> getNotiList(@RequestParam Long user_id){
+        return notiService.getNotiList(user_id);
     }
 
     @PutMapping("/status")
-    public void readNotification(Long noti_id){
+    public Boolean readNotification(@RequestParam Long noti_id){
+        return notiService.readNotification(noti_id);
+    }
 
+    @DeleteMapping("/all")
+    public Boolean removeAll(@RequestParam Long user_id){
+        return notiService.removeAll(user_id);
     }
 }

@@ -20,10 +20,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -55,7 +52,7 @@ public class NotiServiceImpl implements NotiService {
                             getNextNotiId(), Long.parseLong(data.get("user_id")),
                             Long.parseLong(data.get("ticket_id")),
                             true, type);
-            redisTemplate.opsForHash().put("Notification:" + noti.getNoti_id().toString() + ":" + noti.getUser_id().toString(),
+            redisTemplate.opsForHash().put("Notification:" + getNextNotiId() + ":" + noti.getUser_id(),
                     "key", noti);
 
             content.setNoti_id(noti.getNoti_id());
@@ -75,27 +72,65 @@ public class NotiServiceImpl implements NotiService {
     }
 
     @Override
-    public List<GetNotiListResponseDto> getNotiList(Long noti_id) {
-        List<com.example.domain.entity.Notification> notification = notiRepo.findAllById(noti_id);
-        List<GetNotiListResponseDto> response = notification.stream().filter(e -> e.getStatus() != false).map(e -> new GetNotiListResponseDto(e)).collect(Collectors.toList());
-        response.stream().map(e -> {
-            e.setTitle(com.example.notification.util.Message.getMessage(e.getType()).getTitle());
-            e.setContent(com.example.notification.util.Message.getMessage(e.getType()).getBody());
-            return e;
-        });
+    public List<GetNotiListResponseDto> getNotiList(Long user_id) {
+
+        String hashKeyPattern = "Notification:*:" + user_id;
+
+        Set<String> matchingKeys = redisTemplate.keys(hashKeyPattern);
+
+        List<com.example.domain.entity.Notification> notifications = new ArrayList<>();
+
+        for (String hashKey : matchingKeys) {
+            com.example.domain.entity.Notification notification = (com.example.domain.entity.Notification) redisTemplate.opsForHash().get(hashKey, "key");
+            notifications.add(notification);
+        }
+        List<GetNotiListResponseDto> response = notifications.stream().filter(e-> e.getStatus()!=false)
+                .filter(e-> e.getType()!=0)
+                .map(e->new GetNotiListResponseDto(e)).collect(Collectors.toList());;
+
+        for(GetNotiListResponseDto dto:response){
+            dto.setTitle(com.example.notification.util.Message.getMessage(dto.getType()).getTitle());
+            dto.setContent(com.example.notification.util.Message.getMessage(dto.getType()).getBody());
+        }
 
         return response;
     }
 
     @Override
-    public void readNotification(Long noti_id) {
-        Optional<com.example.domain.entity.Notification> noti = notiRepo.findById(noti_id);
-        if (!noti.isEmpty()) {
-            noti.get().setStatus(false);
-            notiRepo.save(noti.get());
+    public Boolean readNotification(Long noti_id) {
+        String hashKeyPattern = "Notification:" + noti_id + ":*";
+        Set<String> matchingKeys = redisTemplate.keys(hashKeyPattern);
+        List<com.example.domain.entity.Notification> notifications = new ArrayList<>();
+
+        for (String hashKey : matchingKeys) {
+            com.example.domain.entity.Notification notification = (com.example.domain.entity.Notification) redisTemplate.opsForHash().get(hashKey, "key");
+            notifications.add(notification);
         }
+
+        if (!notifications.isEmpty()) {
+            System.out.println(notifications.get(0));
+            com.example.domain.entity.Notification noti = notifications.get(0);
+            noti.setStatus(false);
+            redisTemplate.opsForHash().put("Notification:" + noti.getNoti_id() + ":" + noti.getUser_id(),
+                    "key", noti);
+            return true;
+        }
+        return false;
     }
 
+    public Boolean removeAll(Long user_id){
+        String hashKeyPattern = "Notification:*:" + user_id;
+
+        Set<String> matchingKeys = redisTemplate.keys(hashKeyPattern);
+
+        List<com.example.domain.entity.Notification> notifications = new ArrayList<>();
+
+        for (String hashKey : matchingKeys) {
+            redisTemplate.delete(hashKey);
+        }
+
+        return true;
+    }
 
     public Message makeMessage(String targetToken, String title, String body) throws JsonProcessingException {
 

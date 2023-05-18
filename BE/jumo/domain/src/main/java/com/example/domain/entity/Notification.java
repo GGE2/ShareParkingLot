@@ -6,10 +6,12 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.TimeToLive;
 
+import java.io.Serializable;
+
 @Getter
 @RedisHash("Notification")
 @Setter
-public class Notification {
+public class Notification implements Serializable {
 
     public static final Long DEFAULT_TTL = 60*60*24*30L;
     @Id
