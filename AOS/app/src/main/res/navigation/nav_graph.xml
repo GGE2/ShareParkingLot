@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/login_fragment">
+
+    <fragment
+        android:id="@+id/login_fragment"
+        android:name="com.team.parking.presentation.fragment.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment_to_mapFragment"
+            app:destination="@id/map_fragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_login_fragment_to_signUpFragment"
+            app:destination="@id/signUpFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/map_fragment"
+        android:name="com.team.parking.presentation.fragment.MapFragment"
+        android:label="fragment_map"
+        tools:layout="@layout/fragment_map" >
+        <action
+            android:id="@+id/action_map_fragment_to_pointFragment"
+            app:destination="@id/pointFragment" />
+        <action
+            android:id="@+id/action_map_fragment_to_transactionHistoryFragment"
+            app:destination="@id/transactionHistoryFragment" />
+        <action
+            android:id="@+id/action_map_fragment_to_favoriteFragment"
+            app:destination="@id/favoriteFragment" />
+        <action
+            android:id="@+id/action_map_fragment_to_searchFragment"
+            app:destination="@id/searchFragment"
+            app:enterAnim="@anim/push_up_in"
+            app:exitAnim="@anim/push_up_out"
+            app:popEnterAnim="@anim/push_down_in"
+            app:popExitAnim="@anim/push_down_out" />
+         <action
+            android:id="@+id/action_map_fragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_map_fragment_to_myShareParkingLotFragment"
+            app:destination="@id/myShareParkingLotFragment" />
+        <action
+            android:id="@+id/action_map_fragment_to_myTicketFragment"
+            app:destination="@id/myTicketFragment" />
+        <action
+            android:id="@+id/action_map_fragment_to_parkinLotDetailFragment"
+            app:destination="@id/parkinLotDetailFragment" />
+        <action
+            android:id="@+id/action_map_fragment_to_myCarFragment"
+            app:destination="@id/myCarFragment" />
+        <action
+            android:id="@+id/action_map_fragment_to_purchaseTicketFragment"
+            app:destination="@id/purchaseTicketFragment" />
+        <action
+            android:id="@+id/action_map_fragment_to_notification_fragment"
+            app:destination="@id/notification_fragment" />
+        <action
+            android:id="@+id/action_map_fragment_to_ticketDetailFragment"
+            app:destination="@id/ticketDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/pointFragment"
+        android:name="com.team.parking.presentation.fragment.PointFragment"
+        android:label="fragment_point"
+        tools:layout="@layout/fragment_point" />
+    <fragment
+        android:id="@+id/transactionHistoryFragment"
+        android:name="com.team.parking.presentation.fragment.TransactionHistoryFragment"
+        android:label="fragment_transaction_history"
+        tools:layout="@layout/fragment_transaction_history" />
+    <fragment
+        android:id="@+id/favoriteFragment"
+        android:name="com.team.parking.presentation.fragment.FavoriteFragment"
+        android:label="fragment_favorite"
+        tools:layout="@layout/fragment_favorite" >
+        <action
+            android:id="@+id/action_favoriteFragment_to_parkinLotDetailFragment"
+            app:destination="@id/parkinLotDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.team.parking.presentation.fragment.SearchFragment"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" />
+    <fragment
+        android:id="@+id/signUpFragment"
+        android:name="com.team.parking.presentation.fragment.SignUpFragment"
+        android:label="fragment_sign_up"
+        tools:layout="@layout/fragment_sign_up" >
+        <action
+            android:id="@+id/action_signUpFragment_to_login_fragment"
+            app:destination="@id/login_fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.team.parking.presentation.fragment.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_myCarFragment"
+            app:destination="@id/myCarFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/myShareParkingLotFragment"
+        android:name="com.team.parking.presentation.fragment.MyShareParkingLotFragment"
+        android:label="fragment_my_share_parking_lot"
+        tools:layout="@layout/fragment_my_share_parking_lot" >
+        <action
+            android:id="@+id/action_myShareParkingLotFragment_to_daySelectFragment"
+            app:destination="@id/daySelectFragment" />
+        <action
+            android:id="@+id/action_myShareParkingLotFragment_to_myShareParkingLotTicketFragment"
+            app:destination="@id/myTicketFragment" />
+        <action
+            android:id="@+id/action_myShareParkingLotFragment_to_addShareParkingLotFragment"
+            app:destination="@id/addShareParkingLotFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/daySelectFragment"
+        android:name="com.team.parking.presentation.fragment.DaySelectFragment"
+        android:label="fragment_day_select"
+        tools:layout="@layout/fragment_day_select" />
+    <fragment
+        android:id="@+id/myTicketFragment"
+        android:name="com.team.parking.presentation.fragment.MyTicketFragment"
+        android:label="fragment_my_share_parking_lot_ticket"
+        tools:layout="@layout/fragment_my_ticket" >
+        <action
+            android:id="@+id/action_myTicketFragment_to_ticketDetailFragment"
+            app:destination="@id/ticketDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/myCarFragment"
+        android:name="com.team.parking.presentation.fragment.MyCarFragment"
+        android:label="fragment_my_car"
+        tools:layout="@layout/fragment_my_car" />
+    <fragment
+        android:id="@+id/parkinLotDetailFragment"
+        android:name="com.team.parking.presentation.fragment.ParkingLotDetailFragment"
+        android:label="fragment_parkin_lot_detail"
+        tools:layout="@layout/fragment_parking_lot_detail" >
+        <action
+            android:id="@+id/action_parkinLotDetailFragment_to_purchaseTicketFragment"
+            app:destination="@id/purchaseTicketFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/purchaseTicketFragment"
+        android:name="com.team.parking.presentation.fragment.PurchaseTicketFragment"
+        android:label="fragment_purchase_ticket"
+        tools:layout="@layout/fragment_purchase_ticket" >
+        <action
+            android:id="@+id/action_purchaseTicketFragment_to_pointFragment"
+            app:destination="@id/pointFragment" />
+        <action
+            android:id="@+id/action_purchaseTicketFragment_to_myCarFragment"
+            app:destination="@id/myCarFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addShareParkingLotFragment"
+        android:name="com.team.parking.presentation.fragment.AddShareParkingLotFragment"
+        android:label="fragment_add_share_parking_lot"
+        tools:layout="@layout/fragment_add_share_parking_lot" >
+        <action
+            android:id="@+id/action_addShareParkingLotFragment_to_daySelectFragment"
+            app:destination="@id/daySelectFragment" />
+        <action
+            android:id="@+id/action_addShareParkingLotFragment_to_searchAddressFragment"
+            app:destination="@id/searchAddressFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/ticketDetailFragment"
+        android:name="com.team.parking.presentation.fragment.TicketDetailFragment"
+        android:label="fragment_ticket_detail"
+        tools:layout="@layout/fragment_ticket_detail" />
+    <fragment
+        android:id="@+id/searchAddressFragment"
+        android:name="com.team.parking.presentation.fragment.SearchAddressFragment"
+        android:label="fragment_search_address"
+        tools:layout="@layout/fragment_search_address" >
+        <action
+            android:id="@+id/action_searchAddressFragment_to_addShareParkingLotFragment"
+            app:destination="@id/addShareParkingLotFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/notification_fragment"
+        android:name="com.team.parking.presentation.fragment.NotificationFragment"
+        android:label="fragment_notification"
+        tools:layout="@layout/fragment_notification" >
+
+        <action
+            android:id="@+id/action_notification_fragment_to_ticketDetailFragment"
+            app:destination="@id/ticketDetailFragment" />
+    </fragment>
+</navigation>

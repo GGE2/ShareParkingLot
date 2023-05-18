@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="KakaoRegular">
+        <item name="android:fontFamily">@font/kakao_regular</item>
+    </style>
+
+    <style name="KakaoBold" parent="@android:style/Widget.DeviceDefault.Button.Borderless">
+        <item name="android:fontFamily">@font/kakao_bold</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:padding">14dp</item>
+    </style>
+
+    <style name="KakaoOtfRegular">
+        <item name="android:fontFamily">@font/kakao_otf_regular</item>
+    </style>
+
+    <style name="KakaoOtfBold">
+        <item name="android:fontFamily">@font/kakao_otf_bold</item>
+    </style>
+
+    <!--  MaterialTab Style  -->
+    <style name="TabText" parent="TextAppearance.Design.Tab">
+        <item name="android:fontFamily">@font/kakao_regular</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+</resources>
